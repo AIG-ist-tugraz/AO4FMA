@@ -11,10 +11,10 @@
           <option name="goals">
             <list>
               <option value="install:install-file" />
-              <option value="-Dfile=./lib/configurator-1.0.1-alpha-2.jar" />
+              <option value="-Dfile=./lib/configurator-1.0.1-alpha-3.jar" />
               <option value="-DgroupId=at.tugraz.ist.ase.hiconfit" />
               <option value="-DartifactId=configurator" />
-              <option value="-Dversion=1.0.1-alpha-1" />
+              <option value="-Dversion=1.0.1-alpha-3" />
               <option value="-Dpackaging=jar" />
             </list>
           </option>
