@@ -12,7 +12,7 @@
         <maven.compiler.source>20</maven.compiler.source>
         <maven.compiler.target>20</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <configurator.version>1.0.1-alpha-1</configurator.version>
+        <configurator.version>1.0.1-alpha-3</configurator.version>
     </properties>
 
     <dependencies>
@@ -28,12 +28,6 @@
             <artifactId>logback-classic</artifactId>
             <version>1.4.6</version>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.junit.platform</groupId>-->
-<!--            <artifactId>junit-platform-launcher</artifactId>-->
-<!--            <version>1.7.2</version>-->
-<!--        </dependency>-->
     </dependencies>
 
 </project>
