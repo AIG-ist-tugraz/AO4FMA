@@ -15,12 +15,8 @@ import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.product.Product;
 import at.tugraz.ist.ase.ao4fma.product.rank.SimpleProductRankingStrategy;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
-import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;
-import at.tugraz.ist.ase.hiconfit.configurator.Configurator;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
-import at.tugraz.ist.ase.hiconfit.kb.fm.FMKB;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -33,6 +29,8 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapterFactory.createConfigurator;
 
 @Slf4j
 public class Main {
@@ -49,11 +47,40 @@ public class Main {
         LoggerUtils.setUseThreadInfo(false);
 
         // All user requirements
-        UserRequirement userRequirement = new UserRequirement();
-        List<Requirement> requirements = userRequirement.getRequirements(fmFile);
+        String message = String.format("%sAll user requirements:", LoggerUtils.tab());
+        log.info(message);
+        writer.write(message); writer.newLine();
+        UserRequirement urOperation = new UserRequirement();
+        List<Requirement> requirements = urOperation.getRequirements(fmFile);
 
+        // print all user requirements
+        LoggerUtils.indent();
+        Utilities.printList(requirements, writer);
+        LoggerUtils.outdent();
 
-        String message = String.format("%sAll consistent user requirements:", LoggerUtils.tab());
+        // All global consistent user requirements
+        message = String.format("%n%sAll global consistent user requirements:", LoggerUtils.tab());
+        log.info(message);
+        writer.write(message); writer.newLine();
+        requirements = urOperation.getGlobalConsistentUserRequirements(fmFile);
+
+        // print all user requirements
+        LoggerUtils.indent();
+        Utilities.printList(requirements, writer);
+        LoggerUtils.outdent();
+
+        // All consistent user requirements
+        message = String.format("%n%sAll consistent user requirements:", LoggerUtils.tab());
+        log.info(message);
+        writer.write(message); writer.newLine();
+        requirements = urOperation.getConsistentUserRequirements(fmFile, filterFile, productsFile);
+
+        // print all user requirements
+        LoggerUtils.indent();
+        Utilities.printList(requirements, writer);
+        LoggerUtils.outdent();
+
+        message = String.format("%n%sThis is not all consistent user requirements:", LoggerUtils.tab());
         log.info(message);
         writer.write(message); writer.newLine();
         findProducts(fmFile, writer);
@@ -64,10 +91,10 @@ public class Main {
 //        findProducts(fm, filterFile, products, writer);
 
         // Restrictiveness
-        restrictiveness(fmFile, filterFile, productsFile, writer, queries_folder);
+//        restrictiveness(fmFile, filterFile, productsFile, writer, queries_folder);
 
         // Restrictiveness for all features
-        restrictivenessAllLeafFeatures(fmFile, filterFile, productsFile, writer);
+//        restrictivenessAllLeafFeatures(fmFile, filterFile, productsFile, writer);
     }
 
     private static void restrictiveness(File fmFile,
@@ -113,18 +140,7 @@ public class Main {
     public static void findProducts(File fmFile,
                                     BufferedWriter writer) throws IOException, FeatureModelParserException {
         // load the feature model
-        val fm = Utilities.loadFeatureModel(fmFile);
-
-        // convert the feature model into FMKB
-        val kb = new FMKB<>(fm, false);
-
-        val configurationModel = new ConfigurationModel(kb, true);
-        configurationModel.initialize();
-        val configurator = Configurator.builder()
-                .kb(kb)
-                .configurationModel(configurationModel)
-                .translator(new FMSolutionTranslator())
-                .build();
+        val configurator = createConfigurator(fmFile);
 
         configurator.findAllSolutions(false,0);
 

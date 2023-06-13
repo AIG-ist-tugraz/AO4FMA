@@ -13,6 +13,8 @@ import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
 import at.tugraz.ist.ase.ao4fma.product.ProductsReader;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
+import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;
+import at.tugraz.ist.ase.hiconfit.configurator.Configurator;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import at.tugraz.ist.ase.hiconfit.kb.fm.FMKB;
 import lombok.experimental.UtilityClass;
@@ -48,6 +50,22 @@ public class ConfiguratorAdapterFactory {
                 .model(productAwareConfigurationModel)
                 .translator(new FMSolutionTranslator())
                 .productAssortment(products)
+                .build();
+    }
+
+    public static Configurator createConfigurator(File fmFile) throws FeatureModelParserException, IOException {
+        // load the feature model
+        val fm = Utilities.loadFeatureModel(fmFile);
+
+        // convert the feature model into FMKB
+        val kb = new FMKB<>(fm, false);
+
+        val configurationModel = new ConfigurationModel(kb, true);
+        configurationModel.initialize();
+        return Configurator.builder()
+                .kb(kb)
+                .configurationModel(configurationModel)
+                .translator(new FMSolutionTranslator())
                 .build();
     }
 }

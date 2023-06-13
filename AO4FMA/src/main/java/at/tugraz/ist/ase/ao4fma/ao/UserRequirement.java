@@ -10,7 +10,6 @@ package at.tugraz.ist.ase.ao4fma.ao;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
-import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import com.google.common.collect.Sets;
 import lombok.Setter;
@@ -24,19 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapterFactory.createConfigurator;
+
 @Slf4j
 public class UserRequirement {
 
     @Setter
     BufferedWriter writer = null;
 
-    public List<Requirement> getRequirements(File fmFile) throws FeatureModelParserException, IOException {
-        String message = String.format("%sAll consistent user requirements:", LoggerUtils.tab());
-        log.info(message);
-        if (writer != null) {
-            writer.write(message); writer.newLine();
-        }
-
+    public List<Requirement> getRequirements(File fmFile) throws FeatureModelParserException {
         val fm = Utilities.loadFeatureModel(fmFile);
         List<String> leafFeatures = Utilities.getLeafFeatures(fm);
 
@@ -58,11 +53,38 @@ public class UserRequirement {
             }
         }
 
-        // print all user requirements
-        LoggerUtils.indent();
-        Utilities.printList(URs, writer);
-        LoggerUtils.outdent();
-
         return URs;
+    }
+
+    public List<Requirement> getGlobalConsistentUserRequirements(File fmFile) throws FeatureModelParserException, IOException {
+        List<Requirement> URs = getRequirements(fmFile);
+
+        // filter consistent user requirements
+        val configurator = createConfigurator(fmFile);
+
+        List<Requirement> list = new ArrayList<>();
+        for (Requirement UR : URs) {
+            if (configurator.isConsistent(UR)) {
+                list.add(UR);
+            }
+        }
+        return list;
+    }
+
+    public List<Requirement> getConsistentUserRequirements(File fmFile, File filterFile, File productsFile) throws FeatureModelParserException, IOException {
+        List<Requirement> URs = getRequirements(fmFile);
+
+        // filter consistent user requirements
+        val configurator = createConfigurator(fmFile, filterFile, productsFile);
+
+        List<Requirement> list = new ArrayList<>();
+        for (Requirement UR : URs) {
+            configurator.findAllSolutions(UR);
+
+            if (configurator.getProducts().size() > 0) {
+                list.add(UR);
+            }
+        }
+        return list;
     }
 }
