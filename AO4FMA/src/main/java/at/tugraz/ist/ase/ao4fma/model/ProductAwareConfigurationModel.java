@@ -36,7 +36,6 @@ public class ProductAwareConfigurationModel extends ConfigurationModel {
     protected List<Domain> filterDomainList;
     @Getter
     protected List<Variable> filterVariableList;
-//    @Getter
     private final List<Constraint> filterConstraintList;
 
     @Builder
@@ -67,25 +66,10 @@ public class ProductAwareConfigurationModel extends ConfigurationModel {
         List<Constraint> B = new LinkedList<>(super.getCorrectConstraints());
         B.addAll(filterConstraintList);
 
-        // translate constraints from products
-//        try {
-//            Constraint productConstraint = translate();
-//
-//            B.add(productConstraint);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
         this.setCorrectConstraints(B);
 
         // remove all Choco constraints, cause we just need variables
         getModel().unpost(getModel().getCstrs());
-
-//        try {
-//            products = ProductsReader.read(productsFile);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     public void addDomain(String domainName, List<String> domainValues) {
@@ -114,44 +98,6 @@ public class ProductAwareConfigurationModel extends ConfigurationModel {
     public void addConstraint(Constraint constraint) {
         filterConstraintList.add(constraint);
     }
-
-//    private Constraint translate() throws IOException {
-////        List<Solution> products = FMSolutionReader.read(productsFile);
-//        products = ProductsReader.read(productsFile);
-//
-////        LogOp logOp = LogOp.or();
-//        List<org.chocosolver.solver.constraints.Constraint> configurationList = new ArrayList<>();
-//        products.forEach(product -> {
-//            System.out.println("Product: " + product);
-//
-//            List<org.chocosolver.solver.constraints.Constraint> kbReqList = new ArrayList<>();
-//            product.solution().getAssignments().forEach(assignment -> {
-//                String variable = assignment.getVariable();
-//                int value = Integer.parseInt(assignment.getValue());
-//
-//                IntVar chocoVar = (IntVar) getVariable(variable);
-//                assert chocoVar != null : "Variable " + variable + " not found";
-//
-////                logOp2.addChild(value.equals("true") ? chocoVar : chocoVar.not());
-//                kbReqList.add(getModel().arithm(chocoVar, "=", value));
-//            });
-//
-////            logOp.addChild(logOp2);
-//            configurationList.add(getModel().and(kbReqList.toArray(new org.chocosolver.solver.constraints.Constraint[0])));
-//        });
-//
-//        org.chocosolver.solver.constraints.Constraint chocoConstraint = getModel().or(configurationList.toArray(new org.chocosolver.solver.constraints.Constraint[0]));
-//
-//        int startIdx = getModel().getNbCstrs();
-//        getModel().post(chocoConstraint);
-////        getModel().addClauses(logOp);
-//
-//        Constraint constraint = new Constraint("products");
-//
-//        ConstraintUtils.addChocoConstraintsToConstraint(false, constraint, getModel(), startIdx, getModel().getNbCstrs() - 1);
-//
-//        return constraint;
-//    }
 
     public org.chocosolver.solver.variables.Variable getVariable(String varName) {
         return Arrays.stream(getModel().getVars()).filter(v -> v.getName().equals(varName)).findFirst().orElse(null);

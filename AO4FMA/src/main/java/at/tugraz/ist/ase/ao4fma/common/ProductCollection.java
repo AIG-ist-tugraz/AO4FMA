@@ -29,6 +29,5 @@ public class ProductCollection  implements Iterable<Product> {
         Product product = products.stream().filter(p -> p.solution().equals(solution)).findFirst().orElse(null);
 
         return product != null;
-//        return products.contains(solution);
     }
 }

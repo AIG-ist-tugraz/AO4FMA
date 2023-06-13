@@ -27,10 +27,8 @@ import java.util.stream.Collectors;
 
 public class ConfiguratorAdapter extends Configurator {
 
-//    private final Configurator configurator;
     private final ProductAwareConfigurationModel model;
 
-//    @Getter
     private final ProductCollection products;
 
     @Getter
@@ -50,12 +48,6 @@ public class ConfiguratorAdapter extends Configurator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-//        this.configurator = Configurator.builder()
-//                .kb(kb)
-//                .configurationModel(model)
-//                .translator(new FMSolutionTranslator())
-//                .build();
     }
 
     public void findAllSolutions() {
@@ -67,17 +59,10 @@ public class ConfiguratorAdapter extends Configurator {
                 solutions.add(solution);
             }
         });
-
     }
 
     @Override
     protected Solution getCurrentSolution() {
-//        List<Assignment> assignments = kb.getVariableList().stream()
-//                .map(var -> Assignment.builder()
-//                        .variable(var.getName())
-//                        .value(var.getValue())
-//                        .build())
-//                .collect(Collectors.toCollection(LinkedList::new));
         List<Assignment> assignments = model.getFilterVariableList().stream()
                 .map(var -> Assignment.builder()
                         .variable(var.getName())
