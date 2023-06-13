@@ -35,6 +35,8 @@ public class Accessibility {
 
     @Setter
     BufferedWriter writer = null;
+    @Setter
+    boolean printResults = true;
 
     AllRecommendationLists all = null;
 
@@ -60,10 +62,13 @@ public class Accessibility {
     }
 
     public Double calculate(Product product) throws FeatureModelParserException, IOException {
-        String message = String.format("%sProduct: %s", LoggerUtils.tab(), product.id());
-        log.info(message);
-        if (writer != null) {
-            writer.write(message); writer.newLine();
+        if (printResults) {
+            String message = String.format("%sProduct: %s", LoggerUtils.tab(), product.id());
+            log.info(message);
+            if (writer != null) {
+                writer.write(message);
+                writer.newLine();
+            }
         }
 
         calculateAllRecommendations();
@@ -73,23 +78,28 @@ public class Accessibility {
         double accessibility = (double) occurrences / all.size();
 
         // print results
-        LoggerUtils.indent();
-        message = String.format("%sOccurrences: %s", LoggerUtils.tab(), occurrences);
-        log.info(message);
-        if (writer != null) {
-            writer.write(message); writer.newLine();
+        if (printResults) {
+            LoggerUtils.indent();
+            String message = String.format("%sOccurrences: %s", LoggerUtils.tab(), occurrences);
+            log.info(message);
+            if (writer != null) {
+                writer.write(message);
+                writer.newLine();
+            }
+            message = String.format("%sTotal recommendations: %s", LoggerUtils.tab(), all.size());
+            log.info(message);
+            if (writer != null) {
+                writer.write(message);
+                writer.newLine();
+            }
+            message = String.format("%sAccessibility: %s", LoggerUtils.tab(), accessibility);
+            log.info(message);
+            if (writer != null) {
+                writer.write(message);
+                writer.newLine();
+            }
+            LoggerUtils.outdent();
         }
-        message = String.format("%sTotal recommendations: %s", LoggerUtils.tab(), all.size());
-        log.info(message);
-        if (writer != null) {
-            writer.write(message); writer.newLine();
-        }
-        message = String.format("%sAccessibility: %s", LoggerUtils.tab(), accessibility);
-        log.info(message);
-        if (writer != null) {
-            writer.write(message); writer.newLine();
-        }
-        LoggerUtils.outdent();
 
         return accessibility;
     }
@@ -109,24 +119,16 @@ public class Accessibility {
                                                     .productsFile(productsFile)
                                                     .build();
         recommendation.setWriter(writer);
+        recommendation.setPrintResults(false);
         recommendation.setRankingStrategy(new SimpleProductRankingStrategy()); // set ranking strategy
 
         // calculate all list of recommendations
         for (Requirement userRequirement : userRequirements) {
-//            System.out.println("User requirement: " + userRequirement);
             val recommendationList = recommendation.recommend(userRequirement);
-//            System.out.println();
 
-            if (recommendationList.empty()) {
-//                System.out.println("No recommendation found!");
-                continue;
+            if (!recommendationList.empty()) {
+                all.add(recommendationList);
             }
-            all.add(recommendationList);
-
-//            System.out.println();
         }
-
-//        System.out.println("User requirements: " + userRequirements.size());
-//        System.out.println("All recommendations: " + all.size());
     }
 }

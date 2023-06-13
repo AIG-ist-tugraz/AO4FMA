@@ -35,6 +35,8 @@ public class Recommendation {
 
     @Setter
     BufferedWriter writer = null;
+    @Setter
+    boolean printResults = true;
 
     @Setter
     IProductRankingStrategy rankingStrategy = null;
@@ -62,7 +64,9 @@ public class Recommendation {
             recommendedProducts = configurator.getProducts();
         }
 
-//        Utilities.printList(recommendedProducts, writer);
+        if (printResults) {
+            Utilities.printList(recommendedProducts, writer);
+        }
 
         return new RecommendationList(recommendedProducts);
     }

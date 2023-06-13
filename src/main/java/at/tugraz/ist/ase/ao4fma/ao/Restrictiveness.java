@@ -36,6 +36,8 @@ public class Restrictiveness {
 
     @Setter
     BufferedWriter writer = null;
+    @Setter
+    boolean printResults = true;
 
     public Restrictiveness(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile) {
         this.fmFile = fmFile;
@@ -44,10 +46,13 @@ public class Restrictiveness {
     }
 
     public double calculate(Requirement req) throws IOException, FeatureModelParserException {
-        String message = String.format("%sRequirement: %s", LoggerUtils.tab(), req);
-        log.info(message);
-        if (writer != null) {
-            writer.write(message); writer.newLine();
+        if (printResults) {
+            String message = String.format("%sRequirement: %s", LoggerUtils.tab(), req);
+            log.info(message);
+            if (writer != null) {
+                writer.write(message);
+                writer.newLine();
+            }
         }
 
         // read products
@@ -71,20 +76,25 @@ public class Restrictiveness {
         double restrictiveness = (double) support / totalProducts;
 
         // print results
-        message = String.format("%sSupport: %s", LoggerUtils.tab(), support);
-        log.info(message);
-        if (writer != null) {
-            writer.write(message); writer.newLine();
-        }
-        message = String.format("%sTotal products: %s", LoggerUtils.tab(), totalProducts);
-        log.info(message);
-        if (writer != null) {
-            writer.write(message); writer.newLine();
-        }
-        message = String.format("%sRestrictiveness: %s", LoggerUtils.tab(), restrictiveness);
-        log.info(message);
-        if (writer != null) {
-            writer.write(message); writer.newLine();
+        if (printResults) {
+            String message = String.format("%sSupport: %s", LoggerUtils.tab(), support);
+            log.info(message);
+            if (writer != null) {
+                writer.write(message);
+                writer.newLine();
+            }
+            message = String.format("%sTotal products: %s", LoggerUtils.tab(), totalProducts);
+            log.info(message);
+            if (writer != null) {
+                writer.write(message);
+                writer.newLine();
+            }
+            message = String.format("%sRestrictiveness: %s", LoggerUtils.tab(), restrictiveness);
+            log.info(message);
+            if (writer != null) {
+                writer.write(message);
+                writer.newLine();
+            }
         }
         LoggerUtils.outdent();
 

@@ -9,6 +9,7 @@
 package at.tugraz.ist.ase.ao4fma;
 
 import at.tugraz.ist.ase.ao4fma.ao.Accessibility;
+import at.tugraz.ist.ase.ao4fma.ao.ProductCatalogCoverage;
 import at.tugraz.ist.ase.ao4fma.ao.Recommendation;
 import at.tugraz.ist.ase.ao4fma.ao.Restrictiveness;
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
@@ -97,9 +98,10 @@ public class Main {
         restrictivenessAllLeafFeatures(fmFile, filterFile, productsFile, writer);
 
         // Accessibility
-//        Accessibility accessibility = new Accessibility(fmFile, filterFile, productsFile);
-//        HashMap<Product, Double> accessibilityValues = accessibility.calculate();
         accessibility(fmFile, filterFile, productsFile, writer);
+
+        // Product Catalog Coverage
+        productCatalogCoverage(fmFile, filterFile, productsFile, writer);
     }
 
     private static void restrictiveness(File fmFile,
@@ -156,6 +158,27 @@ public class Main {
 
         LoggerUtils.indent();
         HashMap<Product, Double> results = accessibility.calculate();
+        LoggerUtils.outdent();
+    }
+
+    private static void productCatalogCoverage(File fmFile,
+                                              File filterFile,
+                                              File productsFile,
+                                              BufferedWriter writer) throws IOException, FeatureModelParserException {
+        String message = String.format("%n%sIII. PRODUCT CATALOG COVERAGE:", LoggerUtils.tab());
+        System.out.println(message);
+        writer.write(message); writer.newLine();
+
+        // create the operation
+        val coverage = new ProductCatalogCoverage(fmFile, filterFile, productsFile);
+        coverage.setWriter(writer);
+
+        LoggerUtils.indent();
+        double results = coverage.calculate();
+
+        message = String.format("%sCoverage: %s", LoggerUtils.tab(), results);
+        log.info(message);
+        writer.write(message); writer.newLine();
         LoggerUtils.outdent();
     }
 
