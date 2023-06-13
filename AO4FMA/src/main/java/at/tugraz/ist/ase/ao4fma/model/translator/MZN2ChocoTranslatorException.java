@@ -6,7 +6,7 @@
  * Contact: http://ase.ist.tugraz.at/ASE/
  */
 
-package at.tugraz.ist.ase.ao4fma.translator;
+package at.tugraz.ist.ase.ao4fma.model.translator;
 
 /**
  * @author Viet-Man Le (vietman.le@ist.tugraz.at)

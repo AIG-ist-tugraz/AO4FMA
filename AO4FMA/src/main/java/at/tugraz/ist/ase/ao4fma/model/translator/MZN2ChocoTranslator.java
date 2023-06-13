@@ -6,12 +6,12 @@
  * Contact: http://ase.ist.tugraz.at/ASE/
  */
 
-package at.tugraz.ist.ase.ao4fma.translator;
+package at.tugraz.ist.ase.ao4fma.model.translator;
 
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
-import at.tugraz.ist.ase.ao4fma.translator.core.MZN2ChocoBaseListener;
-import at.tugraz.ist.ase.ao4fma.translator.core.MZN2ChocoLexer;
-import at.tugraz.ist.ase.ao4fma.translator.core.MZN2ChocoParser;
+import at.tugraz.ist.ase.ao4fma.model.translator.core.MZN2ChocoBaseListener;
+import at.tugraz.ist.ase.ao4fma.model.translator.core.MZN2ChocoLexer;
+import at.tugraz.ist.ase.ao4fma.model.translator.core.MZN2ChocoParser;
 import at.tugraz.ist.ase.hiconfit.common.ConstraintUtils;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.kb.core.Domain;

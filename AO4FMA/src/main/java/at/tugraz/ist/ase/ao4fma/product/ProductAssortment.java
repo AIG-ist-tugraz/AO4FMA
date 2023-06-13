@@ -6,7 +6,7 @@
  * Contact: http://ase.ist.tugraz.at/ASE/
  */
 
-package at.tugraz.ist.ase.ao4fma.common;
+package at.tugraz.ist.ase.ao4fma.product;
 
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 
@@ -14,8 +14,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ProductCollection  implements Iterable<Product> {
+public class ProductAssortment implements Iterable<Product> {
     List<Product> products = new LinkedList<>();
+
+    /**
+     * @return the number of products in the assortment
+     */
+    public int size() {
+        return products.size();
+    }
 
     public void add(Product product) {
         products.add(product);

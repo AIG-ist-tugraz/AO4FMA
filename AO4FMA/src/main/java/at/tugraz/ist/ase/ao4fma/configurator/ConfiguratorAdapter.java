@@ -6,10 +6,11 @@
  * Contact: http://ase.ist.tugraz.at/ASE/
  */
 
-package at.tugraz.ist.ase.ao4fma.model;
+package at.tugraz.ist.ase.ao4fma.configurator;
 
-import at.tugraz.ist.ase.ao4fma.common.ProductCollection;
-import at.tugraz.ist.ase.ao4fma.common.ProductsReader;
+import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
+import at.tugraz.ist.ase.ao4fma.product.ProductAssortment;
+import at.tugraz.ist.ase.ao4fma.product.ProductsReader;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.ISolutionTranslatable;
@@ -29,7 +30,7 @@ public class ConfiguratorAdapter extends Configurator {
 
     private final ProductAwareConfigurationModel model;
 
-    private final ProductCollection products;
+    private final ProductAssortment products;
 
     @Getter
     protected final List<Solution> solutions = new LinkedList<>();

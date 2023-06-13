@@ -9,9 +9,9 @@
 package at.tugraz.ist.ase.ao4fma;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
-import at.tugraz.ist.ase.ao4fma.model.ConfiguratorAdapter;
+import at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapter;
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
-import at.tugraz.ist.ase.ao4fma.translator.MZN2ChocoTranslator;
+import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
 import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;

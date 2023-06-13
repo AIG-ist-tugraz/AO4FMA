@@ -6,7 +6,7 @@
  * Contact: http://ase.ist.tugraz.at/ASE/
  */
 
-package at.tugraz.ist.ase.ao4fma.common;
+package at.tugraz.ist.ase.ao4fma.product;
 
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
@@ -27,12 +27,12 @@ import java.util.List;
 @Slf4j
 @UtilityClass
 public class ProductsReader {
-    public ProductCollection read(@NonNull File file) throws IOException {
+    public ProductAssortment read(@NonNull File file) throws IOException {
         log.debug("{}Reading the product file - {} >>>", LoggerUtils.tab(), file.getName());
 
         @Cleanup BufferedReader reader = Files.newReader(file, Charsets.UTF_8);
 
-        ProductCollection products = new ProductCollection();
+        ProductAssortment products = new ProductAssortment();
 
         String line = reader.readLine();
         while (line != null) {

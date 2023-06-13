@@ -8,7 +8,7 @@
 
 package at.tugraz.ist.ase.ao4fma.model;
 
-import at.tugraz.ist.ase.ao4fma.translator.MZN2ChocoTranslator;
+import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;
 import at.tugraz.ist.ase.hiconfit.kb.core.*;

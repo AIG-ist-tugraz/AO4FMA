@@ -6,7 +6,7 @@
  * Contact: http://ase.ist.tugraz.at/ASE/
  */
 
-package at.tugraz.ist.ase.ao4fma.common;
+package at.tugraz.ist.ase.ao4fma.product;
 
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 
