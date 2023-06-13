@@ -1,3 +1,11 @@
+<!--
+  ~ Analysis Operations On The Run: Beyond Static Feature Model Analysis in Constraint-based Recommenders
+  ~
+  ~ Copyright (c) 2023 AIG team, Institute for Software Technology, Graz University of Technology, Austria
+  ~
+  ~ Contact: http://ase.ist.tugraz.at/ASE/
+  -->
+
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="configurator [install:install]" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
@@ -11,10 +19,10 @@
           <option name="goals">
             <list>
               <option value="install:install-file" />
-              <option value="-Dfile=./lib/configurator-1.0.1-alpha-3.jar" />
+              <option value="-Dfile=./lib/configurator-1.0.1-alpha-4.jar" />
               <option value="-DgroupId=at.tugraz.ist.ase.hiconfit" />
               <option value="-DartifactId=configurator" />
-              <option value="-Dversion=1.0.1-alpha-3" />
+              <option value="-Dversion=1.0.1-alpha-4" />
               <option value="-Dpackaging=jar" />
             </list>
           </option>
