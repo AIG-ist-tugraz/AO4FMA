@@ -9,6 +9,7 @@
 package at.tugraz.ist.ase.ao4fma.configurator;
 
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
+import at.tugraz.ist.ase.ao4fma.product.Product;
 import at.tugraz.ist.ase.ao4fma.product.ProductAssortment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
@@ -17,7 +18,6 @@ import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.ISolutionTranslatable;
 import at.tugraz.ist.ase.hiconfit.configurator.Configurator;
 import at.tugraz.ist.ase.hiconfit.kb.core.KB;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.LinkedList;
@@ -27,42 +27,43 @@ import java.util.stream.Collectors;
 public class ConfiguratorAdapter extends Configurator {
 
     private final ProductAwareConfigurationModel model;
+    private final ProductAssortment productAssortment;
 
-    private final ProductAssortment products;
+    protected final List<Product> products = new LinkedList<>();
 
-    @Getter
-    protected final List<Solution> solutions = new LinkedList<>();
+    // return a copy of the list
+    public List<Product> getProducts() {
+        return new LinkedList<>(products);
+    }
+
+//    IProductSolutionMapper productSolutionMapper;
 
     @Builder(builderMethodName = "configuratorAdapterBuilder")
     public ConfiguratorAdapter(@NonNull KB kb,
                                @NonNull ProductAwareConfigurationModel model,
                                ISolutionTranslatable translator,
-                               @NonNull ProductAssortment products) {
+                               @NonNull ProductAssortment productAssortment) {
+//                               @NonNull IProductSolutionMapper productSolutionMapper) {
         super(kb, model, translator, null);
         this.model = model;
-        this.products = products;
-    }
-
-    public void findAllSolutions() {
-        findAllSolutions(false,0);
-
-        // filter solutions
-        super.getSolutions().forEach(solution -> {
-            if (products.contains(solution)) {
-                solutions.add(solution);
-            }
-        });
+        this.productAssortment = productAssortment;
+//        this.productSolutionMapper = productSolutionMapper;
     }
 
     public void findAllSolutions(Requirement requirement) {
-        setRequirement(requirement);
+        if (requirement != null) {
+            setRequirement(requirement);
+        }
+
+        // clear products
+        products.clear();
+        emptySolutions();
+
         findAllSolutions(false, 0);
 
         // filter solutions
         super.getSolutions().forEach(solution -> {
-            if (products.contains(solution)) {
-                solutions.add(solution);
-            }
+            productAssortment.get(solution).ifPresent(products::add);
         });
     }
 
@@ -74,6 +75,11 @@ public class ConfiguratorAdapter extends Configurator {
                         .value(var.getValue())
                         .build())
                 .collect(Collectors.toCollection(LinkedList::new));
+
+//        kb.getVariableList().forEach(var -> assignments.add(Assignment.builder()
+//                                                .variable(var.getName())
+//                                                .value(var.getValue())
+//                                                .build()));
 
         return Solution.builder().assignments(assignments).build();
     }

@@ -10,7 +10,14 @@ package at.tugraz.ist.ase.ao4fma.product;
 
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 
-public record Product (String id, Solution solution) {
-
-
+public record Product (String id, Solution properties, Solution fm_values, int rf) {
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + id + '\'' +
+                ", properties=[" + properties + "]" +
+                ", fm_values=[" + fm_values + "]" +
+                ", rf=" + rf +
+                '}';
+    }
 }

@@ -9,19 +9,14 @@
 package at.tugraz.ist.ase.ao4fma.ao;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
-import at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapter;
-import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
-import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
-import at.tugraz.ist.ase.ao4fma.product.ProductAssortment;
+import at.tugraz.ist.ase.ao4fma.product.Product;
+import at.tugraz.ist.ase.ao4fma.product.ProductsReader;
+import at.tugraz.ist.ase.ao4fma.product.rank.SimpleProductRankingStrategy;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
-import at.tugraz.ist.ase.hiconfit.fm.core.AbstractRelationship;
-import at.tugraz.ist.ase.hiconfit.fm.core.CTConstraint;
-import at.tugraz.ist.ase.hiconfit.fm.core.Feature;
-import at.tugraz.ist.ase.hiconfit.fm.core.FeatureModel;
-import at.tugraz.ist.ase.hiconfit.kb.fm.FMKB;
+import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -35,57 +30,47 @@ import java.util.List;
 @Slf4j
 public class Restrictiveness {
 
-    ProductAssortment products;
-    FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> featureModel;
+    File fmFile;
     File filterFile;
+    File productsFile;
 
     @Setter
     BufferedWriter writer = null;
 
-    public Restrictiveness(FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> featureModel,
-                           File filterFile, ProductAssortment products) {
-        this.featureModel = featureModel;
+    public Restrictiveness(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile) {
+        this.fmFile = fmFile;
         this.filterFile = filterFile;
-        this.products = products;
+        this.productsFile = productsFile;
     }
 
-    public double calculate(Requirement req) throws IOException {
+    public double calculate(Requirement req) throws IOException, FeatureModelParserException {
         String message = String.format("%sRequirement: %s", LoggerUtils.tab(), req);
         log.info(message);
         if (writer != null) {
             writer.write(message); writer.newLine();
         }
 
+        // read products
+        val productAssortment = ProductsReader.read(productsFile);
         // DENOMINATOR - the total number of products
-        int totalProducts = products.size();
+        int totalProducts = productAssortment.size();
 
         // NUMERATOR - supports
-        val kb = new FMKB<>(featureModel, true);
-        val translator = new MZN2ChocoTranslator();
-        val productAwareConfigurationModel = ProductAwareConfigurationModel.builder()
-                .kb(kb)
-                .rootConstraints(true)
-                .filterFile(filterFile)
-                .translator(translator)
-                .build();
-        productAwareConfigurationModel.initialize();
-        val configurator = ConfiguratorAdapter.configuratorAdapterBuilder()
-                .kb(kb)
-                .model(productAwareConfigurationModel)
-                .translator(new FMSolutionTranslator())
-                .products(products)
-                .build();
-
-        configurator.findAllSolutions(req); // identify all products that satisfy the Requirement
-        int support = configurator.getSolutions().size();
+        LoggerUtils.indent();
+        Recommendation recommendation = Recommendation.builder()
+                                                .fmFile(fmFile)
+                                                .filterFile(filterFile)
+                                                .productsFile(productsFile)
+                                                .build();
+        recommendation.setWriter(writer);
+        recommendation.setRankingStrategy(new SimpleProductRankingStrategy()); // set ranking strategy
+        List<Product> products = recommendation.recommend(req);
+        int support = products.size();
 
         // restrictiveness
         double restrictiveness = (double) support / totalProducts;
 
         // print results
-        LoggerUtils.indent();
-        Utilities.printSolutions(configurator.getSolutions(), writer);
-
         message = String.format("%sSupport: %s", LoggerUtils.tab(), support);
         log.info(message);
         if (writer != null) {
@@ -106,9 +91,13 @@ public class Restrictiveness {
         return restrictiveness;
     }
 
-    public LinkedHashMap<String, Double> calculate4AllLeafFeatures() throws IOException {
+    public LinkedHashMap<String, Double> calculate4AllLeafFeatures() throws IOException, FeatureModelParserException {
         LinkedHashMap<String, Double> results = new LinkedHashMap<>();
-        for (String feature : Utilities.getLeafFeatures(featureModel)) {
+
+        // load the feature model
+        val fm = Utilities.loadFeatureModel(fmFile);
+
+        for (String feature : Utilities.getLeafFeatures(fm)) {
             val req = Requirement.requirementBuilder()
                     .assignments(List.of(Assignment.builder()
                             .variable(feature)

@@ -56,7 +56,7 @@ public class ProductsReader {
                 assignments.add(ur);
             }
 
-            Product product = new Product(id, Solution.builder().assignments(assignments).build());
+            Product product = new Product(id, Solution.builder().assignments(assignments).build(), null, 0);
             products.add(product);
 
             line = reader.readLine();

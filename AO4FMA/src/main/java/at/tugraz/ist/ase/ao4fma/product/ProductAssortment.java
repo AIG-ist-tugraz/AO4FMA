@@ -13,6 +13,7 @@ import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class ProductAssortment implements Iterable<Product> {
     List<Product> products = new LinkedList<>();
@@ -32,9 +33,13 @@ public class ProductAssortment implements Iterable<Product> {
         return products.listIterator();
     }
 
-    public boolean contains(Solution solution) {
-        Product product = products.stream().filter(p -> p.solution().equals(solution)).findFirst().orElse(null);
+//    public boolean contains(Solution solution) {
+//        Product product = products.stream().filter(p -> p.properties().equals(solution)).findFirst().orElse(null);
+//
+//        return product != null;
+//    }
 
-        return product != null;
+    public Optional<Product> get(Solution solution) {
+        return products.stream().filter(p -> p.properties().equals(solution)).findFirst();
     }
 }
