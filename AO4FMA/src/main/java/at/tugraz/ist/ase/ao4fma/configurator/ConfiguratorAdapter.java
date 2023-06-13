@@ -10,7 +10,6 @@ package at.tugraz.ist.ase.ao4fma.configurator;
 
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.product.ProductAssortment;
-import at.tugraz.ist.ase.ao4fma.product.ProductsReader;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.ISolutionTranslatable;
@@ -20,8 +19,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,16 +36,10 @@ public class ConfiguratorAdapter extends Configurator {
     public ConfiguratorAdapter(@NonNull KB kb,
                                @NonNull ProductAwareConfigurationModel model,
                                ISolutionTranslatable translator,
-                               @NonNull File productsFile) {
+                               @NonNull ProductAssortment products) {
         super(kb, model, translator, null);
         this.model = model;
-
-        // read products
-        try {
-            products = ProductsReader.read(productsFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        this.products = products;
     }
 
     public void findAllSolutions() {

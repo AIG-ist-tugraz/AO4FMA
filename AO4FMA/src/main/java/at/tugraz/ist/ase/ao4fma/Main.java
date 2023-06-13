@@ -8,10 +8,14 @@
 
 package at.tugraz.ist.ase.ao4fma;
 
+//import at.tugraz.ist.ase.ao4fma.ao.Restrictiveness;
+
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapter;
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
+import at.tugraz.ist.ase.ao4fma.product.ProductAssortment;
+import at.tugraz.ist.ase.ao4fma.product.ProductsReader;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
 import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;
@@ -25,40 +29,36 @@ import at.tugraz.ist.ase.hiconfit.kb.fm.FMKB;
 import lombok.val;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) throws FeatureModelParserException {
+    private static final List<String> QUERY_RESTRICTIVENESS_FILES = Arrays.asList("q1_1.csv", "q1_2.csv", "q1_3.csv");
+
+    public static void main(String[] args) throws FeatureModelParserException, IOException {
         File fileFM = new File(args[0]);
         File filterFile = new File(args[1]);
         File productsFile = new File(args[2]);
-//        String queries_folder = args[2];
+//        String queries_folder = args[3];
 
         // create the factory for anomaly feature models
         FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint>
                 fm = Utilities.loadFeatureModel(fileFM);
 
-//        JdbcTemplate jdbcTemplate = jdbcConfiguration.getJdbcTemplate("hsqldb").orElseThrow(IllegalArgumentException::new);
-
-//        ConsistencyChecker checker = new ConsistencyChecker();
-//        AODBService service = new AODBService(jdbcTemplate, checker);
-
-        // prepare the table name and the column names
-//        List<Solution> products = FMSolutionReader.read(productsFile);
-//        service.createDB(fm, products);
-//        service.printTable(AODBService.PRODUCT_TABLE_NAME);
-//        service.printTable(AODBService.UR_TABLE_NAME);
-//        service.printTable(AODBService.TRANS_TABLE_NAME);
-
-        // Restrictiveness
+//        @Cleanup BufferedWriter writer = new BufferedWriter(new FileWriter("results.txt"));
+//
+//        // Restrictiveness
 //        System.out.println("I. RESTRICTIVENESS: ");
-//        Restrictiveness restrictiveness = new Restrictiveness(AODBService.PRODUCT_TABLE_NAME);
+//        writer.write("I. RESTRICTIVENESS: \n");
+//        Restrictiveness restrictiveness = new Restrictiveness();
 //
 //        for (String queryFile : QUERY_RESTRICTIVENESS_FILES) {
 //            String query = queries_folder + queryFile;
 //            Requirement req = Utilities.readRequirement(query);
 //
-//            restrictiveness.query(jdbcTemplate, req);
+//            System.out.println(restrictiveness.calculate(req));
 //        }
 
         System.out.println("ConfigurationModel");
@@ -115,6 +115,14 @@ public class Main {
 //            System.out.println(++counter + " " + configurator.getLastestSolution());
 //        }
 
+        // read products
+        ProductAssortment products;
+        try {
+            products = ProductsReader.read(productsFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         // findProducts using ProductAwareConfigurationModel
         val translator = new MZN2ChocoTranslator();
         val productAwareConfigurationModel = ProductAwareConfigurationModel.builder()
@@ -128,7 +136,7 @@ public class Main {
                 .kb(kb)
                 .model(productAwareConfigurationModel)
                 .translator(new FMSolutionTranslator())
-                .productsFile(productsFile)
+                .products(products)
                 .build();
 
 //        int counter = 0;
