@@ -62,7 +62,7 @@ constraint : CONSTRAINT (constraint_id)? expr;
 
 constraint_id : '::"' IDENTIFIER '"';
 
-expr:   expr op='=' expr                         # Equal
+expr:   expr op='==' expr                         # Equal
     |   expr op='!=' expr                         # NotEqual
     |   expr op='/\\' expr                               # And
     |   expr op='\\/' expr                               # Or

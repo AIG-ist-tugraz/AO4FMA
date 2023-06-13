@@ -1,12 +1,4 @@
-/*
- * Analysis Operations On The Run: Beyond Static Feature Model Analysis in Constraint-based Recommenders
- *
- * Copyright (c) 2021-2023 AIG team, Institute for Software Technology, Graz University of Technology, Austria
- *
- * Contact: http://ase.ist.tugraz.at/ASE/
- */
-
-// Generated from /Users/manleviet/Development/GitHub/ChocoWebService/ChocoWS/src/main/java/at/tugraz/ist/ase/chocows/dr/translator/core/MZN2Choco.g4 by ANTLR 4.9.1
+// Generated from /Users/manleviet/Development/AIG/AO4FMA/AO4FMA/src/main/java/at/tugraz/ist/ase/ao4fma/translator/core/MZN2Choco.g4 by ANTLR 4.12.0
 package at.tugraz.ist.ase.ao4fma.translator.core;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -18,19 +10,20 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
+@SuppressWarnings("CheckReturnValue")
 public class MZN2ChocoBaseListener implements MZN2ChocoListener {
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterModel(MZN2ChocoParser.ModelContext ctx) { }
+	@Override public void enterConfiguration(MZN2ChocoParser.ConfigurationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitModel(MZN2ChocoParser.ModelContext ctx) { }
+	@Override public void exitConfiguration(MZN2ChocoParser.ConfigurationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

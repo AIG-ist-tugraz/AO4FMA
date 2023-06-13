@@ -10,6 +10,7 @@ package at.tugraz.ist.ase.ao4fma;
 
 import at.tugraz.ist.ase.ao4fma.common.FMSolutionReader;
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
+import at.tugraz.ist.ase.ao4fma.model.ConfiguratorAdapter;
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.translator.MZN2ChocoTranslator;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
@@ -37,7 +38,7 @@ public class Main {
     public static void main(String[] args) throws FeatureModelParserException {
         File fileFM = new File(args[0]);
         File filterFile = new File(args[1]);
-//        File productsFile = new File(args[1]);
+        File productsFile = new File(args[2]);
 //        String queries_folder = args[2];
 
         // create the factory for anomaly feature models
@@ -70,7 +71,7 @@ public class Main {
         System.out.println("ConfigurationModel");
         findProducts(fm);
         System.out.println("ProductAwareConfigurationModel");
-        findProducts(fm, filterFile);
+        findProducts(fm, filterFile, productsFile);
     }
 
     public static void findProducts(FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> featureModel) {
@@ -86,14 +87,23 @@ public class Main {
                 .translator(new FMSolutionTranslator())
                 .build();
 
+//        int counter = 0;
+//        for (int i = 0; i < 100; i++) {
+//            configurator.findSolutions(false, 1);
+//            System.out.println(++counter + " " + configurator.getLastestSolution());
+//        }
+
+        configurator.findAllSolutions(false,0);
+//        assert configurator.getNumberSolutions() == 2560;
+
         int counter = 0;
-        for (int i = 0; i < 100; i++) {
-            configurator.findSolutions(false, 1);
-            System.out.println(++counter + " " + configurator.getLastestSolution());
+        for (Solution s : configurator.getSolutions()) {
+            System.out.println(++counter + " " + s);
         }
     }
 
-    public static void findProducts(FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> featureModel, File filterFile) {
+    public static void findProducts(FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> featureModel,
+                                    File filterFile, File productsFile) {
         // convert the feature model into FMKB
         val kb = new FMKB<>(featureModel, true);
 
@@ -114,18 +124,33 @@ public class Main {
 
         // findProducts using ProductAwareConfigurationModel
         val translator = new MZN2ChocoTranslator();
-        val productAwareConfigurationModel = new ProductAwareConfigurationModel(kb, true, filterFile, translator);
-        productAwareConfigurationModel.initialize();
-        val configurator = Configurator.builder()
+        val productAwareConfigurationModel = ProductAwareConfigurationModel.builder()
                 .kb(kb)
-                .configurationModel(productAwareConfigurationModel)
+                .rootConstraints(true)
+                .filterFile(filterFile)
+                .translator(translator)
+                .build();
+        productAwareConfigurationModel.initialize();
+        val configurator = ConfiguratorAdapter.configuratorAdapterBuilder()
+                .kb(kb)
+                .model(productAwareConfigurationModel)
                 .translator(new FMSolutionTranslator())
+                .productsFile(productsFile)
                 .build();
 
+//        int counter = 0;
+//        for (int i = 0; i < 100; i++) {
+//            configurator.findSolutions(false, 1);
+//            System.out.println(++counter + " " + configurator.getLastestSolution());
+//        }
+
+//        configurator.findAllSolutions(false,0);
+//        assert configurator.getNumberSolutions() == 2560;
+        configurator.findAllSolutions();
+
         int counter = 0;
-        for (int i = 0; i < 100; i++) {
-            configurator.findSolutions(false, 1);
-            System.out.println(++counter + " " + configurator.getLastestSolution());
+        for (Solution s : configurator.getSolutions()) {
+            System.out.println(++counter + " " + s);
         }
     }
 }

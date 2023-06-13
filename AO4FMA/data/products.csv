@@ -1,0 +1,8 @@
+product=p1,accumulator=h,resolution=h,fps=h,weight=h,mount=t1,isolation=h
+product=p2,accumulator=h,resolution=h,fps=a,weight=l,mount=no,isolation=l
+product=p3,accumulator=h,resolution=a,fps=h,weight=a,mount=t2,isolation=h
+product=p4,accumulator=h,resolution=h,fps=a,weight=l,mount=t1,isolation=h
+product=p5,accumulator=h,resolution=a,fps=a,weight=l,mount=no,isolation=l
+product=p6,accumulator=h,resolution=a,fps=h,weight=a,mount=t1,isolation=h
+product=p7,accumulator=h,resolution=l,fps=l,weight=l,mount=no,isolation=l
+product=p8,accumulator=h,resolution=h,fps=a,weight=l,mount=no,isolation=h

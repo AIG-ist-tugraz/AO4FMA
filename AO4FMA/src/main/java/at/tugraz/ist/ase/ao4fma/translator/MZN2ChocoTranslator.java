@@ -12,6 +12,7 @@ import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.translator.core.MZN2ChocoBaseListener;
 import at.tugraz.ist.ase.ao4fma.translator.core.MZN2ChocoLexer;
 import at.tugraz.ist.ase.ao4fma.translator.core.MZN2ChocoParser;
+import at.tugraz.ist.ase.hiconfit.common.ConstraintUtils;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.CharStream;
@@ -23,13 +24,14 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.lang3.StringUtils;
 import org.chocosolver.solver.constraints.Constraint;
+import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.solver.variables.Variable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
+import java.util.stream.IntStream;
 
 @Slf4j
 public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
@@ -40,12 +42,17 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
 
     private final Stack<String> ruleParts = new Stack<>();
 
+    private Map<String, List<String>> enumDomains;
+    private Map<String, String> vars;
+    private Map<String, IntVar> intVars;
+//    private List<at.tugraz.ist.ase.hiconfit.kb.core.Constraint> constraintList;
+
 //    public MZN2ChocoTranslator() {
 //        this.model = null;
 //    }
 
     public void translate(String modelName, InputStream inputFile, ProductAwareConfigurationModel model) throws IOException {
-        log.info("{}Translating the MZN file to Choco model >>>", LoggerUtils.tab());
+        log.debug("{}Translating the MZN file to Choco model >>>", LoggerUtils.tab());
         LoggerUtils.indent();
 
         if (inputFile == null) {
@@ -56,11 +63,16 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
 //        model = new DRModel(modelName);
         this.model = model;
 
+        enumDomains = new LinkedHashMap<>();
+        vars = new LinkedHashMap<>();
+        intVars = new LinkedHashMap<>();
+//        constraintList = new LinkedList<>();
+
         CharStream input = CharStreams.fromStream(inputFile);
         MZN2ChocoLexer lexer = new MZN2ChocoLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         MZN2ChocoParser parser = new MZN2ChocoParser(tokens);
-        ParseTree tree = parser.model();
+        ParseTree tree = parser.configuration();
 
         // create a standard ANTLR parse tree walker
         ParseTreeWalker walker = new ParseTreeWalker();
@@ -68,7 +80,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
         walker.walk(this, tree);        // walk parse tree
 
         LoggerUtils.outdent();
-        log.info("{}<<< The MZN file translated to Choco model", LoggerUtils.tab());
+        log.debug("{}<<< The MZN file translated to Choco model", LoggerUtils.tab());
 
         // check enums
 //        for (Enumeration<String> keys = enums.keys(); keys.hasMoreElements();) {
@@ -109,9 +121,16 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
         }
 
 //        model.addDomain(key, enum_values); // TODO
+        addDomain(key, enum_values);
 
         LoggerUtils.outdent();
         log.debug("{}<<< The domain {} parsed", LoggerUtils.tab(), key.toUpperCase());
+    }
+
+    private void addDomain(String domainName, List<String> domainValues) {
+        log.debug("{}Adds the domain {} to Model", LoggerUtils.tab(), domainName.toUpperCase());
+        enumDomains.put(domainName, domainValues);
+        model.addDomain(domainName, domainValues);
     }
 
     // Parse variables
@@ -123,9 +142,33 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
         String var = ctx.var_decl().IDENTIFIER(1).getText();
 
 //        model.addVariable(var, type); // TODO
+        addVariable(var, type);
 
         LoggerUtils.outdent();
         log.debug("{}<<< The variable \"{}\" of the domain {} parsed", LoggerUtils.tab(), var, type.toUpperCase());
+    }
+
+    private void addVariable(String varName, String domainName) {
+        log.debug("{}Adding the variable {} of the domain {} to Model >>>", LoggerUtils.tab(), varName.toUpperCase(), domainName.toUpperCase());
+        // check the existence of domainName
+        List<String> values = enumDomains.get(domainName); // take enum_values from enums
+
+        if (values == null) {
+            throw new MZN2ChocoTranslatorException("Domain " + domainName + " hasn't declared yet");
+        }
+
+        vars.put(varName, domainName);
+        log.debug("{}<<< The variable {} of the domain {} added to Model", LoggerUtils.tab(), varName.toUpperCase(), domainName.toUpperCase());
+
+        log.debug("{}Creating an IntVar for the variable {} >>>", LoggerUtils.tab(), varName.toUpperCase());
+        int[] intVar_values = IntStream.range(0, values.size()).toArray();
+
+        // create a variable in the Choco Model
+        IntVar intVar = model.getModel().intVar(varName, intVar_values);
+
+        intVars.put(varName, intVar);
+        model.addVariable(varName, domainName, intVar);
+        log.debug("{}<<< IntVar for the variable {} created", LoggerUtils.tab(), varName.toUpperCase());
     }
 
     // Parse constraints
@@ -144,22 +187,32 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
             thenConstraint = exprContextTranslate((ParserRuleContext) ctx.expr().getChild(2));
 
 //            model.addIfThenConstraint(ifConstraint, thenConstraint); // TODO
+            addIfThenConstraint(ifConstraint, thenConstraint);
 
             newNumCstrs = model.getModel().getNbCstrs();
         }
 
-        String constraintId = ctx.constraint_id().getChild(1).getText();
+//        String constraintId = ctx.constraint_id().getChild(1).getText();
         String rightPart = ruleParts.pop();
         String leftPart = ruleParts.pop();
-        String strConstraint = constraintId + ": " + leftPart + " -> " + rightPart;
+//        String strConstraint = constraintId + ": " + leftPart + " -> " + rightPart;
+        String strConstraint = leftPart + " -> " + rightPart;
 
         log.debug("{}Sets choco constraints to DRConstraint", LoggerUtils.tab());
 //        DRConstraint drConstraint = new DRConstraint(strConstraint); // TODO
+        at.tugraz.ist.ase.hiconfit.kb.core.Constraint constraint = new at.tugraz.ist.ase.hiconfit.kb.core.Constraint(strConstraint);
 //        setConstraintsToDRConstraint(oldNumCstrs, newNumCstrs, drConstraint); // TODO
+        ConstraintUtils.addChocoConstraintsToConstraint(false, constraint, model.getModel(), oldNumCstrs, newNumCstrs - 1);
 //        model.setConstraint(drConstraint); // TODO
+        model.addConstraint(constraint);
 
         LoggerUtils.outdent();
         log.debug("{}{} parsed >>>", LoggerUtils.tab(), ctx.getText().toUpperCase());
+    }
+
+    private void addIfThenConstraint(Constraint ifConstraint, Constraint thenConstraint) {
+        model.getModel().ifThen(ifConstraint, thenConstraint);
+        log.debug("{}Adds the constraint: IF {}, THEN {} to the Choco model >>>", LoggerUtils.tab(), ifConstraint, thenConstraint);
     }
 
     // TODO
@@ -220,11 +273,17 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
         log.debug("{}<<< {} parsed", LoggerUtils.tab(), context.getText());
 
 //        return model.addAndConstraint(cstrs); // TODO
-        return null;
+        return addAndConstraint(cstrs);
+    }
+
+    private Constraint addAndConstraint(Constraint[] cstrs) {
+        Constraint cstr = model.getModel().and(cstrs);
+        log.debug("{}Adds AND constraint to the Choco model >>>", LoggerUtils.tab());
+        return cstr;
     }
 
     private Constraint equalContextTranslate(ParserRuleContext context) {
-        IntVar intVar;
+        Variable variable;
         int value_index;
         String op;
         String enum_name;
@@ -237,11 +296,27 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
 
             var = exprIDContextTranslate((MZN2ChocoParser.IdContext) cx.expr(0));
 
-            MZN2ChocoParser.Enum_valueContext enum_cx = (MZN2ChocoParser.Enum_valueContext) cx.expr(1);
-            enum_name = enum_cx.IDENTIFIER().getText();
-            value = exprIDContextTranslate((MZN2ChocoParser.IdContext) enum_cx.expr());
+            // check if the variable is an enum
+            if (cx.expr(1) instanceof MZN2ChocoParser.Enum_valueContext enum_cx) {
+                enum_name = enum_cx.IDENTIFIER().getText();
+                value = exprIDContextTranslate((MZN2ChocoParser.IdContext) enum_cx.expr());
 
-//            intVar = model.getIntVar(var); // TODO
+                variable = this.getIntVar(var);
+
+                value_index = this.getValueIndex(value, enum_name);
+            } else {
+                value = exprIDContextTranslate((MZN2ChocoParser.IdContext) cx.expr(1));
+                enum_name = null;
+
+                variable = this.model.getVariable(var);
+
+                value_index = value.equals("true") ? 1 : 0;
+            }
+//            MZN2ChocoParser.Enum_valueContext enum_cx = (MZN2ChocoParser.Enum_valueContext) cx.expr(1);
+//            enum_name = enum_cx.IDENTIFIER().getText();
+//            value = exprIDContextTranslate((MZN2ChocoParser.IdContext) enum_cx.expr());
+
+//            variable = model.getIntVar(var); // TODO
 
 //            value_index = model.getValueIndex(value, enum_name); // TODO
 
@@ -252,11 +327,28 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
 
             var = exprIDContextTranslate((MZN2ChocoParser.IdContext) cx.expr(0));
 
-            MZN2ChocoParser.Enum_valueContext enum_cx = (MZN2ChocoParser.Enum_valueContext) cx.expr(1);
-            enum_name = enum_cx.IDENTIFIER().getText();
-            value = exprIDContextTranslate((MZN2ChocoParser.IdContext) enum_cx.expr());
+            // check if the variable is an enum
+            if (cx.expr(1) instanceof MZN2ChocoParser.Enum_valueContext enum_cx) {
+                enum_name = enum_cx.IDENTIFIER().getText();
+                value = exprIDContextTranslate((MZN2ChocoParser.IdContext) enum_cx.expr());
 
-//            intVar = model.getIntVar(var); // TODO
+                variable = this.getIntVar(var);
+
+                value_index = this.getValueIndex(value, enum_name);
+            } else {
+                value = exprIDContextTranslate((MZN2ChocoParser.IdContext) cx.expr(1));
+                enum_name = null;
+
+                variable = this.model.getVariable(var);
+
+                value_index = value.equals("true") ? 1 : 0;
+            }
+
+//            MZN2ChocoParser.Enum_valueContext enum_cx = (MZN2ChocoParser.Enum_valueContext) cx.expr(1);
+//            enum_name = enum_cx.IDENTIFIER().getText();
+//            value = exprIDContextTranslate((MZN2ChocoParser.IdContext) enum_cx.expr());
+
+//            variable = model.getIntVar(var); // TODO
 
 //            value_index = model.getValueIndex(value, enum_name); // TODO
 
@@ -265,12 +357,37 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
         log.debug("{}<<< {} parsed", LoggerUtils.tab(), context.getText());
 
         ruleParts.push(var + " " + op + " " + enum_name + "[" + value + "]");
-//        return model.addArithmConstraint(intVar, op, value_index); // TODO
-        return null;
+//        return model.addArithmConstraint(variable, op, value_index); // TODO
+        return addArithmConstraint(variable, op, value_index); // TODO
+    }
+
+    private Constraint addArithmConstraint(Variable variable, String op, int value) {
+        Constraint cstr;
+
+        if (variable instanceof IntVar) {
+            cstr =  model.getModel().arithm((IntVar) variable, op, value);
+        } else if (variable instanceof BoolVar) {
+            cstr =  model.getModel().arithm((BoolVar) variable, op, value);
+        } else {
+            throw new MZN2ChocoTranslatorException("Variable " + variable.getName() + " is not an IntVar or a BoolVar");
+        }
+
+        log.debug("{}Adds the constraint: {} to the Choco model", LoggerUtils.tab(), variable.getName() + op + value);
+        return cstr;
+    }
+
+    private Variable getIntVar(String varName) {
+        return intVars.get(varName);
+    }
+
+    public int getValueIndex(String value, String domainName) {
+        List<String> enum_values = enumDomains.get(domainName);
+        return enum_values.indexOf(value);
     }
 
     private String exprIDContextTranslate(MZN2ChocoParser.IdContext context) {
-        return context.IDENTIFIER().getText();
+        String id = context.IDENTIFIER().getText();
+        return id;
     }
 
 //    public void exitConstraint(MZN2ChocoParser.ConstraintContext ctx) {
