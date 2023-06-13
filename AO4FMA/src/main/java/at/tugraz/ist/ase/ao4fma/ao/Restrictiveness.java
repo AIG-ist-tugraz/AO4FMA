@@ -13,6 +13,7 @@ import at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapter;
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
 import at.tugraz.ist.ase.ao4fma.product.ProductAssortment;
+import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
@@ -28,6 +29,8 @@ import lombok.val;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @Slf4j
 public class Restrictiveness {
@@ -101,5 +104,22 @@ public class Restrictiveness {
         LoggerUtils.outdent();
 
         return restrictiveness;
+    }
+
+    public LinkedHashMap<String, Double> calculate4AllLeafFeatures() throws IOException {
+        LinkedHashMap<String, Double> results = new LinkedHashMap<>();
+        for (String feature : Utilities.getLeafFeatures(featureModel)) {
+            val req = Requirement.requirementBuilder()
+                    .assignments(List.of(Assignment.builder()
+                            .variable(feature)
+                            .value("true")
+                            .build()))
+                    .build();
+
+            val restrict_value = calculate(req);
+
+            results.put(feature, restrict_value);
+        }
+        return results;
     }
 }

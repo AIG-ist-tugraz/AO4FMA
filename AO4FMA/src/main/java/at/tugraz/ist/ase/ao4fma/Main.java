@@ -15,8 +15,6 @@ import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
 import at.tugraz.ist.ase.ao4fma.product.ProductAssortment;
 import at.tugraz.ist.ase.ao4fma.product.ProductsReader;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;
@@ -35,6 +33,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Main {
@@ -113,16 +112,7 @@ public class Main {
         restrictiveness.setWriter(writer);
 
         LoggerUtils.indent();
-        for (String feature : Utilities.getLeafFeatures(fm)) {
-            val req = Requirement.requirementBuilder()
-                                .assignments(List.of(Assignment.builder()
-                                                        .variable(feature)
-                                                        .value("true")
-                                                        .build()))
-                                .build();
-
-            double restrict_value = restrictiveness.calculate(req);
-        }
+        LinkedHashMap<String, Double> results = restrictiveness.calculate4AllLeafFeatures();
         LoggerUtils.outdent();
     }
 
