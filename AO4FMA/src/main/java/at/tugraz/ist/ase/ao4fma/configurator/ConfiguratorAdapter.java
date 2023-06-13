@@ -11,6 +11,7 @@ package at.tugraz.ist.ase.ao4fma.configurator;
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.product.ProductAssortment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
+import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.ISolutionTranslatable;
 import at.tugraz.ist.ase.hiconfit.configurator.Configurator;
@@ -44,6 +45,18 @@ public class ConfiguratorAdapter extends Configurator {
 
     public void findAllSolutions() {
         findAllSolutions(false,0);
+
+        // filter solutions
+        super.getSolutions().forEach(solution -> {
+            if (products.contains(solution)) {
+                solutions.add(solution);
+            }
+        });
+    }
+
+    public void findAllSolutions(Requirement requirement) {
+        setRequirement(requirement);
+        findAllSolutions(false, 0);
 
         // filter solutions
         super.getSolutions().forEach(solution -> {
