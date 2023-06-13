@@ -8,30 +8,23 @@
 
 package at.tugraz.ist.ase.ao4fma;
 
-import at.tugraz.ist.ase.ao4fma.common.FMSolutionReader;
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.model.ConfiguratorAdapter;
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.translator.MZN2ChocoTranslator;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
 import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;
+import at.tugraz.ist.ase.hiconfit.configurator.Configurator;
 import at.tugraz.ist.ase.hiconfit.fm.core.AbstractRelationship;
 import at.tugraz.ist.ase.hiconfit.fm.core.CTConstraint;
 import at.tugraz.ist.ase.hiconfit.fm.core.Feature;
 import at.tugraz.ist.ase.hiconfit.fm.core.FeatureModel;
-import at.tugraz.ist.ase.hiconfit.fm.parser.FMParserFactory;
-import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParser;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import at.tugraz.ist.ase.hiconfit.kb.fm.FMKB;
-import at.tugraz.ist.ase.hiconfit.configurator.Configurator;
-import lombok.Cleanup;
-import lombok.NonNull;
 import lombok.val;
 
 import java.io.File;
-import java.util.List;
 
 public class Main {
 

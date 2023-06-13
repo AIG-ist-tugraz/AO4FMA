@@ -1,15 +1,21 @@
+/*
+ * Analysis Operations On The Run: Beyond Static Feature Model Analysis in Constraint-based Recommenders
+ *
+ * Copyright (c) 2023 AIG team, Institute for Software Technology, Graz University of Technology, Austria
+ *
+ * Contact: http://ase.ist.tugraz.at/ASE/
+ */
+
 // Generated from /Users/manleviet/Development/AIG/AO4FMA/AO4FMA/src/main/java/at/tugraz/ist/ase/ao4fma/translator/core/MZN2Choco.g4 by ANTLR 4.12.0
 package at.tugraz.ist.ase.ao4fma.translator.core;
 
 
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.*;
+import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNDeserializer;
+import org.antlr.v4.runtime.atn.LexerATNSimulator;
+import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
 public class MZN2ChocoLexer extends Lexer {

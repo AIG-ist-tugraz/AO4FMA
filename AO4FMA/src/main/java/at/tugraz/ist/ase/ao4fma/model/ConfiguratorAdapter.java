@@ -13,7 +13,6 @@ import at.tugraz.ist.ase.ao4fma.common.ProductsReader;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.ISolutionTranslatable;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
 import at.tugraz.ist.ase.hiconfit.configurator.Configurator;
 import at.tugraz.ist.ase.hiconfit.kb.core.KB;
 import lombok.Builder;
