@@ -15,6 +15,8 @@ import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
 import at.tugraz.ist.ase.ao4fma.product.ProductAssortment;
 import at.tugraz.ist.ase.ao4fma.product.ProductsReader;
+import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
+import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;
@@ -69,9 +71,22 @@ public class Main {
         findProducts(fm, filterFile, products, writer);
 
         // Restrictiveness
-        message = String.format("%n%sI. RESTRICTIVENESS:", LoggerUtils.tab());
+        restrictiveness(fm, filterFile, products, writer, queries_folder);
+
+        // Restrictiveness for all features
+        restrictivenessAllLeafFeatures(fm, filterFile, products, writer);
+    }
+
+    private static void restrictiveness(FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> fm,
+                                        File filterFile,
+                                        ProductAssortment products,
+                                        BufferedWriter writer,
+                                        String queries_folder) throws IOException {
+        String message = String.format("%n%sI. RESTRICTIVENESS:", LoggerUtils.tab());
         System.out.println(message);
         writer.write(message); writer.newLine();
+
+        // create the operation
         val restrictiveness = new Restrictiveness(fm, filterFile, products);
         restrictiveness.setWriter(writer);
 
@@ -79,6 +94,32 @@ public class Main {
         for (String queryFile : QUERY_RESTRICTIVENESS_FILES) {
             String query = queries_folder + queryFile;
             val req = Utilities.readRequirement(query);
+
+            double restrict_value = restrictiveness.calculate(req);
+        }
+        LoggerUtils.outdent();
+    }
+
+    private static void restrictivenessAllLeafFeatures(FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> fm,
+                                                File filterFile,
+                                                ProductAssortment products,
+                                                BufferedWriter writer) throws IOException {
+        String message = String.format("%n%sI.1. RESTRICTIVENESS - ALL LEAF FEATURES:", LoggerUtils.tab());
+        System.out.println(message);
+        writer.write(message); writer.newLine();
+
+        // create the operation
+        val restrictiveness = new Restrictiveness(fm, filterFile, products);
+        restrictiveness.setWriter(writer);
+
+        LoggerUtils.indent();
+        for (String feature : Utilities.getLeafFeatures(fm)) {
+            val req = Requirement.requirementBuilder()
+                                .assignments(List.of(Assignment.builder()
+                                                        .variable(feature)
+                                                        .value("true")
+                                                        .build()))
+                                .build();
 
             double restrict_value = restrictiveness.calculate(req);
         }

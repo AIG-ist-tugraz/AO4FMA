@@ -76,12 +76,13 @@ public class Restrictiveness {
         configurator.findAllSolutions(req); // identify all products that satisfy the Requirement
         int support = configurator.getSolutions().size();
 
-        Utilities.printSolutions(configurator.getSolutions(), writer);
-
         // restrictiveness
         double restrictiveness = (double) support / totalProducts;
 
+        // print results
         LoggerUtils.indent();
+        Utilities.printSolutions(configurator.getSolutions(), writer);
+
         message = String.format("%sSupport: %s", LoggerUtils.tab(), support);
         log.info(message);
         if (writer != null) {
