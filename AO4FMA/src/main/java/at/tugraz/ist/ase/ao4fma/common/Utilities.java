@@ -160,4 +160,15 @@ public class Utilities {
         RequirementBuilder urBuilder = new RequirementBuilder();
         return urBuilder.build(varValueComb);
     }
+
+    public void printSolutions(List<Solution> solutions, BufferedWriter writer) throws IOException {
+        int counter = 0;
+        for (Solution s : solutions) {
+            String message = String.format("%s%s %s", LoggerUtils.tab(), ++counter, s);
+            log.info(message);
+            if (writer != null) {
+                writer.write(message); writer.newLine();
+            }
+        }
+    }
 }

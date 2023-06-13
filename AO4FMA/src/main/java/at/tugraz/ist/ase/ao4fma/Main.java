@@ -15,9 +15,8 @@ import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
 import at.tugraz.ist.ase.ao4fma.product.ProductAssortment;
 import at.tugraz.ist.ase.ao4fma.product.ProductsReader;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
+import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;
 import at.tugraz.ist.ase.hiconfit.configurator.Configurator;
 import at.tugraz.ist.ase.hiconfit.fm.core.AbstractRelationship;
@@ -41,14 +40,12 @@ public class Main {
     private static final List<String> QUERY_RESTRICTIVENESS_FILES = Arrays.asList("q1_1.csv", "q1_2.csv", "q1_3.csv");
 
     public static void main(String[] args) throws FeatureModelParserException, IOException {
-        File fileFM = new File(args[0]);
-        File filterFile = new File(args[1]);
-        File productsFile = new File(args[2]);
-        String queries_folder = args[3];
+        val fileFM = new File(args[0]);
+        val filterFile = new File(args[1]);
+        val productsFile = new File(args[2]);
+        val queries_folder = args[3];
 
-        // create the factory for anomaly feature models
-        FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint>
-                fm = Utilities.loadFeatureModel(fileFM);
+        val fm = Utilities.loadFeatureModel(fileFM);
 
         // read products
         ProductAssortment products;
@@ -58,31 +55,41 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        System.out.println("ConfigurationModel");
-        findProducts(fm);
-        System.out.println("ProductAwareConfigurationModel");
-        findProducts(fm, filterFile, products);
+        @Cleanup val writer = new BufferedWriter(new FileWriter("results.txt"));
+        LoggerUtils.setUseThreadInfo(false);
 
-        @Cleanup BufferedWriter writer = new BufferedWriter(new FileWriter("results.txt"));
+        String message = String.format("%sAll user requirements:", LoggerUtils.tab());
+        System.out.println(message);
+        writer.write(message); writer.newLine();
+        findProducts(fm, writer);
+
+        message = String.format("%n%sProduct Assortment:", LoggerUtils.tab());
+        System.out.println(message);
+        writer.write(message); writer.newLine();
+        findProducts(fm, filterFile, products, writer);
 
         // Restrictiveness
-        System.out.println("I. RESTRICTIVENESS: ");
-        writer.write("I. RESTRICTIVENESS: \n");
-        Restrictiveness restrictiveness = new Restrictiveness(fm, filterFile, products);
+        message = String.format("%n%sI. RESTRICTIVENESS:", LoggerUtils.tab());
+        System.out.println(message);
+        writer.write(message); writer.newLine();
+        val restrictiveness = new Restrictiveness(fm, filterFile, products);
+        restrictiveness.setWriter(writer);
 
+        LoggerUtils.indent();
         for (String queryFile : QUERY_RESTRICTIVENESS_FILES) {
             String query = queries_folder + queryFile;
-            Requirement req = Utilities.readRequirement(query);
+            val req = Utilities.readRequirement(query);
 
-            System.out.println(restrictiveness.calculate(req));
+            double restrict_value = restrictiveness.calculate(req);
         }
+        LoggerUtils.outdent();
     }
 
-    public static void findProducts(FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> featureModel) {
+    public static void findProducts(FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> featureModel,
+                                    BufferedWriter writer) throws IOException {
         // convert the feature model into FMKB
         val kb = new FMKB<>(featureModel, true);
 
-//        Configurator configurator = new Configurator(kb, true, new FMSolutionTranslator());
         val configurationModel = new ConfigurationModel(kb, true);
         configurationModel.initialize();
         val configurator = Configurator.builder()
@@ -91,23 +98,14 @@ public class Main {
                 .translator(new FMSolutionTranslator())
                 .build();
 
-//        int counter = 0;
-//        for (int i = 0; i < 100; i++) {
-//            configurator.findSolutions(false, 1);
-//            System.out.println(++counter + " " + configurator.getLastestSolution());
-//        }
-
         configurator.findAllSolutions(false,0);
-//        assert configurator.getNumberSolutions() == 2560;
 
-        int counter = 0;
-        for (Solution s : configurator.getSolutions()) {
-            System.out.println(++counter + " " + s);
-        }
+        Utilities.printSolutions(configurator.getSolutions(), writer);
     }
 
     public static void findProducts(FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> featureModel,
-                                    File filterFile, ProductAssortment products) {
+                                    File filterFile, ProductAssortment products,
+                                    BufferedWriter writer) throws IOException {
         // convert the feature model into FMKB
         val kb = new FMKB<>(featureModel, true);
 
@@ -116,7 +114,7 @@ public class Main {
         val productAwareConfigurationModel = ProductAwareConfigurationModel.builder()
                 .kb(kb)
                 .rootConstraints(true)
-                .filterFile(filterFile)
+                .filterFile(filterFile) // add the filter constraints
                 .translator(translator)
                 .build();
         productAwareConfigurationModel.initialize();
@@ -129,9 +127,6 @@ public class Main {
 
         configurator.findAllSolutions();
 
-        int counter = 0;
-        for (Solution s : configurator.getSolutions()) {
-            System.out.println(++counter + " " + s);
-        }
+        Utilities.printSolutions(configurator.getSolutions(), writer);
     }
 }

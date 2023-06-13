@@ -20,7 +20,7 @@
         <maven.compiler.source>20</maven.compiler.source>
         <maven.compiler.target>20</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <configurator.version>1.0.1-alpha-3</configurator.version>
+        <configurator.version>1.0.1-alpha-4</configurator.version>
     </properties>
 
     <dependencies>
