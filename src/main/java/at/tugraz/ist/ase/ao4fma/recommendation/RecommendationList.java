@@ -32,6 +32,10 @@ public class RecommendationList implements Iterable<Product> {
         return products.isEmpty();
     }
 
+    public int rank(Product product) {
+        return products.indexOf(product) + 1;
+    }
+
     public boolean contains(Product product) {
         return products.contains(product);
     }

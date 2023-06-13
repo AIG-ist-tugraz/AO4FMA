@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
-public class Accessibility {
+public class Visibility {
 
     File fmFile;
     File filterFile;
@@ -40,7 +40,7 @@ public class Accessibility {
 
     AllRecommendationLists all = null;
 
-    public Accessibility(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile) {
+    public Visibility(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile) {
         this.fmFile = fmFile;
         this.filterFile = filterFile;
         this.productsFile = productsFile;
@@ -54,14 +54,14 @@ public class Accessibility {
 
         val products = ProductsReader.read(productsFile);
 
-        // calculate accessibility for each product
-        HashMap<Product, Double> accessibility = new HashMap<>();
+        // calculate visibility for each product
+        HashMap<Product, Double> visibilities = new HashMap<>();
         for (Product product : products) {
-            val accessibilityValue = calculate(product);
-            accessibility.put(product, accessibilityValue);
+            val visibilityValue = calculate(product);
+            visibilities.put(product, visibilityValue);
         }
 
-        return accessibility;
+        return visibilities;
     }
 
     public double calculate(Product product) throws FeatureModelParserException, IOException {
@@ -81,34 +81,21 @@ public class Accessibility {
             all = recommendation.calculateAllRecommendations();
         }
 
-        // calculate accessibility
-        int occurrences = all.countOccurrence(product);
-        double accessibility = (double) occurrences / all.size();
+        // calculate visibility
+        LoggerUtils.indent();
+        double visibility = all.visibility(product);
 
         // print results
         if (printResults) {
-            LoggerUtils.indent();
-            String message = String.format("%sOccurrences: %s", LoggerUtils.tab(), occurrences);
+            String message = String.format("%sVisibility: %s", LoggerUtils.tab(), visibility);
             log.info(message);
             if (writer != null) {
                 writer.write(message);
                 writer.newLine();
             }
-            message = String.format("%sTotal recommendations: %s", LoggerUtils.tab(), all.size());
-            log.info(message);
-            if (writer != null) {
-                writer.write(message);
-                writer.newLine();
-            }
-            message = String.format("%sAccessibility: %s", LoggerUtils.tab(), accessibility);
-            log.info(message);
-            if (writer != null) {
-                writer.write(message);
-                writer.newLine();
-            }
-            LoggerUtils.outdent();
         }
+        LoggerUtils.outdent();
 
-        return accessibility;
+        return visibility;
     }
 }

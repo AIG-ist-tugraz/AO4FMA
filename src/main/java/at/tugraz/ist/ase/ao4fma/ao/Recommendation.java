@@ -11,6 +11,8 @@ package at.tugraz.ist.ase.ao4fma.ao;
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.product.Product;
 import at.tugraz.ist.ase.ao4fma.product.rank.IProductRankingStrategy;
+import at.tugraz.ist.ase.ao4fma.product.rank.SimpleProductRankingStrategy;
+import at.tugraz.ist.ase.ao4fma.recommendation.AllRecommendationLists;
 import at.tugraz.ist.ase.ao4fma.recommendation.RecommendationList;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
@@ -69,5 +71,33 @@ public class Recommendation {
         }
 
         return new RecommendationList(recommendedProducts);
+    }
+
+    public AllRecommendationLists calculateAllRecommendations() throws FeatureModelParserException, IOException {
+        AllRecommendationLists all = new AllRecommendationLists();
+        UserRequirement urOperation = new UserRequirement();
+
+        // calculate all list of user requirements
+        List<Requirement> userRequirements = urOperation.getConsistentUserRequirements(fmFile, filterFile, productsFile);
+
+        Recommendation recommendation = Recommendation.builder()
+                .fmFile(fmFile)
+                .filterFile(filterFile)
+                .productsFile(productsFile)
+                .build();
+        recommendation.setWriter(writer);
+        recommendation.setPrintResults(this.printResults);
+        recommendation.setRankingStrategy(new SimpleProductRankingStrategy()); // set ranking strategy
+
+        // calculate all list of recommendations
+        for (Requirement userRequirement : userRequirements) {
+            val recommendationList = recommendation.recommend(userRequirement);
+
+            if (!recommendationList.empty()) {
+                all.add(recommendationList);
+            }
+        }
+
+        return all;
     }
 }

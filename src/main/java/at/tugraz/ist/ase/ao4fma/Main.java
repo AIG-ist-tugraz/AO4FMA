@@ -8,10 +8,7 @@
 
 package at.tugraz.ist.ase.ao4fma;
 
-import at.tugraz.ist.ase.ao4fma.ao.Accessibility;
-import at.tugraz.ist.ase.ao4fma.ao.ProductCatalogCoverage;
-import at.tugraz.ist.ase.ao4fma.ao.Recommendation;
-import at.tugraz.ist.ase.ao4fma.ao.Restrictiveness;
+import at.tugraz.ist.ase.ao4fma.ao.*;
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.product.Product;
 import at.tugraz.ist.ase.ao4fma.product.rank.SimpleProductRankingStrategy;
@@ -102,6 +99,9 @@ public class Main {
 
         // Product Catalog Coverage
         productCatalogCoverage(fmFile, filterFile, productsFile, writer);
+
+        // Visibility of Products
+        visibilityOfProducts(fmFile, filterFile, productsFile, writer);
     }
 
     private static void restrictiveness(File fmFile,
@@ -180,6 +180,28 @@ public class Main {
         log.info(message);
         writer.write(message); writer.newLine();
         LoggerUtils.outdent();
+    }
+
+    private static void visibilityOfProducts(File fmFile,
+                                               File filterFile,
+                                               File productsFile,
+                                               BufferedWriter writer) throws IOException, FeatureModelParserException {
+        String message = String.format("%n%sIV. VISIBILITY OF PRODUCTS:", LoggerUtils.tab());
+        System.out.println(message);
+        writer.write(message); writer.newLine();
+
+        // create the operation
+        val visibility = new Visibility(fmFile, filterFile, productsFile);
+        visibility.setWriter(writer);
+
+        LoggerUtils.indent();
+        HashMap<Product, Double> results = visibility.calculate();
+        LoggerUtils.outdent();
+
+//        message = String.format("%sCoverage: %s", LoggerUtils.tab(), results);
+//        log.info(message);
+//        writer.write(message); writer.newLine();
+//        LoggerUtils.outdent();
     }
 
     public static void findProducts(File fmFile,
