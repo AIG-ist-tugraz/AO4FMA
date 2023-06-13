@@ -9,16 +9,10 @@
 package at.tugraz.ist.ase.ao4fma.ao;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
-import at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapter;
-import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
-import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
 import at.tugraz.ist.ase.ao4fma.product.Product;
-import at.tugraz.ist.ase.ao4fma.product.ProductsReader;
 import at.tugraz.ist.ase.ao4fma.product.rank.IProductRankingStrategy;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
-import at.tugraz.ist.ase.hiconfit.kb.fm.FMKB;
 import lombok.Builder;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +22,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import static at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapterFactory.createConfigurator;
 
 @Slf4j
 public class Recommendation {
@@ -52,27 +48,8 @@ public class Recommendation {
     public List<Product> recommend(Requirement req) throws FeatureModelParserException, IOException {
         // load the feature model
         val fm = Utilities.loadFeatureModel(fmFile);
-        // read products
-        val products = ProductsReader.read(productsFile);
 
-        // create knowledge base
-        val kb = new FMKB<>(fm, false);
-        val translator = new MZN2ChocoTranslator(); // a translator for filter constraints
-        // model for the configuration task
-        val productAwareConfigurationModel = ProductAwareConfigurationModel.builder()
-                .kb(kb)
-                .rootConstraints(true)
-                .filterFile(filterFile)
-                .translator(translator)
-                .build();
-        productAwareConfigurationModel.initialize();
-        // create configurator
-        val configurator = ConfiguratorAdapter.configuratorAdapterBuilder()
-                .kb(kb)
-                .model(productAwareConfigurationModel)
-                .translator(new FMSolutionTranslator())
-                .productAssortment(products)
-                .build();
+        val configurator = createConfigurator(fmFile, filterFile, productsFile);
 
         configurator.findAllSolutions(req); // identify all products that satisfy the Requirement
 
