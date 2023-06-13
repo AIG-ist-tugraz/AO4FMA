@@ -24,7 +24,6 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.lang3.StringUtils;
 import org.chocosolver.solver.constraints.Constraint;
-import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.solver.variables.Variable;
 
@@ -43,7 +42,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
     private final Stack<String> ruleParts = new Stack<>();
 
     private Map<String, List<String>> enumDomains;
-    private Map<String, String> vars;
+//    private Map<String, String> vars;
     private Map<String, IntVar> intVars;
 //    private List<at.tugraz.ist.ase.hiconfit.kb.core.Constraint> constraintList;
 
@@ -51,7 +50,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
 //        this.model = null;
 //    }
 
-    public void translate(String modelName, InputStream inputFile, ProductAwareConfigurationModel model) throws IOException {
+    public void translate(InputStream inputFile, ProductAwareConfigurationModel model) throws IOException {
         log.debug("{}Translating the MZN file to Choco model >>>", LoggerUtils.tab());
         LoggerUtils.indent();
 
@@ -64,7 +63,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
         this.model = model;
 
         enumDomains = new LinkedHashMap<>();
-        vars = new LinkedHashMap<>();
+//        vars = new LinkedHashMap<>();
         intVars = new LinkedHashMap<>();
 //        constraintList = new LinkedList<>();
 
@@ -157,7 +156,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
             throw new MZN2ChocoTranslatorException("Domain " + domainName + " hasn't declared yet");
         }
 
-        vars.put(varName, domainName);
+//        vars.put(varName, domainName);
         log.debug("{}<<< The variable {} of the domain {} added to Model", LoggerUtils.tab(), varName.toUpperCase(), domainName.toUpperCase());
 
         log.debug("{}Creating an IntVar for the variable {} >>>", LoggerUtils.tab(), varName.toUpperCase());
@@ -366,8 +365,6 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
 
         if (variable instanceof IntVar) {
             cstr =  model.getModel().arithm((IntVar) variable, op, value);
-        } else if (variable instanceof BoolVar) {
-            cstr =  model.getModel().arithm((BoolVar) variable, op, value);
         } else {
             throw new MZN2ChocoTranslatorException("Variable " + variable.getName() + " is not an IntVar or a BoolVar");
         }
@@ -386,8 +383,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
     }
 
     private String exprIDContextTranslate(MZN2ChocoParser.IdContext context) {
-        String id = context.IDENTIFIER().getText();
-        return id;
+        return context.IDENTIFIER().getText();
     }
 
 //    public void exitConstraint(MZN2ChocoParser.ConstraintContext ctx) {

@@ -8,10 +8,7 @@
 
 package at.tugraz.ist.ase.ao4fma.model;
 
-import at.tugraz.ist.ase.ao4fma.common.ProductCollection;
-import at.tugraz.ist.ase.ao4fma.common.ProductsReader;
 import at.tugraz.ist.ase.ao4fma.translator.MZN2ChocoTranslator;
-import at.tugraz.ist.ase.hiconfit.common.ConstraintUtils;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;
 import at.tugraz.ist.ase.hiconfit.kb.core.*;
@@ -21,8 +18,10 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.chocosolver.solver.variables.IntVar;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,7 +57,7 @@ public class ProductAwareConfigurationModel extends ConfigurationModel {
 
         // translate the filter constraints
         try (InputStream filterStream = new FileInputStream(filterFile)) {
-            translator.translate("", filterStream, this);
+            translator.translate(filterStream, this);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -105,7 +104,7 @@ public class ProductAwareConfigurationModel extends ConfigurationModel {
 
     public void addVariable(String varName, String domainName, IntVar intVar) {
         Domain domain = getDomain(domainName);
-        Variable var = (Variable) IntVariable.builder()
+        Variable var = IntVariable.builder()
                 .name(varName)
                 .domain(domain)
                 .chocoVar(intVar).build();
