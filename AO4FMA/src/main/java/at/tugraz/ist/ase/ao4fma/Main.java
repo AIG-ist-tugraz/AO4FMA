@@ -10,11 +10,19 @@ package at.tugraz.ist.ase.ao4fma;
 
 import at.tugraz.ist.ase.ao4fma.ao.Recommendation;
 import at.tugraz.ist.ase.ao4fma.ao.Restrictiveness;
+import at.tugraz.ist.ase.ao4fma.ao.UserRequirement;
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
+import at.tugraz.ist.ase.ao4fma.product.Product;
 import at.tugraz.ist.ase.ao4fma.product.rank.SimpleProductRankingStrategy;
+import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
+import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
+import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;
+import at.tugraz.ist.ase.hiconfit.configurator.Configurator;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
+import at.tugraz.ist.ase.hiconfit.kb.fm.FMKB;
 import lombok.Cleanup;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.io.BufferedWriter;
@@ -24,7 +32,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 public class Main {
 
     private static final List<String> QUERY_RESTRICTIVENESS_FILES = Arrays.asList("q1_1.csv", "q1_2.csv", "q1_3.csv");
@@ -38,13 +48,18 @@ public class Main {
         @Cleanup val writer = new BufferedWriter(new FileWriter("results.txt"));
         LoggerUtils.setUseThreadInfo(false);
 
-//        String message = String.format("%sAll user requirements:", LoggerUtils.tab());
-//        System.out.println(message);
-//        writer.write(message); writer.newLine();
-//        findProducts(fm, writer);
-//
+        // All user requirements
+        UserRequirement userRequirement = new UserRequirement();
+        List<Requirement> requirements = userRequirement.getRequirements(fmFile);
+
+
+        String message = String.format("%sAll consistent user requirements:", LoggerUtils.tab());
+        log.info(message);
+        writer.write(message); writer.newLine();
+        findProducts(fmFile, writer);
+
 //        message = String.format("%n%sProduct Assortment:", LoggerUtils.tab());
-//        System.out.println(message);
+//        log.info(message);
 //        writer.write(message); writer.newLine();
 //        findProducts(fm, filterFile, products, writer);
 
@@ -95,53 +110,34 @@ public class Main {
         LoggerUtils.outdent();
     }
 
-//    public static void findProducts(FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> featureModel,
-//                                    BufferedWriter writer) throws IOException {
-//        // convert the feature model into FMKB
-//        val kb = new FMKB<>(featureModel, false);
-//
-//        val configurationModel = new ConfigurationModel(kb, true);
-//        configurationModel.initialize();
-//        val configurator = Configurator.builder()
-//                .kb(kb)
-//                .configurationModel(configurationModel)
-//                .translator(new FMSolutionTranslator())
-//                .build();
-//
-//        configurator.findAllSolutions(false,0);
-//
-//        Utilities.printProducts(configurator.getProducts(), writer);
-//    }
+    public static void findProducts(File fmFile,
+                                    BufferedWriter writer) throws IOException, FeatureModelParserException {
+        // load the feature model
+        val fm = Utilities.loadFeatureModel(fmFile);
+
+        // convert the feature model into FMKB
+        val kb = new FMKB<>(fm, false);
+
+        val configurationModel = new ConfigurationModel(kb, true);
+        configurationModel.initialize();
+        val configurator = Configurator.builder()
+                .kb(kb)
+                .configurationModel(configurationModel)
+                .translator(new FMSolutionTranslator())
+                .build();
+
+        configurator.findAllSolutions(false,0);
+
+        // map the solutions to products
+        val products = configurator.getSolutions().stream().map(solution -> new Product("0",null, solution, 0)).collect(Collectors.toList());
+
+        Utilities.printList(products, writer);
+    }
 
     public static void findProducts(File fmFile,
                                     File filterFile,
                                     File productsFile,
                                     BufferedWriter writer) throws IOException, FeatureModelParserException {
-//        public static void findProducts(FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> featureModel,
-//                                    File filterFile, ProductAssortment products,
-//                                    BufferedWriter writer) throws IOException, FeatureModelParserException {
-        // convert the feature model into FMKB
-//        val kb = new FMKB<>(featureModel, false);
-//
-//        // findProducts using ProductAwareConfigurationModel
-//        val translator = new MZN2ChocoTranslator();
-//        val productAwareConfigurationModel = ProductAwareConfigurationModel.builder()
-//                .kb(kb)
-//                .rootConstraints(true)
-//                .filterFile(filterFile) // add the filter constraints
-//                .translator(translator)
-//                .build();
-//        productAwareConfigurationModel.initialize();
-//        val configurator = ConfiguratorAdapter.configuratorAdapterBuilder()
-//                .kb(kb)
-//                .model(productAwareConfigurationModel)
-//                .translator(new FMSolutionTranslator())
-//                .productAssortment(products)
-//                .build();
-//
-//        configurator.findAllSolutions(null);
-//
-//        Utilities.printProducts(configurator.getProducts(), writer);
         Recommendation recommendation = Recommendation.builder()
                 .fmFile(fmFile)
                 .filterFile(filterFile)

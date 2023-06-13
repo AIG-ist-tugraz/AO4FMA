@@ -84,7 +84,7 @@ public class Recommendation {
             recommendedProducts = configurator.getProducts();
         }
 
-        Utilities.printProducts(recommendedProducts, writer);
+        Utilities.printList(recommendedProducts, writer);
 
         return recommendedProducts;
     }

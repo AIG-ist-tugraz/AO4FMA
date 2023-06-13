@@ -8,7 +8,6 @@
 
 package at.tugraz.ist.ase.ao4fma.common;
 
-import at.tugraz.ist.ase.ao4fma.product.Product;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.builder.RequirementBuilder;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
@@ -18,6 +17,7 @@ import at.tugraz.ist.ase.hiconfit.fm.core.Feature;
 import at.tugraz.ist.ase.hiconfit.fm.core.FeatureModel;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FMParserFactory;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
+import com.google.common.collect.Lists;
 import lombok.Cleanup;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -26,8 +26,11 @@ import lombok.val;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @UtilityClass
 @Slf4j
@@ -106,55 +109,55 @@ public class Utilities {
         return req;
     }
 
-//    public Integer[] createIndexesArray(int numVar) {
-//        return IntStream.range(0, numVar).mapToObj(i -> i + 1).toArray(Integer[]::new);
-//    }
-//
-//    public List<String> generateFMValueCombinations(int card,
-//                                                   Set<Integer> comb,
-//                                                   List<String> leafFeatures) {
-//        // variable-value assignment
-//        List<String> value_combs = new LinkedList<>();
-//        value_combs.add("");
-//        List<Integer> original_index = Lists.newArrayList(comb);
-//
-//        for (int j = 0; j < card; j++) {
-//            String feature = leafFeatures.get(original_index.get(j) - 1);
-//            value_combs = generateValueCombinations(value_combs, feature);
-//        }
-//        return value_combs;
-//    }
+    public Integer[] createIndexesArray(int numVar) {
+        return IntStream.range(0, numVar).mapToObj(i -> i + 1).toArray(Integer[]::new);
+    }
 
-//    private static List<String> generateValueCombinations(List<String> combs,
-//                                                          String feature) {
-//        List<String> newCombs = new LinkedList<>();
-//        List<String> values = List.of("true"); // "false"
-//
-//        for (String comb : combs) {
-//            for (String value : values) {
-//                String n_comb;
-//
-//                if (comb.isEmpty()) {
-//                    n_comb = feature + "=" + value;
-//                } else {
-//                    n_comb = comb + "," + feature + "=" + value;
-//                }
-//
-//                newCombs.add(n_comb);
-//            }
-//        }
-//
-//        return newCombs;
-//    }
+    public List<String> generateFMValueCombinations(int card,
+                                                   Set<Integer> comb,
+                                                   List<String> leafFeatures) {
+        // variable-value assignment
+        List<String> value_combs = new LinkedList<>();
+        value_combs.add("");
+        List<Integer> original_index = Lists.newArrayList(comb);
+
+        for (int j = 0; j < card; j++) {
+            String feature = leafFeatures.get(original_index.get(j) - 1);
+            value_combs = generateValueCombinations(value_combs, feature);
+        }
+        return value_combs;
+    }
+
+    private static List<String> generateValueCombinations(List<String> combs,
+                                                          String feature) {
+        List<String> newCombs = new LinkedList<>();
+        List<String> values = List.of("true"); // "false"
+
+        for (String comb : combs) {
+            for (String value : values) {
+                String n_comb;
+
+                if (comb.isEmpty()) {
+                    n_comb = feature + "=" + value;
+                } else {
+                    n_comb = comb + "," + feature + "=" + value;
+                }
+
+                newCombs.add(n_comb);
+            }
+        }
+
+        return newCombs;
+    }
 
     public static Requirement convertToRequirement(String varValueComb, FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> fm) {
         RequirementBuilder urBuilder = new RequirementBuilder();
         return urBuilder.build(varValueComb);
     }
 
-    public void printProducts(List<Product> products, BufferedWriter writer) throws IOException {
+    public <T> void printList(List<T> products, BufferedWriter writer) throws IOException {
         int counter = 0;
-        for (Product s : products) {
+        for (T s : products) {
             val message = String.format("%s%s %s", LoggerUtils.tab(), ++counter, s);
             log.info(message);
             if (writer != null) {
