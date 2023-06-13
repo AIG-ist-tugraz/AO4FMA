@@ -9,9 +9,9 @@
 package at.tugraz.ist.ase.ao4fma.ao;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
-import at.tugraz.ist.ase.ao4fma.product.Product;
 import at.tugraz.ist.ase.ao4fma.product.ProductsReader;
 import at.tugraz.ist.ase.ao4fma.product.rank.SimpleProductRankingStrategy;
+import at.tugraz.ist.ase.ao4fma.recommendation.RecommendationList;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
@@ -64,8 +64,8 @@ public class Restrictiveness {
                                                 .build();
         recommendation.setWriter(writer);
         recommendation.setRankingStrategy(new SimpleProductRankingStrategy()); // set ranking strategy
-        List<Product> products = recommendation.recommend(req);
-        int support = products.size();
+        RecommendationList recommendationList = recommendation.recommend(req);
+        int support = recommendationList.size();
 
         // restrictiveness
         double restrictiveness = (double) support / totalProducts;

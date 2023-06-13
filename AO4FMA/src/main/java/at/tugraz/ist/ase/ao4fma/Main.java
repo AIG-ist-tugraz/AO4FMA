@@ -8,13 +8,12 @@
 
 package at.tugraz.ist.ase.ao4fma;
 
+import at.tugraz.ist.ase.ao4fma.ao.Accessibility;
 import at.tugraz.ist.ase.ao4fma.ao.Recommendation;
 import at.tugraz.ist.ase.ao4fma.ao.Restrictiveness;
-import at.tugraz.ist.ase.ao4fma.ao.UserRequirement;
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.product.Product;
 import at.tugraz.ist.ase.ao4fma.product.rank.SimpleProductRankingStrategy;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import lombok.Cleanup;
@@ -26,6 +25,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,44 +46,44 @@ public class Main {
         @Cleanup val writer = new BufferedWriter(new FileWriter("results.txt"));
         LoggerUtils.setUseThreadInfo(false);
 
-        // All user requirements
-        String message = String.format("%sAll user requirements:", LoggerUtils.tab());
-        log.info(message);
-        writer.write(message); writer.newLine();
-        UserRequirement urOperation = new UserRequirement();
-        List<Requirement> requirements = urOperation.getRequirements(fmFile);
-
-        // print all user requirements
-        LoggerUtils.indent();
-        Utilities.printList(requirements, writer);
-        LoggerUtils.outdent();
-
-        // All global consistent user requirements
-        message = String.format("%n%sAll global consistent user requirements:", LoggerUtils.tab());
-        log.info(message);
-        writer.write(message); writer.newLine();
-        requirements = urOperation.getGlobalConsistentUserRequirements(fmFile);
-
-        // print all user requirements
-        LoggerUtils.indent();
-        Utilities.printList(requirements, writer);
-        LoggerUtils.outdent();
-
-        // All consistent user requirements
-        message = String.format("%n%sAll consistent user requirements:", LoggerUtils.tab());
-        log.info(message);
-        writer.write(message); writer.newLine();
-        requirements = urOperation.getConsistentUserRequirements(fmFile, filterFile, productsFile);
-
-        // print all user requirements
-        LoggerUtils.indent();
-        Utilities.printList(requirements, writer);
-        LoggerUtils.outdent();
-
-        message = String.format("%n%sThis is not all consistent user requirements:", LoggerUtils.tab());
-        log.info(message);
-        writer.write(message); writer.newLine();
-        findProducts(fmFile, writer);
+//        // All user requirements
+//        String message = String.format("%sAll user requirements:", LoggerUtils.tab());
+//        log.info(message);
+//        writer.write(message); writer.newLine();
+//        UserRequirement urOperation = new UserRequirement();
+//        List<Requirement> requirements = urOperation.getRequirements(fmFile);
+//
+//        // print all user requirements
+//        LoggerUtils.indent();
+//        Utilities.printList(requirements, writer);
+//        LoggerUtils.outdent();
+//
+//        // All global consistent user requirements
+//        message = String.format("%n%sAll global consistent user requirements:", LoggerUtils.tab());
+//        log.info(message);
+//        writer.write(message); writer.newLine();
+//        requirements = urOperation.getGlobalConsistentUserRequirements(fmFile);
+//
+//        // print all user requirements
+//        LoggerUtils.indent();
+//        Utilities.printList(requirements, writer);
+//        LoggerUtils.outdent();
+//
+//        // All consistent user requirements
+//        message = String.format("%n%sAll consistent user requirements:", LoggerUtils.tab());
+//        log.info(message);
+//        writer.write(message); writer.newLine();
+//        requirements = urOperation.getConsistentUserRequirements(fmFile, filterFile, productsFile);
+//
+//        // print all user requirements
+//        LoggerUtils.indent();
+//        Utilities.printList(requirements, writer);
+//        LoggerUtils.outdent();
+//
+//        message = String.format("%n%sThis is not all consistent user requirements:", LoggerUtils.tab());
+//        log.info(message);
+//        writer.write(message); writer.newLine();
+//        findProducts(fmFile, writer);
 
 //        message = String.format("%n%sProduct Assortment:", LoggerUtils.tab());
 //        log.info(message);
@@ -91,10 +91,15 @@ public class Main {
 //        findProducts(fm, filterFile, products, writer);
 
         // Restrictiveness
-//        restrictiveness(fmFile, filterFile, productsFile, writer, queries_folder);
+        restrictiveness(fmFile, filterFile, productsFile, writer, queries_folder);
 
         // Restrictiveness for all features
-//        restrictivenessAllLeafFeatures(fmFile, filterFile, productsFile, writer);
+        restrictivenessAllLeafFeatures(fmFile, filterFile, productsFile, writer);
+
+        // Accessibility
+//        Accessibility accessibility = new Accessibility(fmFile, filterFile, productsFile);
+//        HashMap<Product, Double> accessibilityValues = accessibility.calculate();
+        accessibility(fmFile, filterFile, productsFile, writer);
     }
 
     private static void restrictiveness(File fmFile,
@@ -137,6 +142,23 @@ public class Main {
         LoggerUtils.outdent();
     }
 
+    private static void accessibility(File fmFile,
+                                      File filterFile,
+                                      File productsFile,
+                                      BufferedWriter writer) throws IOException, FeatureModelParserException {
+        String message = String.format("%n%sII. ACCESSIBILITY:", LoggerUtils.tab());
+        System.out.println(message);
+        writer.write(message); writer.newLine();
+
+        // create the operation
+        val accessibility = new Accessibility(fmFile, filterFile, productsFile);
+        accessibility.setWriter(writer);
+
+        LoggerUtils.indent();
+        HashMap<Product, Double> results = accessibility.calculate();
+        LoggerUtils.outdent();
+    }
+
     public static void findProducts(File fmFile,
                                     BufferedWriter writer) throws IOException, FeatureModelParserException {
         // load the feature model
@@ -161,6 +183,6 @@ public class Main {
                 .build();
         recommendation.setWriter(writer);
         recommendation.setRankingStrategy(new SimpleProductRankingStrategy()); // set ranking strategy
-        val products = recommendation.recommend(null);
+        val recommendationList = recommendation.recommend(null);
     }
 }

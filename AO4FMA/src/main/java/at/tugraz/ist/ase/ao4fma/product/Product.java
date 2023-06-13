@@ -9,6 +9,7 @@
 package at.tugraz.ist.ase.ao4fma.product;
 
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
+import com.google.common.base.Objects;
 
 public record Product (String id, Solution properties, Solution fm_values, int rf) {
     @Override
@@ -19,5 +20,17 @@ public record Product (String id, Solution properties, Solution fm_values, int r
                 ", fm_values=[" + fm_values + "]" +
                 ", rf=" + rf +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product product)) return false;
+        return Objects.equal(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

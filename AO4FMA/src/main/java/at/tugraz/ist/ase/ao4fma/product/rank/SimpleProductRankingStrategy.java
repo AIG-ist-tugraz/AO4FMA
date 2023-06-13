@@ -35,7 +35,7 @@ public class SimpleProductRankingStrategy implements IProductRankingStrategy {
         this.fm = fm;
 
         return products.stream().map(p -> new Product(p.id(), p.properties(), p.fm_values(), calculateRF(p)))
-                        .sorted(Comparator.comparingInt(Product::rf)).toList();
+                        .sorted(Comparator.comparingInt(Product::rf).reversed()).toList();
     }
 
     private int calculateRF(Product product) {

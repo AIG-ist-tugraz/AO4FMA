@@ -11,6 +11,7 @@ package at.tugraz.ist.ase.ao4fma.ao;
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.product.Product;
 import at.tugraz.ist.ase.ao4fma.product.rank.IProductRankingStrategy;
+import at.tugraz.ist.ase.ao4fma.recommendation.RecommendationList;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import lombok.Builder;
@@ -45,7 +46,7 @@ public class Recommendation {
         this.productsFile = productsFile;
     }
 
-    public List<Product> recommend(Requirement req) throws FeatureModelParserException, IOException {
+    public RecommendationList recommend(Requirement req) throws FeatureModelParserException, IOException {
         // load the feature model
         val fm = Utilities.loadFeatureModel(fmFile);
 
@@ -61,8 +62,8 @@ public class Recommendation {
             recommendedProducts = configurator.getProducts();
         }
 
-        Utilities.printList(recommendedProducts, writer);
+//        Utilities.printList(recommendedProducts, writer);
 
-        return recommendedProducts;
+        return new RecommendationList(recommendedProducts);
     }
 }
