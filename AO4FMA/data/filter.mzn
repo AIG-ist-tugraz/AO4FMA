@@ -12,9 +12,9 @@ var Weight: weight;
 var Mount: mount;
 var Isolation: isolation;
 
-constraint landscape == true -> accumulator == Accumulator[h];
-constraint portrait == true -> resolution == Resolution[h];
-constraint sports == true -> fps == FPS[h];
-constraint lightweight == true -> weight == Weight[l];
-constraint exchangelens == true -> mount != Mount[no];
-constraint waterproof == true -> isolation == Isolation[h];
+constraint landscape == true <-> accumulator == Accumulator[h];
+constraint portrait == true <-> resolution == Resolution[h];
+constraint sports == true <-> fps == FPS[h];
+constraint lightweight == true <-> weight == Weight[l];
+constraint exchangelens == true <-> mount != Mount[no];
+constraint waterproof == true <-> isolation == Isolation[h];

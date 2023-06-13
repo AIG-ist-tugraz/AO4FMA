@@ -6,7 +6,7 @@
  * Contact: http://ase.ist.tugraz.at/ASE/
  */
 
-// Generated from /Users/manleviet/Development/AIG/AO4FMA/AO4FMA/src/main/java/at/tugraz/ist/ase/ao4fma/translator/core/MZN2Choco.g4 by ANTLR 4.12.0
+// Generated from /Users/manleviet/Development/AIG/AO4FMA/AO4FMA/src/main/java/at/tugraz/ist/ase/ao4fma/model/translator/core/MZN2Choco.g4 by ANTLR 4.12.0
 package at.tugraz.ist.ase.ao4fma.model.translator.core;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -200,6 +200,18 @@ public class MZN2ChocoBaseListener implements MZN2ChocoListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitImplication(MZN2ChocoParser.ImplicationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBi_Implication(MZN2ChocoParser.Bi_ImplicationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBi_Implication(MZN2ChocoParser.Bi_ImplicationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

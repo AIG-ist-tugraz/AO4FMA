@@ -141,6 +141,13 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
             addIfThenConstraint(ifConstraint, thenConstraint);
 
             newNumCstrs = model.getModel().getNbCstrs();
+        } else if (ctx.expr() instanceof MZN2ChocoParser.Bi_ImplicationContext) {
+            ifConstraint = exprContextTranslate((ParserRuleContext) ctx.expr().getChild(0));
+            thenConstraint = exprContextTranslate((ParserRuleContext) ctx.expr().getChild(2));
+
+            addIfOnlyIfConstraint(ifConstraint, thenConstraint);
+
+            newNumCstrs = model.getModel().getNbCstrs();
         }
 
         String rightPart = ruleParts.pop();
@@ -159,6 +166,11 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
     private void addIfThenConstraint(Constraint ifConstraint, Constraint thenConstraint) {
         model.getModel().ifThen(ifConstraint, thenConstraint);
         log.debug("{}Adds the constraint: IF {}, THEN {} to the Choco model >>>", LoggerUtils.tab(), ifConstraint, thenConstraint);
+    }
+
+    private void addIfOnlyIfConstraint(Constraint ifConstraint, Constraint thenConstraint) {
+        model.getModel().ifOnlyIf(ifConstraint, thenConstraint);
+        log.debug("{}Adds the constraint: {} IfOnlyIf {} to the Choco model >>>", LoggerUtils.tab(), ifConstraint, thenConstraint);
     }
 
     private Constraint exprContextTranslate(ParserRuleContext context) {

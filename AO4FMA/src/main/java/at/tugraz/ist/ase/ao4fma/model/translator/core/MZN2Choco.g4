@@ -67,6 +67,7 @@ expr:   expr op='==' expr                         # Equal
     |   expr op='/\\' expr                               # And
     |   expr op='\\/' expr                               # Or
     |   expr op='->' expr                               # Implication
+    |   expr op='<->' expr                               # Bi_Implication
     |   IDENTIFIER                                      # id
     |   IDENTIFIER '[' expr ']'                         # enum_value
 //    |   INT_CONST                                       # int

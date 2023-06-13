@@ -6,7 +6,7 @@
  * Contact: http://ase.ist.tugraz.at/ASE/
  */
 
-// Generated from /Users/manleviet/Development/AIG/AO4FMA/AO4FMA/src/main/java/at/tugraz/ist/ase/ao4fma/translator/core/MZN2Choco.g4 by ANTLR 4.12.0
+// Generated from /Users/manleviet/Development/AIG/AO4FMA/AO4FMA/src/main/java/at/tugraz/ist/ase/ao4fma/model/translator/core/MZN2Choco.g4 by ANTLR 4.12.0
 package at.tugraz.ist.ase.ao4fma.model.translator.core;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -181,6 +181,18 @@ public interface MZN2ChocoListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitImplication(MZN2ChocoParser.ImplicationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Bi_Implication}
+	 * labeled alternative in {@link MZN2ChocoParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBi_Implication(MZN2ChocoParser.Bi_ImplicationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Bi_Implication}
+	 * labeled alternative in {@link MZN2ChocoParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBi_Implication(MZN2ChocoParser.Bi_ImplicationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MZN2ChocoParser#enum_decl}.
 	 * @param ctx the parse tree
