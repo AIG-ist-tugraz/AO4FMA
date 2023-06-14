@@ -12,6 +12,7 @@ import at.tugraz.ist.ase.ao4fma.ao.*;
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.product.Product;
 import at.tugraz.ist.ase.ao4fma.product.rank.SimpleProductRankingStrategy;
+import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import lombok.Cleanup;
@@ -44,7 +45,7 @@ public class Main {
         @Cleanup val writer = new BufferedWriter(new FileWriter("results.txt"));
         LoggerUtils.setUseThreadInfo(false);
 
-//        // All user requirements
+        // All user requirements
 //        String message = String.format("%sAll user requirements:", LoggerUtils.tab());
 //        log.info(message);
 //        writer.write(message); writer.newLine();
@@ -68,16 +69,27 @@ public class Main {
 //        LoggerUtils.outdent();
 //
 //        // All consistent user requirements
-//        message = String.format("%n%sAll consistent user requirements:", LoggerUtils.tab());
+//        String message = String.format("%n%sAll consistent user requirements:", LoggerUtils.tab());
 //        log.info(message);
 //        writer.write(message); writer.newLine();
-//        requirements = urOperation.getConsistentUserRequirements(fmFile, filterFile, productsFile);
+//        List<Requirement> requirements = urOperation.getConsistentUserRequirements(fmFile, filterFile, productsFile);
 //
 //        // print all user requirements
 //        LoggerUtils.indent();
 //        Utilities.printList(requirements, writer);
 //        LoggerUtils.outdent();
 //
+//        // All inconsistent user requirements
+//        message = String.format("%n%sAll inconsistent user requirements:", LoggerUtils.tab());
+//        log.info(message);
+//        writer.write(message); writer.newLine();
+//        requirements = urOperation.getInconsistentUserRequirements(fmFile, filterFile, productsFile);
+//
+//        // print all user requirements
+//        LoggerUtils.indent();
+//        Utilities.printList(requirements, writer);
+//        LoggerUtils.outdent();
+
 //        message = String.format("%n%sThis is not all consistent user requirements:", LoggerUtils.tab());
 //        log.info(message);
 //        writer.write(message); writer.newLine();
@@ -102,6 +114,12 @@ public class Main {
 
         // Visibility of Products
         visibilityOfProducts(fmFile, filterFile, productsFile, writer);
+
+        // Controversy of Features
+        controversyOfFeatures(fmFile, filterFile, productsFile, writer);
+
+        // Global controversy
+        globalControversy(fmFile, filterFile, productsFile, writer);
     }
 
     private static void restrictiveness(File fmFile,
@@ -109,8 +127,8 @@ public class Main {
                                         File productsFile,
                                         BufferedWriter writer,
                                         String queries_folder) throws IOException, FeatureModelParserException {
-        String message = String.format("%n%sI. RESTRICTIVENESS:", LoggerUtils.tab());
-        System.out.println(message);
+        String message = String.format("%sI. RESTRICTIVENESS:", LoggerUtils.tab());
+        log.info(message);
         writer.write(message); writer.newLine();
 
         // create the operation
@@ -131,8 +149,8 @@ public class Main {
                                                        File filterFile,
                                                        File productsFile,
                                                 BufferedWriter writer) throws IOException, FeatureModelParserException {
-        String message = String.format("%n%sI.1. RESTRICTIVENESS - ALL LEAF FEATURES:", LoggerUtils.tab());
-        System.out.println(message);
+        String message = String.format("%sI.1. RESTRICTIVENESS - ALL LEAF FEATURES:", LoggerUtils.tab());
+        log.info(message);
         writer.write(message); writer.newLine();
 
         // create the operation
@@ -148,8 +166,8 @@ public class Main {
                                       File filterFile,
                                       File productsFile,
                                       BufferedWriter writer) throws IOException, FeatureModelParserException {
-        String message = String.format("%n%sII. ACCESSIBILITY:", LoggerUtils.tab());
-        System.out.println(message);
+        String message = String.format("%sII. ACCESSIBILITY:", LoggerUtils.tab());
+        log.info(message);
         writer.write(message); writer.newLine();
 
         // create the operation
@@ -165,8 +183,8 @@ public class Main {
                                               File filterFile,
                                               File productsFile,
                                               BufferedWriter writer) throws IOException, FeatureModelParserException {
-        String message = String.format("%n%sIII. PRODUCT CATALOG COVERAGE:", LoggerUtils.tab());
-        System.out.println(message);
+        String message = String.format("%sIII. PRODUCT CATALOG COVERAGE:", LoggerUtils.tab());
+        log.info(message);
         writer.write(message); writer.newLine();
 
         // create the operation
@@ -175,10 +193,6 @@ public class Main {
 
         LoggerUtils.indent();
         double results = coverage.calculate();
-
-        message = String.format("%sCoverage: %s", LoggerUtils.tab(), results);
-        log.info(message);
-        writer.write(message); writer.newLine();
         LoggerUtils.outdent();
     }
 
@@ -186,8 +200,8 @@ public class Main {
                                                File filterFile,
                                                File productsFile,
                                                BufferedWriter writer) throws IOException, FeatureModelParserException {
-        String message = String.format("%n%sIV. VISIBILITY OF PRODUCTS:", LoggerUtils.tab());
-        System.out.println(message);
+        String message = String.format("%sIV. VISIBILITY OF PRODUCTS:", LoggerUtils.tab());
+        log.info(message);
         writer.write(message); writer.newLine();
 
         // create the operation
@@ -197,11 +211,41 @@ public class Main {
         LoggerUtils.indent();
         HashMap<Product, Double> results = visibility.calculate();
         LoggerUtils.outdent();
+    }
 
-//        message = String.format("%sCoverage: %s", LoggerUtils.tab(), results);
-//        log.info(message);
-//        writer.write(message); writer.newLine();
-//        LoggerUtils.outdent();
+    private static void controversyOfFeatures(File fmFile,
+                                             File filterFile,
+                                             File productsFile,
+                                             BufferedWriter writer) throws IOException, FeatureModelParserException {
+
+        String message = String.format("%sV. CONTROVERSY OF FEATURES:", LoggerUtils.tab());
+        log.info(message);
+        writer.write(message); writer.newLine();
+
+        // create the operation
+        val controversy = new Controversy(fmFile, filterFile, productsFile);
+        controversy.setWriter(writer);
+
+        LoggerUtils.indent();
+        HashMap<String, Double> results = controversy.calculate();
+        LoggerUtils.outdent();
+    }
+
+    private static void globalControversy(File fmFile,
+                                          File filterFile,
+                                          File productsFile,
+                                          BufferedWriter writer) throws IOException, FeatureModelParserException {
+        String message = String.format("%sVI. GLOBAL CONTROVERSY:", LoggerUtils.tab());
+        log.info(message);
+        writer.write(message); writer.newLine();
+
+        // create the operation
+        val controversy = new GlobalControversy(fmFile, filterFile, productsFile);
+        controversy.setWriter(writer);
+
+        LoggerUtils.indent();
+        double results = controversy.calculate();
+        LoggerUtils.outdent();
     }
 
     public static void findProducts(File fmFile,

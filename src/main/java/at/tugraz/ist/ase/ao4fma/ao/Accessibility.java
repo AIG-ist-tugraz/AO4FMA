@@ -27,16 +27,11 @@ import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
-public class Accessibility {
+public class Accessibility extends AnalysisOperation {
 
     File fmFile;
     File filterFile;
     File productsFile;
-
-    @Setter
-    BufferedWriter writer = null;
-    @Setter
-    boolean printResults = true;
 
     AllRecommendationLists all = null;
 

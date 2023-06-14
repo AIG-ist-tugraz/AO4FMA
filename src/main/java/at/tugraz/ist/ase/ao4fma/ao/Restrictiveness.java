@@ -28,16 +28,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 @Slf4j
-public class Restrictiveness {
+public class Restrictiveness extends AnalysisOperation {
 
     File fmFile;
     File filterFile;
     File productsFile;
-
-    @Setter
-    BufferedWriter writer = null;
-    @Setter
-    boolean printResults = true;
 
     public Restrictiveness(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile) {
         this.fmFile = fmFile;

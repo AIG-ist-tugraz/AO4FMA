@@ -29,16 +29,11 @@ import java.util.List;
 import static at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapterFactory.createConfigurator;
 
 @Slf4j
-public class Recommendation {
+public class Recommendation extends AnalysisOperation {
 
     File fmFile;
     File filterFile;
     File productsFile;
-
-    @Setter
-    BufferedWriter writer = null;
-    @Setter
-    boolean printResults = true;
 
     @Setter
     IProductRankingStrategy rankingStrategy = null;

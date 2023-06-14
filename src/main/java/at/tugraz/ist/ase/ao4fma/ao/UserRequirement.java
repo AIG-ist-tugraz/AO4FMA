@@ -26,10 +26,7 @@ import java.util.Set;
 import static at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapterFactory.createConfigurator;
 
 @Slf4j
-public class UserRequirement {
-
-    @Setter
-    BufferedWriter writer = null;
+public class UserRequirement extends AnalysisOperation {
 
     public List<Requirement> getRequirements(File fmFile) throws FeatureModelParserException {
         val fm = Utilities.loadFeatureModel(fmFile);
@@ -82,6 +79,23 @@ public class UserRequirement {
             configurator.findAllSolutions(UR);
 
             if (configurator.getProducts().size() > 0) {
+                list.add(UR);
+            }
+        }
+        return list;
+    }
+
+    public List<Requirement> getInconsistentUserRequirements(File fmFile, File filterFile, File productsFile) throws FeatureModelParserException, IOException {
+        List<Requirement> URs = getRequirements(fmFile);
+
+        // filter consistent user requirements
+        val configurator = createConfigurator(fmFile, filterFile, productsFile);
+
+        List<Requirement> list = new ArrayList<>();
+        for (Requirement UR : URs) {
+            configurator.findAllSolutions(UR);
+
+            if (configurator.getProducts().size() == 0) {
                 list.add(UR);
             }
         }

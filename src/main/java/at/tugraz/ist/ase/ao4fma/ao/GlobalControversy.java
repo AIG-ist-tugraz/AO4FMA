@@ -8,66 +8,59 @@
 
 package at.tugraz.ist.ase.ao4fma.ao;
 
-import at.tugraz.ist.ase.ao4fma.product.Product;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
-public class ProductCatalogCoverage extends AnalysisOperation {
+public class GlobalControversy extends AnalysisOperation {
 
     File fmFile;
     File filterFile;
     File productsFile;
 
-    public ProductCatalogCoverage(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile) {
+    public GlobalControversy(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile) {
         this.fmFile = fmFile;
         this.filterFile = filterFile;
         this.productsFile = productsFile;
     }
 
     public double calculate() throws IOException, FeatureModelParserException {
-        val accessibility = new Accessibility(fmFile, filterFile, productsFile);
-        accessibility.setWriter(writer);
-        accessibility.setPrintResults(false);
+        UserRequirement urOperation = new UserRequirement();
 
-        HashMap<Product, Double> results = accessibility.calculate();
+        // all user requirements
+        List<Requirement> requirements = urOperation.getRequirements(fmFile);
+        int numberOfRequirements = requirements.size();
 
-        // NUMERATOR
-        int countAtLeastOne = 0;
-        for (Product p : results.keySet()) {
-            if (results.get(p) > 0) {
-                countAtLeastOne++;
-            }
-        }
+        // all inconsistent user requirements
+        requirements = urOperation.getInconsistentUserRequirements(fmFile, filterFile, productsFile);
+        int numberOfInconsistentRequirements = requirements.size();
 
-        double coverage = (double) countAtLeastOne / results.size();
+        // calculate the global controversy
+        double globalControversy = (double) numberOfInconsistentRequirements / numberOfRequirements;
 
         // print results
         LoggerUtils.indent();
         if (printResults) {
-            String message = String.format("%sNumber of products recommended at least one: %s", LoggerUtils.tab(), countAtLeastOne);
+            String message = String.format("%sTotal inconsistent URs: %s", LoggerUtils.tab(), numberOfInconsistentRequirements);
             log.info(message);
             if (writer != null) {
                 writer.write(message);
                 writer.newLine();
             }
-            message = String.format("%sNumber of products: %s", LoggerUtils.tab(), results.size());
+            message = String.format("%sTotal URs: %s", LoggerUtils.tab(), numberOfRequirements);
             log.info(message);
             if (writer != null) {
                 writer.write(message);
                 writer.newLine();
             }
-            message = String.format("%sGlobal controversy: %s", LoggerUtils.tab(), coverage);
+            message = String.format("%sGlobal controversy: %s", LoggerUtils.tab(), globalControversy);
             log.info(message);
             if (writer != null) {
                 writer.write(message);
@@ -76,7 +69,7 @@ public class ProductCatalogCoverage extends AnalysisOperation {
         }
         LoggerUtils.outdent();
 
-        return coverage;
+        return globalControversy;
     }
 
 }
