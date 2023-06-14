@@ -10,9 +10,8 @@ package at.tugraz.ist.ase.ao4fma;
 
 import at.tugraz.ist.ase.ao4fma.ao.*;
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
-import at.tugraz.ist.ase.ao4fma.product.Product;
-import at.tugraz.ist.ase.ao4fma.product.rank.SimpleProductRankingStrategy;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
+import at.tugraz.ist.ase.ao4fma.core.Product;
+import at.tugraz.ist.ase.ao4fma.core.rank.SimpleProductRankingStrategy;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import lombok.Cleanup;

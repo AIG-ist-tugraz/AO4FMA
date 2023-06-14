@@ -6,9 +6,8 @@
  * Contact: http://ase.ist.tugraz.at/ASE/
  */
 
-package at.tugraz.ist.ase.ao4fma.recommendation;
+package at.tugraz.ist.ase.ao4fma.core;
 
-import at.tugraz.ist.ase.ao4fma.product.Product;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

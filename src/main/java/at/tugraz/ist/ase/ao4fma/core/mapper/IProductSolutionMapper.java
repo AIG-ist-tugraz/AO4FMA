@@ -6,9 +6,9 @@
  * Contact: http://ase.ist.tugraz.at/ASE/
  */
 
-package at.tugraz.ist.ase.ao4fma.product.mapper;
+package at.tugraz.ist.ase.ao4fma.core.mapper;
 
-import at.tugraz.ist.ase.ao4fma.product.Product;
+import at.tugraz.ist.ase.ao4fma.core.Product;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 
 public interface IProductSolutionMapper {

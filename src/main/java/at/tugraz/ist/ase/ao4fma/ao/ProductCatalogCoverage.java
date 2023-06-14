@@ -8,16 +8,13 @@
 
 package at.tugraz.ist.ase.ao4fma.ao;
 
-import at.tugraz.ist.ase.ao4fma.product.Product;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
+import at.tugraz.ist.ase.ao4fma.core.Product;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;

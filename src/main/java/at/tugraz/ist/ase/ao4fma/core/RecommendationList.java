@@ -6,9 +6,8 @@
  * Contact: http://ase.ist.tugraz.at/ASE/
  */
 
-package at.tugraz.ist.ase.ao4fma.recommendation;
+package at.tugraz.ist.ase.ao4fma.core;
 
-import at.tugraz.ist.ase.ao4fma.product.Product;
 import com.google.common.base.Objects;
 
 import java.util.Iterator;

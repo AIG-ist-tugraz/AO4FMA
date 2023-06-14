@@ -6,10 +6,10 @@
  * Contact: http://ase.ist.tugraz.at/ASE/
  */
 
-package at.tugraz.ist.ase.ao4fma.product.rank;
+package at.tugraz.ist.ase.ao4fma.core.rank;
 
 import at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapter;
-import at.tugraz.ist.ase.ao4fma.product.Product;
+import at.tugraz.ist.ase.ao4fma.core.Product;
 import at.tugraz.ist.ase.hiconfit.fm.core.AbstractRelationship;
 import at.tugraz.ist.ase.hiconfit.fm.core.CTConstraint;
 import at.tugraz.ist.ase.hiconfit.fm.core.Feature;

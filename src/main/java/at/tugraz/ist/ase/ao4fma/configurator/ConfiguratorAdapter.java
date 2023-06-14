@@ -9,8 +9,8 @@
 package at.tugraz.ist.ase.ao4fma.configurator;
 
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
-import at.tugraz.ist.ase.ao4fma.product.Product;
-import at.tugraz.ist.ase.ao4fma.product.ProductAssortment;
+import at.tugraz.ist.ase.ao4fma.core.Product;
+import at.tugraz.ist.ase.ao4fma.core.ProductAssortment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;

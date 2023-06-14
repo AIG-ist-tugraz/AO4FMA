@@ -9,19 +9,17 @@
 package at.tugraz.ist.ase.ao4fma.ao;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
-import at.tugraz.ist.ase.ao4fma.product.ProductsReader;
-import at.tugraz.ist.ase.ao4fma.product.rank.SimpleProductRankingStrategy;
-import at.tugraz.ist.ase.ao4fma.recommendation.RecommendationList;
+import at.tugraz.ist.ase.ao4fma.core.ProductsReader;
+import at.tugraz.ist.ase.ao4fma.core.rank.SimpleProductRankingStrategy;
+import at.tugraz.ist.ase.ao4fma.core.RecommendationList;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
