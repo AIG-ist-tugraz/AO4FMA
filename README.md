@@ -36,5 +36,5 @@ Next, create a folder for the experiment results and copy results inside the Doc
 
 ```shell
 mkdir results
-docker run --rm --entrypoint tar wipeoutr-image cC ./results . | tar xvC ./results
+docker run --rm --entrypoint tar ao4fma cC ./results . | tar xvC ./results
 ```
