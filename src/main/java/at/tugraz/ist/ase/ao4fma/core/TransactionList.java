@@ -16,6 +16,10 @@ public class TransactionList implements Iterable<Transaction> {
 
     List<Transaction> transactions = new LinkedList<>();
 
+    public int size() {
+        return transactions.size();
+    }
+
     public void add(Transaction transaction) {
         transactions.add(transaction);
     }

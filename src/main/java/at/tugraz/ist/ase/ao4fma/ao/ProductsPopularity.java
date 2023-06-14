@@ -8,10 +8,7 @@
 
 package at.tugraz.ist.ase.ao4fma.ao;
 
-import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.core.*;
-import at.tugraz.ist.ase.ao4fma.core.rank.SimpleProductRankingStrategy;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
@@ -22,11 +19,10 @@ import lombok.val;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 @Slf4j
-public class Prominence extends AnalysisOperation {
+public class ProductsPopularity extends AnalysisOperation {
 
     File fmFile;
     File filterFile;
@@ -36,27 +32,27 @@ public class Prominence extends AnalysisOperation {
     List<Requirement> userRequirements = null;
     TransactionList mappedTransactions = null;
 
-    public Prominence(@NonNull File fmFile, @NonNull File filterFile,
-                      @NonNull File productsFile, @NonNull File transactionsFile) {
+    public ProductsPopularity(@NonNull File fmFile, @NonNull File filterFile,
+                              @NonNull File productsFile, @NonNull File transactionsFile) {
         this.fmFile = fmFile;
         this.filterFile = filterFile;
         this.productsFile = productsFile;
         this.transactionsFile = transactionsFile;
     }
 
-    public HashMap<String, Double> calculate() throws IOException, FeatureModelParserException {
+    public HashMap<Product, Double> calculate() throws IOException, FeatureModelParserException {
         loadData();
 
-        // load the feature model
-        val fm = Utilities.loadFeatureModel(fmFile);
+        val products = ProductsReader.read(productsFile);
 
-        LinkedHashMap<String, Double> results = new LinkedHashMap<>();
-        for (String feature : Utilities.getLeafFeatures(fm)) {
-            val prominence = calculate(feature);
-
-            results.put(feature, prominence);
+        // calculate visibility for each product
+        HashMap<Product, Double> popularities = new HashMap<>();
+        for (Product product : products) {
+            val popularityValue = calculate(product);
+            popularities.put(product, popularityValue);
         }
-        return results;
+
+        return popularities;
     }
 
     private void loadData() throws FeatureModelParserException, IOException {
@@ -78,12 +74,13 @@ public class Prominence extends AnalysisOperation {
         });
     }
 
-    public double calculate(String feature) throws IOException, FeatureModelParserException {
+    public double calculate(Product product) throws FeatureModelParserException, IOException {
         if (printResults) {
-            String message = String.format("%sFeature: %s", LoggerUtils.tab(), feature);
+            String message = String.format("%sProduct: %s", LoggerUtils.tab(), product.id());
             log.info(message);
             if (writer != null) {
-                writer.write(message); writer.newLine();
+                writer.write(message);
+                writer.newLine();
             }
         }
 
@@ -92,51 +89,35 @@ public class Prominence extends AnalysisOperation {
         }
 
         // NUMERATOR
-        long explicitly_selected = 0;
+        long selections = 0;
         for (Transaction t : mappedTransactions) {
-            if (t.req().getAssignments().stream().anyMatch(a -> a.getVariable().equals(feature) && a.getValue().equals("true"))) {
-                explicitly_selected++;
+            if (t.product_id().equals(product.id())) {
+                selections++;
             }
         }
 
         // DENOMINATOR - included
-        long included= 0;
-        for (Transaction t : mappedTransactions) {
-            // identify recommendation
-            Recommendation recommendation = Recommendation.builder()
-                    .fmFile(fmFile)
-                    .filterFile(filterFile)
-                    .productsFile(productsFile)
-                    .build();
-            recommendation.setWriter(writer);
-            recommendation.setPrintResults(false);
-            recommendation.setRankingStrategy(new SimpleProductRankingStrategy()); // set ranking strategy
-            RecommendationList recommendationList = recommendation.recommend(t.req());
+        int product_selections = mappedTransactions.size();
 
-            if (recommendationList.contains(feature)) {
-                included++;
-            }
-        }
-
-        // prominence
-        double prominence = (double) explicitly_selected / included;
+        // calculate popularity
+        double popularity = (double) selections / product_selections;
 
         // print results
         LoggerUtils.indent();
         if (printResults) {
-            String message = String.format("%sNumber of time when f selected explicitly: %s", LoggerUtils.tab(), explicitly_selected);
+            String message = String.format("%sSelections: %s", LoggerUtils.tab(), selections);
             log.info(message);
             if (writer != null) {
                 writer.write(message);
                 writer.newLine();
             }
-            message = String.format("%sNumber of recommendation where f included in: %s", LoggerUtils.tab(), included);
+            message = String.format("%sProduct selections: %s", LoggerUtils.tab(), product_selections);
             log.info(message);
             if (writer != null) {
                 writer.write(message);
                 writer.newLine();
             }
-            message = String.format("%sProminence: %s", LoggerUtils.tab(), prominence);
+            message = String.format("%sProduct Popularity: %s", LoggerUtils.tab(), popularity);
             log.info(message);
             if (writer != null) {
                 writer.write(message);
@@ -145,7 +126,7 @@ public class Prominence extends AnalysisOperation {
         }
         LoggerUtils.outdent();
 
-        return prominence;
+        return popularity;
     }
 
 }

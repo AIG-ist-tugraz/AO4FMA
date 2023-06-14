@@ -9,9 +9,11 @@
 package at.tugraz.ist.ase.ao4fma.ao;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
-import at.tugraz.ist.ase.ao4fma.core.*;
+import at.tugraz.ist.ase.ao4fma.core.RecommendationList;
+import at.tugraz.ist.ase.ao4fma.core.Transaction;
+import at.tugraz.ist.ase.ao4fma.core.TransactionList;
+import at.tugraz.ist.ase.ao4fma.core.TransactionsReader;
 import at.tugraz.ist.ase.ao4fma.core.rank.SimpleProductRankingStrategy;
-import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
@@ -26,7 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 @Slf4j
-public class Prominence extends AnalysisOperation {
+public class FeaturesPopularity extends AnalysisOperation {
 
     File fmFile;
     File filterFile;
@@ -36,8 +38,8 @@ public class Prominence extends AnalysisOperation {
     List<Requirement> userRequirements = null;
     TransactionList mappedTransactions = null;
 
-    public Prominence(@NonNull File fmFile, @NonNull File filterFile,
-                      @NonNull File productsFile, @NonNull File transactionsFile) {
+    public FeaturesPopularity(@NonNull File fmFile, @NonNull File filterFile,
+                              @NonNull File productsFile, @NonNull File transactionsFile) {
         this.fmFile = fmFile;
         this.filterFile = filterFile;
         this.productsFile = productsFile;
@@ -52,9 +54,9 @@ public class Prominence extends AnalysisOperation {
 
         LinkedHashMap<String, Double> results = new LinkedHashMap<>();
         for (String feature : Utilities.getLeafFeatures(fm)) {
-            val prominence = calculate(feature);
+            val popularity = calculate(feature);
 
-            results.put(feature, prominence);
+            results.put(feature, popularity);
         }
         return results;
     }
@@ -92,51 +94,38 @@ public class Prominence extends AnalysisOperation {
         }
 
         // NUMERATOR
-        long explicitly_selected = 0;
+        long selections = 0;
         for (Transaction t : mappedTransactions) {
             if (t.req().getAssignments().stream().anyMatch(a -> a.getVariable().equals(feature) && a.getValue().equals("true"))) {
-                explicitly_selected++;
+                selections++;
             }
         }
 
         // DENOMINATOR - included
-        long included= 0;
+        int feature_selections = 0;
         for (Transaction t : mappedTransactions) {
-            // identify recommendation
-            Recommendation recommendation = Recommendation.builder()
-                    .fmFile(fmFile)
-                    .filterFile(filterFile)
-                    .productsFile(productsFile)
-                    .build();
-            recommendation.setWriter(writer);
-            recommendation.setPrintResults(false);
-            recommendation.setRankingStrategy(new SimpleProductRankingStrategy()); // set ranking strategy
-            RecommendationList recommendationList = recommendation.recommend(t.req());
-
-            if (recommendationList.contains(feature)) {
-                included++;
-            }
+            feature_selections += t.req().getAssignments().size();
         }
 
-        // prominence
-        double prominence = (double) explicitly_selected / included;
+        // popularity
+        double popularity = (double) selections / feature_selections;
 
         // print results
         LoggerUtils.indent();
         if (printResults) {
-            String message = String.format("%sNumber of time when f selected explicitly: %s", LoggerUtils.tab(), explicitly_selected);
+            String message = String.format("%sSelections: %s", LoggerUtils.tab(), selections);
             log.info(message);
             if (writer != null) {
                 writer.write(message);
                 writer.newLine();
             }
-            message = String.format("%sNumber of recommendation where f included in: %s", LoggerUtils.tab(), included);
+            message = String.format("%sFeature selections: %s", LoggerUtils.tab(), feature_selections);
             log.info(message);
             if (writer != null) {
                 writer.write(message);
                 writer.newLine();
             }
-            message = String.format("%sProminence: %s", LoggerUtils.tab(), prominence);
+            message = String.format("%sFeature Popularity: %s", LoggerUtils.tab(), popularity);
             log.info(message);
             if (writer != null) {
                 writer.write(message);
@@ -145,7 +134,7 @@ public class Prominence extends AnalysisOperation {
         }
         LoggerUtils.outdent();
 
-        return prominence;
+        return popularity;
     }
 
 }

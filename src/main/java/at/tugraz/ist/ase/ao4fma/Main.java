@@ -125,7 +125,13 @@ public class Main {
 //        efficiencyOfProducts(fmFile, filterFile, productsFile, transactionsFile, writer);
 
         // Prominence
-        prominenceOfFeatures(fmFile, filterFile, productsFile, transactionsFile, writer);
+//        prominenceOfFeatures(fmFile, filterFile, productsFile, transactionsFile, writer);
+
+        // Popularity of Features
+        popularityOfFeatures(fmFile, filterFile, productsFile, transactionsFile, writer);
+
+        // Popularity of Products
+        popularityOfProducts(fmFile, filterFile, productsFile, transactionsFile, writer);
     }
 
     private static void restrictiveness(File fmFile,
@@ -287,6 +293,42 @@ public class Main {
 
         LoggerUtils.indent();
         HashMap<String, Double> results = prominence.calculate();
+        LoggerUtils.outdent();
+    }
+
+    private static void popularityOfFeatures(File fmFile,
+                                             File filterFile,
+                                             File productsFile,
+                                             File transactionsFile,
+                                             BufferedWriter writer) throws IOException, FeatureModelParserException {
+        String message = String.format("%sIX. POPULARITY OF FEATURES:", LoggerUtils.tab());
+        log.info(message);
+        writer.write(message); writer.newLine();
+
+        // create the operation
+        val popularity = new FeaturesPopularity(fmFile, filterFile, productsFile, transactionsFile);
+        popularity.setWriter(writer);
+
+        LoggerUtils.indent();
+        HashMap<String, Double> results = popularity.calculate();
+        LoggerUtils.outdent();
+    }
+
+    private static void popularityOfProducts(File fmFile,
+                                             File filterFile,
+                                             File productsFile,
+                                             File transactionsFile,
+                                             BufferedWriter writer) throws IOException, FeatureModelParserException {
+        String message = String.format("%sX. POPULARITY OF PRODUCTS:", LoggerUtils.tab());
+        log.info(message);
+        writer.write(message); writer.newLine();
+
+        // create the operation
+        val popularity = new ProductsPopularity(fmFile, filterFile, productsFile, transactionsFile);
+        popularity.setWriter(writer);
+
+        LoggerUtils.indent();
+        HashMap<Product, Double> results = popularity.calculate();
         LoggerUtils.outdent();
     }
 
