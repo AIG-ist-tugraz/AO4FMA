@@ -39,7 +39,8 @@ public class Main {
         val fmFile = new File(args[0]);
         val filterFile = new File(args[1]);
         val productsFile = new File(args[2]);
-        val queries_folder = args[3];
+        val transactionsFile = new File(args[3]);
+        val queries_folder = args[4];
 
         @Cleanup val writer = new BufferedWriter(new FileWriter("results.txt"));
         LoggerUtils.setUseThreadInfo(false);
@@ -100,25 +101,28 @@ public class Main {
 //        findProducts(fm, filterFile, products, writer);
 
         // Restrictiveness
-        restrictiveness(fmFile, filterFile, productsFile, writer, queries_folder);
+//        restrictiveness(fmFile, filterFile, productsFile, writer, queries_folder);
 
         // Restrictiveness for all features
-        restrictivenessAllLeafFeatures(fmFile, filterFile, productsFile, writer);
+//        restrictivenessAllLeafFeatures(fmFile, filterFile, productsFile, writer);
 
         // Accessibility
-        accessibility(fmFile, filterFile, productsFile, writer);
+//        accessibility(fmFile, filterFile, productsFile, writer);
 
         // Product Catalog Coverage
-        productCatalogCoverage(fmFile, filterFile, productsFile, writer);
+//        productCatalogCoverage(fmFile, filterFile, productsFile, writer);
 
         // Visibility of Products
-        visibilityOfProducts(fmFile, filterFile, productsFile, writer);
+//        visibilityOfProducts(fmFile, filterFile, productsFile, writer);
 
         // Controversy of Features
-        controversyOfFeatures(fmFile, filterFile, productsFile, writer);
+//        controversyOfFeatures(fmFile, filterFile, productsFile, writer);
 
         // Global controversy
-        globalControversy(fmFile, filterFile, productsFile, writer);
+//        globalControversy(fmFile, filterFile, productsFile, writer);
+
+        // Efficiency
+        efficiencyOfProducts(fmFile, filterFile, productsFile, transactionsFile, writer);
     }
 
     private static void restrictiveness(File fmFile,
@@ -244,6 +248,24 @@ public class Main {
 
         LoggerUtils.indent();
         double results = controversy.calculate();
+        LoggerUtils.outdent();
+    }
+
+    private static void efficiencyOfProducts(File fmFile,
+                                          File filterFile,
+                                          File productsFile,
+                                          File transactionsFile,
+                                          BufferedWriter writer) throws IOException, FeatureModelParserException {
+        String message = String.format("%sVII. EFFICIENCY OF PRODUCTS:", LoggerUtils.tab());
+        log.info(message);
+        writer.write(message); writer.newLine();
+
+        // create the operation
+        val efficiency = new Efficiency(fmFile, filterFile, productsFile, transactionsFile);
+        efficiency.setWriter(writer);
+
+        LoggerUtils.indent();
+        HashMap<Product, Double> results = efficiency.calculate();
         LoggerUtils.outdent();
     }
 
