@@ -9,18 +9,18 @@ Source code to accompany the paper "Analysis Operations On The Run: Beyond Stati
 
 ## Repository structure
 
-| *folder*                | *description*                                              |
-|-------------------------|------------------------------------------------------------|
-| ./data/app.cfg          | the configuration file                                     |
-| ./data/camera.xml       | testing feature model                                      |
-| ./data/filter.mzn       | filter constraints using MiniZinc syntax                   |
-| ./data/products.csv     | product assortment                                         |
-| ./data/transactions.csv | synthesized transactions                                   |
+| *folder*                | *description*                                                          |
+|-------------------------|------------------------------------------------------------------------|
+| ./data/app.cfg          | the configuration file                                                 |
+| ./data/camera.xml       | testing feature model                                                  |
+| ./data/filter.mzn       | filter constraints using MiniZinc syntax                               |
+| ./data/products.csv     | product assortment                                                     |
+| ./data/transactions.csv | synthesized transactions                                               |
 | ./data/query            | stores three user requirements used in calculating the Restrictiveness |
-| ./lib                   | a library                                                  |
-| ./src                   | source code                                                |
-| Dockerfile              | Dockerfile to build the Docker image                       |
-| results.txt             | new results                                                |
+| ./lib                   | a library                                                              |
+| ./src                   | source code                                                            |
+| Dockerfile              | Dockerfile to build the Docker image                                   |
+| results.txt             | new results                                                            |
 
 ## How to reproduce the experiment
 
