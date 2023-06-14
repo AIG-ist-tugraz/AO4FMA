@@ -9,6 +9,8 @@
 package at.tugraz.ist.ase.ao4fma;
 
 import at.tugraz.ist.ase.ao4fma.ao.*;
+import at.tugraz.ist.ase.ao4fma.cli.CmdLineOptions;
+import at.tugraz.ist.ase.ao4fma.cli.ConfigManager;
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.core.Product;
 import at.tugraz.ist.ase.ao4fma.core.rank.SimpleProductRankingStrategy;
@@ -28,6 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static at.tugraz.ist.ase.ao4fma.cli.ConfigManager.defaultConfigFile;
 import static at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapterFactory.createConfigurator;
 
 @Slf4j
@@ -36,96 +39,59 @@ public class Main {
     private static final List<String> QUERY_RESTRICTIVENESS_FILES = Arrays.asList("q1_1.csv", "q1_2.csv", "q1_3.csv");
 
     public static void main(String[] args) throws IOException, FeatureModelParserException {
-        val fmFile = new File(args[0]);
-        val filterFile = new File(args[1]);
-        val productsFile = new File(args[2]);
-        val transactionsFile = new File(args[3]);
-        val queries_folder = args[4];
+        String programTitle = "Analysis Operations On The Run";
+        String usage = "Usage: java -jar ao4fma.jar [options]]";
 
-        @Cleanup val writer = new BufferedWriter(new FileWriter("results.txt"));
+        // Parse command line arguments
+        CmdLineOptions cmdLineOptions = new CmdLineOptions(null, programTitle, null, usage);
+        cmdLineOptions.parseArgument(args);
+
+        if (cmdLineOptions.isHelp()) {
+            cmdLineOptions.printUsage();
+            System.exit(0);
+        }
+
+        cmdLineOptions.printWelcome();
+
+        String confFile = cmdLineOptions.getConfFile() == null ? defaultConfigFile : cmdLineOptions.getConfFile();
+        ConfigManager cfg = ConfigManager.getInstance(confFile);
+
+        val fmFile = cfg.getFmFile();
+        val filterFile = cfg.getFilterFile();
+        val productsFile = cfg.getProductsFile();
+        val transactionsFile = cfg.getTransactionsFile();
+        val queries_folder = cfg.getQueries_folder();
+        val resultsFile = cfg.getResultsFile();
+
+        @Cleanup val writer = new BufferedWriter(new FileWriter(resultsFile));
         LoggerUtils.setUseThreadInfo(false);
 
-        // All user requirements
-//        String message = String.format("%sAll user requirements:", LoggerUtils.tab());
-//        log.info(message);
-//        writer.write(message); writer.newLine();
-//        UserRequirement urOperation = new UserRequirement();
-//        List<Requirement> requirements = urOperation.getRequirements(fmFile);
-//
-//        // print all user requirements
-//        LoggerUtils.indent();
-//        Utilities.printList(requirements, writer);
-//        LoggerUtils.outdent();
-//
-//        // All global consistent user requirements
-//        message = String.format("%n%sAll global consistent user requirements:", LoggerUtils.tab());
-//        log.info(message);
-//        writer.write(message); writer.newLine();
-//        requirements = urOperation.getGlobalConsistentUserRequirements(fmFile);
-//
-//        // print all user requirements
-//        LoggerUtils.indent();
-//        Utilities.printList(requirements, writer);
-//        LoggerUtils.outdent();
-//
-//        // All consistent user requirements
-//        String message = String.format("%n%sAll consistent user requirements:", LoggerUtils.tab());
-//        log.info(message);
-//        writer.write(message); writer.newLine();
-//        List<Requirement> requirements = urOperation.getConsistentUserRequirements(fmFile, filterFile, productsFile);
-//
-//        // print all user requirements
-//        LoggerUtils.indent();
-//        Utilities.printList(requirements, writer);
-//        LoggerUtils.outdent();
-//
-//        // All inconsistent user requirements
-//        message = String.format("%n%sAll inconsistent user requirements:", LoggerUtils.tab());
-//        log.info(message);
-//        writer.write(message); writer.newLine();
-//        requirements = urOperation.getInconsistentUserRequirements(fmFile, filterFile, productsFile);
-//
-//        // print all user requirements
-//        LoggerUtils.indent();
-//        Utilities.printList(requirements, writer);
-//        LoggerUtils.outdent();
-
-//        message = String.format("%n%sThis is not all consistent user requirements:", LoggerUtils.tab());
-//        log.info(message);
-//        writer.write(message); writer.newLine();
-//        findProducts(fmFile, writer);
-
-//        message = String.format("%n%sProduct Assortment:", LoggerUtils.tab());
-//        log.info(message);
-//        writer.write(message); writer.newLine();
-//        findProducts(fm, filterFile, products, writer);
-
         // Restrictiveness
-//        restrictiveness(fmFile, filterFile, productsFile, writer, queries_folder);
+        restrictiveness(fmFile, filterFile, productsFile, writer, queries_folder);
 
         // Restrictiveness for all features
-//        restrictivenessAllLeafFeatures(fmFile, filterFile, productsFile, writer);
+        restrictivenessAllLeafFeatures(fmFile, filterFile, productsFile, writer);
 
         // Accessibility
-//        accessibility(fmFile, filterFile, productsFile, writer);
+        accessibility(fmFile, filterFile, productsFile, writer);
 
         // Product Catalog Coverage
-//        productCatalogCoverage(fmFile, filterFile, productsFile, writer);
+        productCatalogCoverage(fmFile, filterFile, productsFile, writer);
 
         // Visibility of Products
-//        visibilityOfProducts(fmFile, filterFile, productsFile, writer);
+        visibilityOfProducts(fmFile, filterFile, productsFile, writer);
 
         // Controversy of Features
-//        controversyOfFeatures(fmFile, filterFile, productsFile, writer);
+        controversyOfFeatures(fmFile, filterFile, productsFile, writer);
 
         // Global controversy
-//        globalControversy(fmFile, filterFile, productsFile, writer);
+        globalControversy(fmFile, filterFile, productsFile, writer);
 
         // Efficiency
-//        efficiencyOfProducts(fmFile, filterFile, productsFile, transactionsFile, writer);
+        efficiencyOfProducts(fmFile, filterFile, productsFile, transactionsFile, writer);
 
         // Prominence
-//        prominenceOfFeatures(fmFile, filterFile, productsFile, transactionsFile, writer);
+        prominenceOfFeatures(fmFile, filterFile, productsFile, transactionsFile, writer);
 
         // Popularity of Features
         popularityOfFeatures(fmFile, filterFile, productsFile, transactionsFile, writer);
