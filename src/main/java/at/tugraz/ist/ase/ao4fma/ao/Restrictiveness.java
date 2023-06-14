@@ -94,7 +94,8 @@ public class Restrictiveness extends AnalysisOperation {
         return restrictiveness;
     }
 
-    public LinkedHashMap<String, Double> calculate4AllLeafFeatures() throws IOException, FeatureModelParserException {
+    // calculate restrictiveness for all leaf features
+    public LinkedHashMap<String, Double> calculate() throws IOException, FeatureModelParserException {
         LinkedHashMap<String, Double> results = new LinkedHashMap<>();
 
         // load the feature model

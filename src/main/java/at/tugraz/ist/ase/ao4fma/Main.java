@@ -122,7 +122,10 @@ public class Main {
 //        globalControversy(fmFile, filterFile, productsFile, writer);
 
         // Efficiency
-        efficiencyOfProducts(fmFile, filterFile, productsFile, transactionsFile, writer);
+//        efficiencyOfProducts(fmFile, filterFile, productsFile, transactionsFile, writer);
+
+        // Prominence
+        prominenceOfFeatures(fmFile, filterFile, productsFile, transactionsFile, writer);
     }
 
     private static void restrictiveness(File fmFile,
@@ -161,7 +164,7 @@ public class Main {
         restrictiveness.setWriter(writer);
 
         LoggerUtils.indent();
-        LinkedHashMap<String, Double> results = restrictiveness.calculate4AllLeafFeatures();
+        LinkedHashMap<String, Double> results = restrictiveness.calculate();
         LoggerUtils.outdent();
     }
 
@@ -266,6 +269,24 @@ public class Main {
 
         LoggerUtils.indent();
         HashMap<Product, Double> results = efficiency.calculate();
+        LoggerUtils.outdent();
+    }
+
+    private static void prominenceOfFeatures(File fmFile,
+                                             File filterFile,
+                                             File productsFile,
+                                             File transactionsFile,
+                                             BufferedWriter writer) throws IOException, FeatureModelParserException {
+        String message = String.format("%sVIII. PROMINENCE OF FEATURES:", LoggerUtils.tab());
+        log.info(message);
+        writer.write(message); writer.newLine();
+
+        // create the operation
+        val prominence = new Prominence(fmFile, filterFile, productsFile, transactionsFile);
+        prominence.setWriter(writer);
+
+        LoggerUtils.indent();
+        HashMap<String, Double> results = prominence.calculate();
         LoggerUtils.outdent();
     }
 

@@ -9,6 +9,7 @@
 package at.tugraz.ist.ase.ao4fma.configurator;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
+import at.tugraz.ist.ase.ao4fma.core.mapper.ProductSolutionMapperImpl;
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
 import at.tugraz.ist.ase.ao4fma.core.ProductsReader;
@@ -50,6 +51,7 @@ public class ConfiguratorAdapterFactory {
                 .model(productAwareConfigurationModel)
                 .translator(new FMSolutionTranslator())
                 .productAssortment(products)
+                .productSolutionMapper(new ProductSolutionMapperImpl(productAwareConfigurationModel))
                 .build();
     }
 

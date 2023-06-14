@@ -8,6 +8,7 @@
 
 package at.tugraz.ist.ase.ao4fma.core;
 
+import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import com.google.common.base.Objects;
 
 import java.util.Iterator;
@@ -37,6 +38,17 @@ public class RecommendationList implements Iterable<Product> {
 
     public boolean contains(Product product) {
         return products.contains(product);
+    }
+
+    public boolean contains(String feature) {
+        return products.stream().anyMatch(p -> {
+            for (Assignment a : p.fm_values().getAssignments()) {
+                if (a.getVariable().equals(feature) && a.getValue().equals("true")) {
+                    return true;
+                }
+            }
+            return false;
+        });
     }
 
     @Override
