@@ -61,9 +61,9 @@ public class Main {
         val productsFile = cfg.getProductsFile();
         val transactionsFile = cfg.getTransactionsFile();
         val queries_folder = cfg.getQueries_folder();
-        val resultsFile = cfg.getResultsFile();
+        val resultFile = cfg.getResultFile();
 
-        @Cleanup val writer = new BufferedWriter(new FileWriter(resultsFile));
+        @Cleanup val writer = new BufferedWriter(new FileWriter(resultFile));
         LoggerUtils.setUseThreadInfo(false);
 
         // Restrictiveness

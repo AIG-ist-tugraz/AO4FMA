@@ -22,6 +22,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+/**
+ * Implementation of Controversy of Features
+ *
+ * @author Viet-Man Le (vietman.le@ist.tugraz.at)
+ */
 @Slf4j
 public class Controversy extends AnalysisOperation {
 
@@ -40,9 +45,9 @@ public class Controversy extends AnalysisOperation {
     public HashMap<String, Double> calculate() throws IOException, FeatureModelParserException {
         LinkedHashMap<String, Double> results = new LinkedHashMap<>();
 
-        UserRequirement urOperation = new UserRequirement();
+        UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
         // calculate all list of user requirements
-        userRequirements = urOperation.getInconsistentUserRequirements(fmFile, filterFile, productsFile);
+        userRequirements = urOperation.getInconsistentUserRequirements();
 
         // load the feature model
         val fm = Utilities.loadFeatureModel(fmFile);
@@ -67,9 +72,9 @@ public class Controversy extends AnalysisOperation {
         }
 
         if (userRequirements == null) {
-            UserRequirement urOperation = new UserRequirement();
+            UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
             // calculate all list of user requirements
-            userRequirements = urOperation.getInconsistentUserRequirements(fmFile, filterFile, productsFile);
+            userRequirements = urOperation.getInconsistentUserRequirements();
         }
 
         // calculate controversy

@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.chocosolver.solver.variables.IntVar;
 
 import java.io.File;
@@ -26,6 +27,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * This class extends the {@link ConfigurationModel} class by adding the filter constraints.
+ */
 @Slf4j
 public class ProductAwareConfigurationModel extends ConfigurationModel {
 
@@ -63,7 +67,7 @@ public class ProductAwareConfigurationModel extends ConfigurationModel {
 
         // sets new correct constraints to super class
         log.trace("{}Adding correct constraints", LoggerUtils.tab());
-        List<Constraint> B = new LinkedList<>(super.getCorrectConstraints());
+        val B = new LinkedList<>(super.getCorrectConstraints());
         B.addAll(filterConstraintList);
 
         this.setCorrectConstraints(B);
@@ -87,8 +91,8 @@ public class ProductAwareConfigurationModel extends ConfigurationModel {
     }
 
     public void addVariable(String varName, String domainName, IntVar intVar) {
-        Domain domain = getDomain(domainName);
-        Variable var = IntVariable.builder()
+        val domain = getDomain(domainName);
+        val var = IntVariable.builder()
                 .name(varName)
                 .domain(domain)
                 .chocoVar(intVar).build();

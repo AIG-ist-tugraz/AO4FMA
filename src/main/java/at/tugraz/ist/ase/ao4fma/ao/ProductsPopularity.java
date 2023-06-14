@@ -21,6 +21,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Implementation of Popularity of Products
+ *
+ * @author Viet-Man Le (vietman.le@ist.tugraz.at)
+ */
 @Slf4j
 public class ProductsPopularity extends AnalysisOperation {
 
@@ -56,11 +61,11 @@ public class ProductsPopularity extends AnalysisOperation {
     }
 
     private void loadData() throws FeatureModelParserException, IOException {
-        UserRequirement urOperation = new UserRequirement();
+        UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
         // calculate all list of user requirements
-        userRequirements = urOperation.getRequirements(fmFile);
+        userRequirements = urOperation.getRequirements();
 
-        val transactions = TransactionsReader.read(transactionsFile);
+        val transactions = TransactionReader.read(transactionsFile);
 
         // update data for transactions
         mappedTransactions = new TransactionList();

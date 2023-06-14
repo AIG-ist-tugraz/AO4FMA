@@ -12,6 +12,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * A list of transactions
+ */
 public class TransactionList implements Iterable<Transaction> {
 
     List<Transaction> transactions = new LinkedList<>();
@@ -28,6 +31,11 @@ public class TransactionList implements Iterable<Transaction> {
         return transactions.listIterator();
     }
 
+    /**
+     * Returns the number of times a product was purchased
+     * @param p a product
+     * @return the number of times the product was purchased
+     */
     public long selections(Product p) {
         return transactions.stream().filter(t -> t.product_id().equals(p.id())).count();
     }

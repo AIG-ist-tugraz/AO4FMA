@@ -12,11 +12,9 @@ import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import com.google.common.collect.Sets;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,10 +23,25 @@ import java.util.Set;
 
 import static at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapterFactory.createConfigurator;
 
+/**
+ * This class identifies all possible user requirements for a given feature model.
+ *
+ * @author Viet-Man Le (vietman.le@ist.tugraz.at)
+ */
 @Slf4j
 public class UserRequirement extends AnalysisOperation {
 
-    public List<Requirement> getRequirements(File fmFile) throws FeatureModelParserException {
+    File fmFile;
+    File filterFile;
+    File productsFile;
+
+    public UserRequirement(File fmFile, File filterFile, File productsFile) {
+        this.fmFile = fmFile;
+        this.filterFile = filterFile;
+        this.productsFile = productsFile;
+    }
+
+    public List<Requirement> getRequirements() throws FeatureModelParserException {
         val fm = Utilities.loadFeatureModel(fmFile);
         List<String> leafFeatures = Utilities.getLeafFeatures(fm);
 
@@ -44,7 +57,7 @@ public class UserRequirement extends AnalysisOperation {
                 List<String> var_value_combs = Utilities.generateFMValueCombinations(card, combination, leafFeatures);
 
                 var_value_combs.forEach(var_value_comb -> {
-                    Requirement requirement = Utilities.convertToRequirement(var_value_comb, fm);
+                    Requirement requirement = Utilities.convertToRequirement(var_value_comb);
                     URs.add(requirement);
                 });
             }
@@ -53,8 +66,8 @@ public class UserRequirement extends AnalysisOperation {
         return URs;
     }
 
-    public List<Requirement> getGlobalConsistentUserRequirements(File fmFile) throws FeatureModelParserException, IOException {
-        List<Requirement> URs = getRequirements(fmFile);
+    public List<Requirement> getGlobalConsistentUserRequirements() throws FeatureModelParserException, IOException {
+        List<Requirement> URs = getRequirements();
 
         // filter consistent user requirements
         val configurator = createConfigurator(fmFile);
@@ -68,8 +81,8 @@ public class UserRequirement extends AnalysisOperation {
         return list;
     }
 
-    public List<Requirement> getConsistentUserRequirements(File fmFile, File filterFile, File productsFile) throws FeatureModelParserException, IOException {
-        List<Requirement> URs = getRequirements(fmFile);
+    public List<Requirement> getConsistentUserRequirements() throws FeatureModelParserException, IOException {
+        List<Requirement> URs = getRequirements();
 
         // filter consistent user requirements
         val configurator = createConfigurator(fmFile, filterFile, productsFile);
@@ -85,8 +98,8 @@ public class UserRequirement extends AnalysisOperation {
         return list;
     }
 
-    public List<Requirement> getInconsistentUserRequirements(File fmFile, File filterFile, File productsFile) throws FeatureModelParserException, IOException {
-        List<Requirement> URs = getRequirements(fmFile);
+    public List<Requirement> getInconsistentUserRequirements() throws FeatureModelParserException, IOException {
+        List<Requirement> URs = getRequirements();
 
         // filter consistent user requirements
         val configurator = createConfigurator(fmFile, filterFile, productsFile);

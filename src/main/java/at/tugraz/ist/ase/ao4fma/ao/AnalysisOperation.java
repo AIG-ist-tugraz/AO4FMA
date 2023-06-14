@@ -12,9 +12,14 @@ import lombok.Setter;
 
 import java.io.BufferedWriter;
 
+/**
+ * Base class for all analysis operations
+ *
+ * @author Viet-Man Le (vietman.le@ist.tugraz.at)
+ */
 public abstract class AnalysisOperation {
     @Setter
-    BufferedWriter writer = null;
+    BufferedWriter writer = null; // print results to file
     @Setter
-    boolean printResults = true;
+    boolean printResults = true; // true to print results, false to not print results
 }

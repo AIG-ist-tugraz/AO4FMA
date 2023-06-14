@@ -10,8 +10,8 @@ package at.tugraz.ist.ase.ao4fma.ao;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.core.ProductsReader;
-import at.tugraz.ist.ase.ao4fma.core.rank.SimpleProductRankingStrategy;
 import at.tugraz.ist.ase.ao4fma.core.RecommendationList;
+import at.tugraz.ist.ase.ao4fma.core.rank.SimpleProductRankingStrategy;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
@@ -25,6 +25,11 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+/**
+ * Implementation of Restrictiveness of Features
+ *
+ * @author Viet-Man Le (vietman.le@ist.tugraz.at)
+ */
 @Slf4j
 public class Restrictiveness extends AnalysisOperation {
 

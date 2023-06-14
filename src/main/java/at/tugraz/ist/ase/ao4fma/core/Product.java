@@ -11,6 +11,13 @@ package at.tugraz.ist.ase.ao4fma.core;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 import com.google.common.base.Objects;
 
+/**
+ * A product
+ * @param id the id of the product
+ * @param properties technical properties of the product
+ * @param fm_values user requirements/feature values based on that the product was identified
+ * @param rf the result of ranking function
+ */
 public record Product (String id, Solution properties, Solution fm_values, int rf) {
     @Override
     public String toString() {

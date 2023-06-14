@@ -16,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -36,7 +34,7 @@ public final class ConfigManager {
     private final File productsFile;
     private final File transactionsFile;
     private final String queries_folder;
-    private final String resultsFile;
+    private final String resultFile;
 
     private static ConfigManager instance = null;
 
@@ -60,9 +58,9 @@ public final class ConfigManager {
         productsFile = new File(appProps.getProperty("productsFile", "./data/products.csv"));
         transactionsFile = new File(appProps.getProperty("transactionsFile", "./data/transactions.csv"));
         queries_folder = appProps.getProperty("queries_folder", "./data/query/");
-        resultsFile = appProps.getProperty("results", "results.csv");
+        resultFile = appProps.getProperty("results", "results.csv");
 
         log.trace("{}<<< Read configurations [fmFile={}, filterFile={}, productsFile={}, transactionsFile={}, queries_folder={}, resultsFile={}]",
-                LoggerUtils.tab(), fmFile, filterFile, productsFile, transactionsFile, queries_folder, resultsFile);
+                LoggerUtils.tab(), fmFile, filterFile, productsFile, transactionsFile, queries_folder, resultFile);
     }
 }

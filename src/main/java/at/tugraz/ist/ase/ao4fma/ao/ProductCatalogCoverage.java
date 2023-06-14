@@ -19,6 +19,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * Implementation of Product Catalog Coverage
+ *
+ * @author Viet-Man Le (vietman.le@ist.tugraz.at)
+ */
 @Slf4j
 public class ProductCatalogCoverage extends AnalysisOperation {
 

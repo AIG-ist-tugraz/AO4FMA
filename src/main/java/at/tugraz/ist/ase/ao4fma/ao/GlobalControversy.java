@@ -18,6 +18,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Implementation of Global Controversy
+ *
+ * @author Viet-Man Le (vietman.le@ist.tugraz.at)
+ */
 @Slf4j
 public class GlobalControversy extends AnalysisOperation {
 
@@ -32,14 +37,14 @@ public class GlobalControversy extends AnalysisOperation {
     }
 
     public double calculate() throws IOException, FeatureModelParserException {
-        UserRequirement urOperation = new UserRequirement();
+        UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
 
         // all user requirements
-        List<Requirement> requirements = urOperation.getRequirements(fmFile);
+        List<Requirement> requirements = urOperation.getRequirements();
         int numberOfRequirements = requirements.size();
 
         // all inconsistent user requirements
-        requirements = urOperation.getInconsistentUserRequirements(fmFile, filterFile, productsFile);
+        requirements = urOperation.getInconsistentUserRequirements();
         int numberOfInconsistentRequirements = requirements.size();
 
         // calculate the global controversy

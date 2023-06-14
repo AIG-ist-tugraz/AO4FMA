@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
+/**
+ * A list of recommended products for a user requirement
+ */
 public class RecommendationList implements Iterable<Product> {
 
     List<Product> products;
@@ -32,14 +35,29 @@ public class RecommendationList implements Iterable<Product> {
         return products.isEmpty();
     }
 
+    /**
+     * Get the rank of the product in the list
+     * @param product the product
+     * @return the rank of the product in the list
+     */
     public int rank(Product product) {
         return products.indexOf(product) + 1;
     }
 
+    /**
+     * Check if the recommendation list contains the product
+     * @param product the product
+     * @return true if the recommendation list contains the product
+     */
     public boolean contains(Product product) {
         return products.contains(product);
     }
 
+    /**
+     * Check if the feature is part of the user requirements that led to the recommendation list
+     * @param feature the feature
+     * @return true if the feature is part of the user requirements that led to the recommendation list
+     */
     public boolean contains(String feature) {
         return products.stream().anyMatch(p -> {
             for (Assignment a : p.fm_values().getAssignments()) {

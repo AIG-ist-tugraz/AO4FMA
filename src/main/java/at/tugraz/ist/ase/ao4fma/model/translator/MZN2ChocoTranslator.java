@@ -14,9 +14,8 @@ import at.tugraz.ist.ase.ao4fma.model.translator.core.MZN2ChocoLexer;
 import at.tugraz.ist.ase.ao4fma.model.translator.core.MZN2ChocoParser;
 import at.tugraz.ist.ase.hiconfit.common.ConstraintUtils;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
-import at.tugraz.ist.ase.hiconfit.kb.core.Domain;
 import lombok.extern.slf4j.Slf4j;
-import org.antlr.v4.runtime.CharStream;
+import lombok.val;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -34,6 +33,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * Translates the MZN file to a Choco model using ANTLR4.
+ * This is a simple translator with limited functionality.
+ * The order of the specification of variables, domains, and constraints has to be:
+ * - First, using enum syntax to specify domains
+ * - Second, using var syntax to specify variables
+ * - Finally, using constraint syntax to specify constraints
+ * Supporting operators: ==, !=, /\, \/, ->, <->
+ * Expression forms: <exp> <op> <exp>
+ *     <variable> <op> <variable>
+ * Constraints: constraint [::id] <ep>
+ *
+ * @author Viet-Man Le (vietman.le@ist.tugraz.at)
+ */
 @Slf4j
 public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
 
@@ -51,14 +64,14 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
 
         this.model = model;
 
-        CharStream input = CharStreams.fromStream(inputFile);
-        MZN2ChocoLexer lexer = new MZN2ChocoLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        MZN2ChocoParser parser = new MZN2ChocoParser(tokens);
+        val input = CharStreams.fromStream(inputFile);
+        val lexer = new MZN2ChocoLexer(input);
+        val tokens = new CommonTokenStream(lexer);
+        val parser = new MZN2ChocoParser(tokens);
         ParseTree tree = parser.configuration();
 
         // create a standard ANTLR parse tree walker
-        ParseTreeWalker walker = new ParseTreeWalker();
+        val walker = new ParseTreeWalker();
         // feed to walker
         walker.walk(this, tree);        // walk parse tree
 
@@ -109,7 +122,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
     private void addVariable(String varName, String domainName) {
         log.debug("{}Adding the variable {} of the domain {} to Model >>>", LoggerUtils.tab(), varName.toUpperCase(), domainName.toUpperCase());
         // check the existence of domainName
-        Domain domain = model.getDomain(domainName);
+        val domain = model.getDomain(domainName);
 
         if (domain == null) {
             throw new MZN2ChocoTranslatorException("Domain " + domainName + " hasn't declared yet");
@@ -117,7 +130,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
 
         log.debug("{}Creating an IntVar for the variable {} >>>", LoggerUtils.tab(), varName.toUpperCase());
         // create a variable in the Choco Model
-        IntVar intVar = model.getModel().intVar(varName, domain.getIntValues());
+        val intVar = model.getModel().intVar(varName, domain.getIntValues());
 
         model.addVariable(varName, domainName, intVar);
         log.debug("{}<<< IntVar for the variable {} created", LoggerUtils.tab(), varName.toUpperCase());
@@ -155,7 +168,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
         String strConstraint = leftPart + " -> " + rightPart;
 
         log.debug("{}Sets choco constraints to DRConstraint", LoggerUtils.tab());
-        at.tugraz.ist.ase.hiconfit.kb.core.Constraint constraint = new at.tugraz.ist.ase.hiconfit.kb.core.Constraint(strConstraint);
+        val constraint = new at.tugraz.ist.ase.hiconfit.kb.core.Constraint(strConstraint);
         ConstraintUtils.addChocoConstraintsToConstraint(false, constraint, model.getModel(), oldNumCstrs, newNumCstrs - 1);
         model.addConstraint(constraint);
 
@@ -186,7 +199,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
 
     private Constraint andContextTranslate(ParserRuleContext context) {
         log.debug("{}Parsing {} >>>", LoggerUtils.tab(), context.getText());
-        MZN2ChocoParser.AndContext ctx = (MZN2ChocoParser.AndContext) context;
+        val ctx = (MZN2ChocoParser.AndContext) context;
 
         List<MZN2ChocoParser.ExprContext> cxs = ctx.expr();
 
@@ -218,7 +231,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
     }
 
     private Constraint addAndConstraint(Constraint[] cstrs) {
-        Constraint cstr = model.getModel().and(cstrs);
+        val cstr = model.getModel().and(cstrs);
         log.debug("{}Adds AND constraint to the Choco model >>>", LoggerUtils.tab());
         return cstr;
     }
@@ -233,7 +246,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
 
         if (context instanceof MZN2ChocoParser.EqualContext) { // equal
             log.debug("{}Parsing {} >>>", LoggerUtils.tab(), context.getText());
-            MZN2ChocoParser.EqualContext cx = (MZN2ChocoParser.EqualContext)context;
+            val cx = (MZN2ChocoParser.EqualContext) context;
 
             var = exprIDContextTranslate((MZN2ChocoParser.IdContext) cx.expr(0));
 
@@ -257,7 +270,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
             op = "=";
         } else { // not equal
             log.debug("{}Parsing {} >>>", LoggerUtils.tab(), context.getText());
-            MZN2ChocoParser.NotEqualContext cx = (MZN2ChocoParser.NotEqualContext)context;
+            val cx = (MZN2ChocoParser.NotEqualContext)context;
 
             var = exprIDContextTranslate((MZN2ChocoParser.IdContext) cx.expr(0));
 
@@ -289,8 +302,8 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
     private Constraint addArithmConstraint(Variable variable, String op, int value) {
         Constraint cstr;
 
-        if (variable instanceof IntVar) {
-            cstr =  model.getModel().arithm((IntVar) variable, op, value);
+        if (variable instanceof IntVar var) {
+            cstr =  model.getModel().arithm(var, op, value);
         } else {
             throw new MZN2ChocoTranslatorException("Variable " + variable.getName() + " is not an IntVar or a BoolVar");
         }
@@ -300,7 +313,7 @@ public class MZN2ChocoTranslator extends MZN2ChocoBaseListener {
     }
 
     public int getValueIndex(String value, String domainName) {
-        Domain domain = model.getDomain(domainName);
+        val domain = model.getDomain(domainName);
 
         if (domain == null) {
             throw new MZN2ChocoTranslatorException("Domain " + domainName + " not found");

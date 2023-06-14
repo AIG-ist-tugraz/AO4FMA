@@ -15,6 +15,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Product Assortment
+ */
 public class ProductAssortment implements Iterable<Product> {
     List<Product> products = new LinkedList<>();
 
@@ -33,13 +36,12 @@ public class ProductAssortment implements Iterable<Product> {
         return products.listIterator();
     }
 
-//    public boolean contains(Solution solution) {
-//        Product product = products.stream().filter(p -> p.properties().equals(solution)).findFirst().orElse(null);
-//
-//        return product != null;
-//    }
-
-    public Optional<Product> get(Solution solution) {
-        return products.stream().filter(p -> p.properties().equals(solution)).findFirst();
+    /**
+     * Get the product with the given properties
+     * @param properties the properties of the product
+     * @return  the product with the given properties
+     */
+    public Optional<Product> get(Solution properties) {
+        return products.stream().filter(p -> p.properties().equals(properties)).findFirst();
     }
 }

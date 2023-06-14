@@ -8,9 +8,9 @@
 
 package at.tugraz.ist.ase.ao4fma.ao;
 
+import at.tugraz.ist.ase.ao4fma.core.AllRecommendationLists;
 import at.tugraz.ist.ase.ao4fma.core.Product;
 import at.tugraz.ist.ase.ao4fma.core.ProductsReader;
-import at.tugraz.ist.ase.ao4fma.core.AllRecommendationLists;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import lombok.NonNull;
@@ -21,6 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * Implementation of Accessibility of Products
+ *
+ * @author Viet-Man Le (vietman.le@ist.tugraz.at)
+ */
 @Slf4j
 public class Accessibility extends AnalysisOperation {
 

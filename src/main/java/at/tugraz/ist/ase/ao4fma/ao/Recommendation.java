@@ -9,11 +9,11 @@
 package at.tugraz.ist.ase.ao4fma.ao;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
+import at.tugraz.ist.ase.ao4fma.core.AllRecommendationLists;
 import at.tugraz.ist.ase.ao4fma.core.Product;
+import at.tugraz.ist.ase.ao4fma.core.RecommendationList;
 import at.tugraz.ist.ase.ao4fma.core.rank.IProductRankingStrategy;
 import at.tugraz.ist.ase.ao4fma.core.rank.SimpleProductRankingStrategy;
-import at.tugraz.ist.ase.ao4fma.core.AllRecommendationLists;
-import at.tugraz.ist.ase.ao4fma.core.RecommendationList;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import lombok.Builder;
@@ -27,6 +27,11 @@ import java.util.List;
 
 import static at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapterFactory.createConfigurator;
 
+/**
+ * Implementation of a Recommendation task
+ *
+ * @author Viet-Man Le (vietman.le@ist.tugraz.at)
+ */
 @Slf4j
 public class Recommendation extends AnalysisOperation {
 
@@ -69,10 +74,10 @@ public class Recommendation extends AnalysisOperation {
 
     public AllRecommendationLists calculateAllRecommendations() throws FeatureModelParserException, IOException {
         AllRecommendationLists all = new AllRecommendationLists();
-        UserRequirement urOperation = new UserRequirement();
+        UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
 
         // calculate all list of user requirements
-        List<Requirement> userRequirements = urOperation.getConsistentUserRequirements(fmFile, filterFile, productsFile);
+        List<Requirement> userRequirements = urOperation.getConsistentUserRequirements();
 
         Recommendation recommendation = Recommendation.builder()
                 .fmFile(fmFile)

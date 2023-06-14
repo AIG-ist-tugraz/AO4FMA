@@ -46,50 +46,9 @@ public class Utilities {
         return parser.parse(fileFM);
     }
 
-//    public List<Feature> getLeafFeatures(@NonNull FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> fm) {
-//        return fm.getBfFeatures().stream().filter(Feature::isLeaf).collect(Collectors.toList());
-//    }
-
     public List<String> getLeafFeatures(@NonNull FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> fm) {
         return fm.getBfFeatures().stream().filter(Feature::isLeaf).map(Feature::getName).collect(Collectors.toList());
     }
-
-//    /**
-//     * Replace special characters (e.g. space, -) by underscore characters.
-//     *
-//     * @param st - a string needed to replace
-//     * @return a new string in which the special characters are replaced
-//     */
-//    public String replaceSpecialCharactersByUnderscore(@NonNull String st) {
-//        return st.replaceAll("[^a-zA-Z0-9]", "_");
-//    }
-//
-//    public String getDatabaseName(@NonNull File fileFM) {
-//        return fileFM.getName().substring(0, fileFM.getName().indexOf("."));
-//    }
-
-//    public String getTableName(@NonNull File fileFM) {
-//        return replaceSpecialCharactersByUnderscore(getDatabaseName(fileFM));
-//    }
-//
-//    public List<String> getColumnNames(@NonNull FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> fm) {
-//        return fm.getBfFeatures().stream().map(f -> replaceSpecialCharactersByUnderscore(f.getName())).toList();
-//    }
-//
-//    public List<String> getColumnNames(@NonNull Solution firstProduct) {
-//        return firstProduct.getAssignments().stream().map(f -> replaceSpecialCharactersByUnderscore(f.getVariable())).toList();
-//    }
-//
-//    public List<String> getColumnSpecs(Solution firstProduct) {
-//        List<String> columnSpecs = new ArrayList<>();
-//        for (Assignment assignment : firstProduct.getAssignments()) {
-//            if (assignment.getValue().equals("true") || assignment.getValue().equals("false"))
-//                columnSpecs.add(assignment.getVariable() + " BOOLEAN");
-//            else
-//                columnSpecs.add(assignment.getVariable() + " VARCHAR(255)");
-//        }
-//        return columnSpecs;
-//    }
 
     public Requirement readRequirement(@NonNull String filepath) throws IOException {
         File file = new File(filepath);
@@ -128,7 +87,7 @@ public class Utilities {
         return value_combs;
     }
 
-    private static List<String> generateValueCombinations(List<String> combs,
+    private List<String> generateValueCombinations(List<String> combs,
                                                           String feature) {
         List<String> newCombs = new LinkedList<>();
         List<String> values = List.of("true"); // "false"
@@ -150,14 +109,14 @@ public class Utilities {
         return newCombs;
     }
 
-    public static Requirement convertToRequirement(String varValueComb, FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> fm) {
+    public Requirement convertToRequirement(String varValueComb) {
         RequirementBuilder urBuilder = new RequirementBuilder();
         return urBuilder.build(varValueComb);
     }
 
-    public <T> void printList(List<T> products, BufferedWriter writer) throws IOException {
+    public <T> void printList(@NonNull List<T> tList, BufferedWriter writer) throws IOException {
         int counter = 0;
-        for (T s : products) {
+        for (T s : tList) {
             val message = String.format("%s%s %s", LoggerUtils.tab(), ++counter, s);
             log.info(message);
             if (writer != null) {

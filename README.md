@@ -30,7 +30,7 @@ Build a Docker image of the **AO4FMA** with the following command:
 docker build -t ao4fma .
 ```
 
-This step may take 8-10 minutes to complete.
+> It took around 8-10 minutes to complete this step on an Apple M1 laptop.
 
 Next, create a folder for the experiment results and copy results inside the Docker image to the folder:
 

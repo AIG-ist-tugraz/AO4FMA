@@ -9,11 +9,9 @@
 package at.tugraz.ist.ase.ao4fma.ao;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
-import at.tugraz.ist.ase.ao4fma.core.RecommendationList;
 import at.tugraz.ist.ase.ao4fma.core.Transaction;
 import at.tugraz.ist.ase.ao4fma.core.TransactionList;
-import at.tugraz.ist.ase.ao4fma.core.TransactionsReader;
-import at.tugraz.ist.ase.ao4fma.core.rank.SimpleProductRankingStrategy;
+import at.tugraz.ist.ase.ao4fma.core.TransactionReader;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.common.LoggerUtils;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
@@ -27,6 +25,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+/**
+ * Implementation of Popularity of Features
+ *
+ * @author Viet-Man Le (vietman.le@ist.tugraz.at)
+ */
 @Slf4j
 public class FeaturesPopularity extends AnalysisOperation {
 
@@ -62,11 +65,11 @@ public class FeaturesPopularity extends AnalysisOperation {
     }
 
     private void loadData() throws FeatureModelParserException, IOException {
-        UserRequirement urOperation = new UserRequirement();
+        UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
         // calculate all list of user requirements
-        userRequirements = urOperation.getRequirements(fmFile);
+        userRequirements = urOperation.getRequirements();
 
-        val transactions = TransactionsReader.read(transactionsFile);
+        val transactions = TransactionReader.read(transactionsFile);
 
         // update data for transactions
         mappedTransactions = new TransactionList();
