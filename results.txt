@@ -111,7 +111,7 @@ II. ACCESSIBILITY:
 III. PRODUCT CATALOG COVERAGE:
       Number of products recommended at least one: 8
       Number of products: 8
-      Global controversy: 1.0
+      Product Catalog Coverage: 1.0
 IV. VISIBILITY OF PRODUCTS:
    Product: p1
       Visibility: 0.5909090909090908

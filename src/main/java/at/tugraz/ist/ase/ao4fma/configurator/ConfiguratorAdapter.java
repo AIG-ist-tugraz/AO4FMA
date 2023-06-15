@@ -8,10 +8,10 @@
 
 package at.tugraz.ist.ase.ao4fma.configurator;
 
-import at.tugraz.ist.ase.ao4fma.core.mapper.IProductSolutionMapper;
-import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.core.Product;
 import at.tugraz.ist.ase.ao4fma.core.ProductAssortment;
+import at.tugraz.ist.ase.ao4fma.core.mapper.IProductSolutionMapper;
+import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
@@ -25,6 +25,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Adapter for the Configurator class
+ */
 public class ConfiguratorAdapter extends Configurator {
 
     private final ProductAwareConfigurationModel model;

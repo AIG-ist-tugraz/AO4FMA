@@ -69,7 +69,7 @@ public class ProductCatalogCoverage extends AnalysisOperation {
                 writer.write(message);
                 writer.newLine();
             }
-            message = String.format("%sGlobal controversy: %s", LoggerUtils.tab(), coverage);
+            message = String.format("%sProduct Catalog Coverage: %s", LoggerUtils.tab(), coverage);
             log.info(message);
             if (writer != null) {
                 writer.write(message);

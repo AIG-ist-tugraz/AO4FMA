@@ -9,10 +9,10 @@
 package at.tugraz.ist.ase.ao4fma.configurator;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
+import at.tugraz.ist.ase.ao4fma.core.ProductsReader;
 import at.tugraz.ist.ase.ao4fma.core.mapper.ProductSolutionMapperImpl;
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
-import at.tugraz.ist.ase.ao4fma.core.ProductsReader;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
 import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;
 import at.tugraz.ist.ase.hiconfit.configurator.Configurator;
@@ -55,7 +55,7 @@ public class ConfiguratorAdapterFactory {
                 .build();
     }
 
-    public static Configurator createConfigurator(File fmFile) throws FeatureModelParserException, IOException {
+    public static Configurator createConfigurator(File fmFile) throws FeatureModelParserException {
         // load the feature model
         val fm = Utilities.loadFeatureModel(fmFile);
 
