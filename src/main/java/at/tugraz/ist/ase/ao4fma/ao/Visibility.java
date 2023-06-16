@@ -8,6 +8,7 @@
 
 package at.tugraz.ist.ase.ao4fma.ao;
 
+import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.core.AllRecommendationLists;
 import at.tugraz.ist.ase.ao4fma.core.Product;
 import at.tugraz.ist.ase.ao4fma.core.ProductsReader;
@@ -36,10 +37,7 @@ public class Visibility extends AnalysisOperation {
     }
 
     public HashMap<Product, Double> calculate() throws IOException, FeatureModelParserException {
-        Recommendation recommendation = new Recommendation(fmFile, filterFile, productsFile);
-        recommendation.setWriter(writer);
-        recommendation.setPrintResults(false);
-        all = recommendation.calculateAllRecommendations();
+        calculateAllRecommendations();
 
         val products = ProductsReader.read(productsFile); // don't need to calculate rf
 
@@ -54,20 +52,10 @@ public class Visibility extends AnalysisOperation {
     }
 
     public double calculate(Product product) throws FeatureModelParserException, IOException {
-        if (printResults) {
-            String message = String.format("%sProduct: %s", LoggerUtils.tab(), product.id());
-            log.info(message);
-            if (writer != null) {
-                writer.write(message);
-                writer.newLine();
-            }
-        }
+        Utilities.printInfo(printResults, writer, "Product", product.id());
 
         if (all == null) {
-            Recommendation recommendation = new Recommendation(fmFile, filterFile, productsFile);
-            recommendation.setWriter(writer);
-            recommendation.setPrintResults(false);
-            all = recommendation.calculateAllRecommendations();
+            calculateAllRecommendations();
         }
 
         // calculate visibility
@@ -88,5 +76,12 @@ public class Visibility extends AnalysisOperation {
         LoggerUtils.outdent();
 
         return visibility;
+    }
+
+    private void calculateAllRecommendations() throws FeatureModelParserException, IOException {
+        Recommendation recommendation = new Recommendation(fmFile, filterFile, productsFile);
+        recommendation.setWriter(writer);
+        recommendation.setPrintResults(false);
+        all = recommendation.calculateAllRecommendations();
     }
 }

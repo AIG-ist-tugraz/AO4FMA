@@ -38,17 +38,10 @@ public class Restrictiveness extends AnalysisOperation {
     }
 
     public double calculate(Requirement req) throws IOException, FeatureModelParserException {
-        if (printResults) {
-            String message = String.format("%sRequirement: %s", LoggerUtils.tab(), req);
-            log.info(message);
-            if (writer != null) {
-                writer.write(message);
-                writer.newLine();
-            }
-        }
+        Utilities.printInfo(printResults, writer, "Requirement", req.toString());
 
         // read products
-        val productAssortment = ProductsReader.read(productsFile); // don't need to calculate rf
+        val productAssortment = ProductsReader.read(productsFile);
         // DENOMINATOR - the total number of products
         int totalProducts = productAssortment.size();
 

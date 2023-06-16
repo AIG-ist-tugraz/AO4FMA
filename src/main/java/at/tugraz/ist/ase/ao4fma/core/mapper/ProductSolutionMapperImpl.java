@@ -9,7 +9,6 @@
 package at.tugraz.ist.ase.ao4fma.core.mapper;
 
 import at.tugraz.ist.ase.ao4fma.core.Product;
-import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 
@@ -18,21 +17,15 @@ import java.util.List;
 
 public class ProductSolutionMapperImpl implements IProductSolutionMapper {
 
-    private final ProductAwareConfigurationModel model;
-
-    public ProductSolutionMapperImpl(ProductAwareConfigurationModel model) {
-        this.model = model;
-    }
-
     @Override
-    public Product toProduct(Solution solution) {
+    public Product toProduct(Solution solution, int num_properties) {
         List<Assignment> newAssProperties = new LinkedList<>();
         List<Assignment> newAssFeatures = new LinkedList<>();
 
         for (int i = 0; i < solution.getAssignments().size(); i++) {
             Assignment assignment = solution.getAssignments().get(i);
 
-            if (i < model.getFilterVariableList().size()) {
+            if (i < num_properties) {
                 newAssProperties.add(assignment);
             } else {
                 newAssFeatures.add(assignment);

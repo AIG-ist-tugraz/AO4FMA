@@ -60,7 +60,7 @@ public class UserRequirement extends AnalysisOperation {
         return URs;
     }
 
-    public List<Requirement> getGlobalConsistentUserRequirements() throws FeatureModelParserException, IOException {
+    public List<Requirement> getGlobalConsistentUserRequirements() throws FeatureModelParserException {
         List<Requirement> URs = getRequirements();
 
         // filter consistent user requirements

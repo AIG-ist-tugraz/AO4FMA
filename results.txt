@@ -113,9 +113,9 @@ II. ACCESSIBILITY:
       Total recommendations: 47
       Accessibility: 0.3191489361702128
 III. PRODUCT CATALOG COVERAGE:
-      Number of products recommended at least one: 8
-      Number of products: 8
-      Product Catalog Coverage: 1.0
+   Number of products recommended at least one: 8
+   Number of products: 8
+   Product Catalog Coverage: 1.0
 IV. VISIBILITY OF PRODUCTS:
    Product: p1
       rank: 1 - worst rank: 4
@@ -279,9 +279,9 @@ V. CONTROVERSY OF FEATURES:
       Total inconsistent URs: 16
       Controversy: 1.0
 VI. GLOBAL CONTROVERSY:
-      Total inconsistent URs: 16
-      Total URs: 63
-      Global controversy: 0.25396825396825395
+   Total inconsistent URs: 16
+   Total URs: 63
+   Global controversy: 0.25396825396825395
 VII. EFFICIENCY OF PRODUCTS:
    Product: p1
       Selections: 902

@@ -46,10 +46,6 @@ public class Recommendation extends AnalysisOperation {
     }
 
     public RecommendationList recommend(Requirement req) throws FeatureModelParserException, IOException {
-        // load the feature model
-//        val fm = Utilities.loadFeatureModel(fmFile);
-
-//        val configurator = createConfigurator(fmFile, filterFile, productsFile);
         if (configurator == null) {
             configurator = createConfigurator(fmFile, filterFile, productsFile, rankingStrategy.getCalculator(fmFile, filterFile, productsFile));
         }

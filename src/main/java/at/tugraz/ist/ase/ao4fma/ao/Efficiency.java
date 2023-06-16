@@ -8,6 +8,7 @@
 
 package at.tugraz.ist.ase.ao4fma.ao;
 
+import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.core.*;
 import at.tugraz.ist.ase.ao4fma.core.rank.SimpleProductRankingStrategy;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Requirement;
@@ -45,7 +46,7 @@ public class Efficiency extends AnalysisOperation {
         loadData();
 
         // load products
-        val products = ProductsReader.read(productsFile); // don't need to calculate rf
+        val products = ProductsReader.read(productsFile);
 
         // calculate efficiency for each product
         HashMap<Product, Double> efficiencies = new HashMap<>();
@@ -56,34 +57,8 @@ public class Efficiency extends AnalysisOperation {
         return efficiencies;
     }
 
-    private void loadData() throws FeatureModelParserException, IOException {
-        UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
-        // calculate all list of user requirements
-        userRequirements = urOperation.getRequirements();
-
-        val transactions = TransactionReader.read(transactionsFile);
-
-        // update data for transactions
-        mappedTransactions = new TransactionList();
-        // TODO: retest
-        transactions.getTransactions().parallelStream().forEach(t -> {
-            int ur_id = t.ur_id();
-            val ur = userRequirements.get(ur_id);
-
-            // copy transaction
-            val newTransaction = new Transaction(t.id(), t.ur_id(), t.product_id(), ur);
-            mappedTransactions.add(newTransaction);
-        });
-    }
-
     public double calculate(Product product) throws FeatureModelParserException, IOException {
-        if (printResults) {
-            String message = String.format("%sProduct: %s", LoggerUtils.tab(), product.id());
-            log.info(message);
-            if (writer != null) {
-                writer.write(message); writer.newLine();
-            }
-        }
+        Utilities.printInfo(printResults, writer, "Product", product.id());
 
         if (userRequirements == null) {
             loadData();
@@ -142,4 +117,22 @@ public class Efficiency extends AnalysisOperation {
         return efficiency;
     }
 
+    private void loadData() throws FeatureModelParserException, IOException {
+        UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
+        // calculate all list of user requirements
+        userRequirements = urOperation.getRequirements();
+
+        val transactions = TransactionReader.read(transactionsFile);
+
+        // update data for transactions
+        mappedTransactions = new TransactionList();
+        transactions.getTransactions().parallelStream().forEach(t -> {
+            int ur_id = t.ur_id();
+            val ur = userRequirements.get(ur_id);
+
+            // copy transaction
+            val newTransaction = new Transaction(t.id(), t.ur_id(), t.product_id(), ur);
+            mappedTransactions.add(newTransaction);
+        });
+    }
 }

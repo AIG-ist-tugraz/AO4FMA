@@ -45,7 +45,6 @@ public class GlobalControversy extends AnalysisOperation {
         double globalControversy = (double) numberOfInconsistentRequirements / numberOfRequirements;
 
         // print results
-        LoggerUtils.indent();
         if (printResults) {
             String message = String.format("%sTotal inconsistent URs: %s", LoggerUtils.tab(), numberOfInconsistentRequirements);
             log.info(message);
@@ -66,7 +65,6 @@ public class GlobalControversy extends AnalysisOperation {
                 writer.newLine();
             }
         }
-        LoggerUtils.outdent();
 
         return globalControversy;
     }

@@ -57,7 +57,7 @@ public class ConfiguratorAdapterFactory {
                 .model(productAwareConfigurationModel)
                 .translator(new FMSolutionTranslator())
                 .productAssortment(products)
-                .productSolutionMapper(new ProductSolutionMapperImpl(productAwareConfigurationModel))
+                .productSolutionMapper(new ProductSolutionMapperImpl())
                 .build();
     }
 

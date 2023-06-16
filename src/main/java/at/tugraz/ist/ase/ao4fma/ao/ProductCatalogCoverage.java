@@ -49,7 +49,6 @@ public class ProductCatalogCoverage extends AnalysisOperation {
         double coverage = (double) countAtLeastOne / results.size();
 
         // print results
-        LoggerUtils.indent();
         if (printResults) {
             String message = String.format("%sNumber of products recommended at least one: %s", LoggerUtils.tab(), countAtLeastOne);
             log.info(message);
@@ -70,7 +69,6 @@ public class ProductCatalogCoverage extends AnalysisOperation {
                 writer.newLine();
             }
         }
-        LoggerUtils.outdent();
 
         return coverage;
     }

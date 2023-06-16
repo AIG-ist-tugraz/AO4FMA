@@ -80,12 +80,7 @@ public class SimpleProductRankCalculator implements IProductRankCalculatable {
             if (configurator.getProducts().parallelStream().anyMatch(p -> p.equals(product))) {
                 rf.getAndIncrement();
             }
-        };
+        }
         return rf.get();
-    }
-
-    public void dispose() {
-        fm = null;
-        configurator = null;
     }
 }

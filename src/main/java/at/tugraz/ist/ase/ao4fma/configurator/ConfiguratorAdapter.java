@@ -67,7 +67,7 @@ public class ConfiguratorAdapter extends Configurator {
 
         // filter solutions
         super.getSolutions().forEach(solution -> {
-            Product translatedProduct = productSolutionMapper.toProduct(solution);
+            Product translatedProduct = productSolutionMapper.toProduct(solution, model.getNumProperties());
 
             productAssortment.get(translatedProduct.properties()).ifPresent(product -> {
                 Product newProduct = new Product(product.id(), product.properties(), translatedProduct.fm_values(), product.rf(), product.rf_calculated());
@@ -81,7 +81,7 @@ public class ConfiguratorAdapter extends Configurator {
 
     @Override
     protected Solution getCurrentSolution() {
-        List<Assignment> assignments = model.getFilterVariableList().stream()
+        List<Assignment> assignments = model.getPropertyVars().stream()
                 .map(var -> Assignment.builder()
                         .variable(var.getName())
                         .value(var.getValue())

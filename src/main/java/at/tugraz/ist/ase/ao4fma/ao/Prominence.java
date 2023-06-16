@@ -61,33 +61,8 @@ public class Prominence extends AnalysisOperation {
         return results;
     }
 
-    private void loadData() throws FeatureModelParserException, IOException {
-        UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
-        // calculate all list of user requirements
-        userRequirements = urOperation.getRequirements();
-
-        val transactions = TransactionReader.read(transactionsFile);
-
-        // update data for transactions
-        mappedTransactions = new TransactionList();
-        transactions.forEach(t -> {
-            int ur_id = t.ur_id();
-            val ur = userRequirements.get(ur_id);
-
-            // copy transaction
-            val newTransaction = new Transaction(t.id(), t.ur_id(), t.product_id(), ur);
-            mappedTransactions.add(newTransaction);
-        });
-    }
-
     public double calculate(String feature) throws IOException, FeatureModelParserException {
-        if (printResults) {
-            String message = String.format("%sFeature: %s", LoggerUtils.tab(), feature);
-            log.info(message);
-            if (writer != null) {
-                writer.write(message); writer.newLine();
-            }
-        }
+        Utilities.printInfo(printResults, writer, "Feature", feature);
 
         if (userRequirements == null) {
             loadData();
@@ -150,4 +125,22 @@ public class Prominence extends AnalysisOperation {
         return prominence;
     }
 
+    private void loadData() throws FeatureModelParserException, IOException {
+        UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
+        // calculate all list of user requirements
+        userRequirements = urOperation.getRequirements();
+
+        val transactions = TransactionReader.read(transactionsFile);
+
+        // update data for transactions
+        mappedTransactions = new TransactionList();
+        transactions.forEach(t -> {
+            int ur_id = t.ur_id();
+            val ur = userRequirements.get(ur_id);
+
+            // copy transaction
+            val newTransaction = new Transaction(t.id(), t.ur_id(), t.product_id(), ur);
+            mappedTransactions.add(newTransaction);
+        });
+    }
 }

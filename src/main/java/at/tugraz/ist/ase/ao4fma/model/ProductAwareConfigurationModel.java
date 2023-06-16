@@ -37,10 +37,9 @@ public class ProductAwareConfigurationModel extends ConfigurationModel {
     private MZN2ChocoTranslator translator;
 
     private final File filterFile;
-    protected List<Domain> filterDomainList;
-    @Getter
-    protected List<Variable> filterVariableList;
-    private final List<Constraint> filterConstraintList;
+    protected final List<Domain> filterDomainList = new LinkedList<>();
+    protected final List<Variable> filterVariableList = new LinkedList<>();
+    private final List<Constraint> filterConstraintList = new LinkedList<>();
 
     @Builder
     public ProductAwareConfigurationModel(@NonNull KB kb, boolean rootConstraints,
@@ -49,9 +48,6 @@ public class ProductAwareConfigurationModel extends ConfigurationModel {
 
         this.translator = translator;
         this.filterFile = filterFile;
-        this.filterDomainList = new LinkedList<>();
-        this.filterVariableList = new LinkedList<>();
-        this.filterConstraintList = new LinkedList<>();
     }
 
     @Override
@@ -72,8 +68,16 @@ public class ProductAwareConfigurationModel extends ConfigurationModel {
 
         this.setCorrectConstraints(B);
 
-        // remove all Choco constraints, cause we just need variables
+        // remove all Choco constraints, since we just need variables
         getModel().unpost(getModel().getCstrs());
+    }
+
+    public List<Variable> getPropertyVars() {
+        return filterVariableList;
+    }
+
+    public int getNumProperties() {
+        return filterVariableList.size();
     }
 
     public void addDomain(String domainName, List<String> domainValues) {

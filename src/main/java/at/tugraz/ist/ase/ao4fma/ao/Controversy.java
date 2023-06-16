@@ -39,9 +39,7 @@ public class Controversy extends AnalysisOperation {
     public HashMap<String, Double> calculate() throws IOException, FeatureModelParserException {
         LinkedHashMap<String, Double> results = new LinkedHashMap<>();
 
-        UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
-        // calculate all list of user requirements
-        userRequirements = urOperation.getInconsistentUserRequirements();
+        userRequirements = getInconsistentUserRequirements();
 
         // load the feature model
         val fm = Utilities.loadFeatureModel(fmFile);
@@ -56,23 +54,13 @@ public class Controversy extends AnalysisOperation {
     }
 
     public double calculate(String feature) throws FeatureModelParserException, IOException {
-        if (printResults) {
-            String message = String.format("%sFeature: %s", LoggerUtils.tab(), feature);
-            log.info(message);
-            if (writer != null) {
-                writer.write(message);
-                writer.newLine();
-            }
-        }
+        Utilities.printInfo(printResults, writer,"Feature", feature);
 
         if (userRequirements == null) {
-            UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
-            // calculate all list of user requirements
-            userRequirements = urOperation.getInconsistentUserRequirements();
+            userRequirements = getInconsistentUserRequirements();
         }
 
         // calculate controversy
-        // TODO - retest
         int count = (int) userRequirements.parallelStream().filter(requirement -> requirement.getAssignments().parallelStream().anyMatch(a -> a.getVariable().equals(feature))).count();
 
         // calculate controversy
@@ -102,4 +90,9 @@ public class Controversy extends AnalysisOperation {
         return controversy;
     }
 
+    private List<Requirement> getInconsistentUserRequirements() throws FeatureModelParserException, IOException {
+        UserRequirement urOperation = new UserRequirement(fmFile, filterFile, productsFile);
+        // calculate all list of user requirements
+        return urOperation.getInconsistentUserRequirements();
+    }
 }

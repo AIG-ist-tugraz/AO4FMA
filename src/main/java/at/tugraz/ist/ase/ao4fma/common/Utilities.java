@@ -114,14 +114,25 @@ public class Utilities {
         return urBuilder.build(varValueComb);
     }
 
+    public void printInfo(boolean printResults, BufferedWriter writer, String title, String mess) throws IOException {
+        if (printResults) {
+            String message = String.format("%s%s: %s", LoggerUtils.tab(), title, mess);
+            print_common(writer, message);
+        }
+    }
+
     public <T> void printList(@NonNull List<T> tList, BufferedWriter writer) throws IOException {
         int counter = 0;
         for (T s : tList) {
             val message = String.format("%s%s %s", LoggerUtils.tab(), ++counter, s);
-            log.info(message);
-            if (writer != null) {
-                writer.write(message); writer.newLine();
-            }
+            print_common(writer, message);
+        }
+    }
+
+    private static void print_common(BufferedWriter writer, String message) throws IOException {
+        log.info(message);
+        if (writer != null) {
+            writer.write(message); writer.newLine();
         }
     }
 }
