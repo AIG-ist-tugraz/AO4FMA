@@ -78,6 +78,8 @@ public class Visibility extends AnalysisOperation {
 
         // calculate visibility
         LoggerUtils.indent();
+        all.setWriter(writer);
+        all.setPrintResults(true);
         double visibility = all.visibility(product);
 
         // print results

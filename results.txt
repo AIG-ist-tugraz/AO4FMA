@@ -114,20 +114,140 @@ III. PRODUCT CATALOG COVERAGE:
       Product Catalog Coverage: 1.0
 IV. VISIBILITY OF PRODUCTS:
    Product: p1
+      rank: 1 - worst rank: 4
+      rank: 2 - worst rank: 5
+      rank: 2 - worst rank: 8
+      rank: 1 - worst rank: 4
+      rank: 1 - worst rank: 3
+      rank: 2 - worst rank: 4
+      rank: 2 - worst rank: 4
+      rank: 1 - worst rank: 5
+      rank: 1 - worst rank: 2
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 4
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 4
+      rank: 1 - worst rank: 2
+      rank: 1 - worst rank: 2
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 2 - worst rank: 2
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
       Visibility: 0.5909090909090908
    Product: p2
+      rank: 3 - worst rank: 5
+      rank: 6 - worst rank: 8
+      rank: 4 - worst rank: 4
+      rank: 3 - worst rank: 5
+      rank: 3 - worst rank: 3
+      rank: 4 - worst rank: 4
+      rank: 3 - worst rank: 3
       Visibility: 0.1875
    Product: p3
+      rank: 4 - worst rank: 4
+      rank: 5 - worst rank: 5
+      rank: 5 - worst rank: 8
+      rank: 3 - worst rank: 3
+      rank: 4 - worst rank: 4
+      rank: 4 - worst rank: 4
+      rank: 4 - worst rank: 5
+      rank: 3 - worst rank: 3
+      rank: 3 - worst rank: 3
+      rank: 3 - worst rank: 3
+      rank: 4 - worst rank: 4
+      rank: 3 - worst rank: 3
+      rank: 3 - worst rank: 3
+      rank: 3 - worst rank: 3
+      rank: 3 - worst rank: 3
       Visibility: 0.06896551724137934
    Product: p4
+      rank: 1 - worst rank: 5
+      rank: 2 - worst rank: 4
+      rank: 1 - worst rank: 5
+      rank: 1 - worst rank: 8
+      rank: 2 - worst rank: 4
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 2
+      rank: 1 - worst rank: 4
+      rank: 1 - worst rank: 5
+      rank: 1 - worst rank: 4
+      rank: 2 - worst rank: 5
+      rank: 1 - worst rank: 3
+      rank: 2 - worst rank: 2
+      rank: 2 - worst rank: 3
+      rank: 2 - worst rank: 4
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 2
+      rank: 2 - worst rank: 4
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 2
+      rank: 2 - worst rank: 2
+      rank: 1 - worst rank: 3
+      rank: 2 - worst rank: 2
+      rank: 2 - worst rank: 3
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 2
+      rank: 1 - worst rank: 2
+      rank: 1 - worst rank: 1
       Visibility: 0.5340909090909092
    Product: p5
+      rank: 4 - worst rank: 5
+      rank: 7 - worst rank: 8
+      rank: 4 - worst rank: 5
       Visibility: 0.16666666666666663
    Product: p6
+      rank: 3 - worst rank: 4
+      rank: 4 - worst rank: 5
+      rank: 4 - worst rank: 8
+      rank: 2 - worst rank: 3
+      rank: 3 - worst rank: 4
+      rank: 3 - worst rank: 4
+      rank: 3 - worst rank: 5
+      rank: 2 - worst rank: 3
+      rank: 2 - worst rank: 3
+      rank: 2 - worst rank: 3
+      rank: 3 - worst rank: 4
+      rank: 2 - worst rank: 3
+      rank: 2 - worst rank: 3
+      rank: 2 - worst rank: 3
+      rank: 2 - worst rank: 3
       Visibility: 0.3275862068965517
    Product: p7
+      rank: 5 - worst rank: 5
+      rank: 8 - worst rank: 8
+      rank: 5 - worst rank: 5
       Visibility: 0.0
    Product: p8
+      rank: 2 - worst rank: 5
+      rank: 3 - worst rank: 5
+      rank: 3 - worst rank: 8
+      rank: 3 - worst rank: 4
+      rank: 2 - worst rank: 2
+      rank: 2 - worst rank: 5
+      rank: 5 - worst rank: 5
+      rank: 2 - worst rank: 3
+      rank: 3 - worst rank: 3
+      rank: 3 - worst rank: 4
+      rank: 2 - worst rank: 2
+      rank: 2 - worst rank: 2
+      rank: 2 - worst rank: 3
+      rank: 3 - worst rank: 3
+      rank: 2 - worst rank: 2
       Visibility: 0.3035714285714286
 V. CONTROVERSY OF FEATURES:
    Feature: lightweight
