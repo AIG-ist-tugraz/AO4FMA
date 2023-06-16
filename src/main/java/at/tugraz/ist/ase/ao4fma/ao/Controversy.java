@@ -30,16 +30,10 @@ import java.util.List;
 @Slf4j
 public class Controversy extends AnalysisOperation {
 
-    File fmFile;
-    File filterFile;
-    File productsFile;
-
     List<Requirement> userRequirements = null;
 
     public Controversy(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile) {
-        this.fmFile = fmFile;
-        this.filterFile = filterFile;
-        this.productsFile = productsFile;
+        super(fmFile, filterFile, productsFile);
     }
 
     public HashMap<String, Double> calculate() throws IOException, FeatureModelParserException {
@@ -78,12 +72,8 @@ public class Controversy extends AnalysisOperation {
         }
 
         // calculate controversy
-        int count = 0;
-        for (Requirement requirement : userRequirements) {
-            if (requirement.getAssignments().stream().anyMatch(a -> a.getVariable().equals(feature))) {
-                count++;
-            }
-        }
+        // TODO - retest
+        int count = (int) userRequirements.parallelStream().filter(requirement -> requirement.getAssignments().parallelStream().anyMatch(a -> a.getVariable().equals(feature))).count();
 
         // calculate controversy
         LoggerUtils.indent();

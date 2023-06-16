@@ -9,6 +9,7 @@
 package at.tugraz.ist.ase.ao4fma.ao;
 
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
+import at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapter;
 import at.tugraz.ist.ase.ao4fma.core.AllRecommendationLists;
 import at.tugraz.ist.ase.ao4fma.core.Product;
 import at.tugraz.ist.ase.ao4fma.core.RecommendationList;
@@ -35,32 +36,30 @@ import static at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapterFactory.c
 @Slf4j
 public class Recommendation extends AnalysisOperation {
 
-    File fmFile;
-    File filterFile;
-    File productsFile;
-
     @Setter
     IProductRankingStrategy rankingStrategy = null;
+    ConfiguratorAdapter configurator = null;
 
     @Builder
     public Recommendation(File fmFile, File filterFile, File productsFile) {
-        this.fmFile = fmFile;
-        this.filterFile = filterFile;
-        this.productsFile = productsFile;
+        super(fmFile, filterFile, productsFile);
     }
 
     public RecommendationList recommend(Requirement req) throws FeatureModelParserException, IOException {
         // load the feature model
-        val fm = Utilities.loadFeatureModel(fmFile);
+//        val fm = Utilities.loadFeatureModel(fmFile);
 
-        val configurator = createConfigurator(fmFile, filterFile, productsFile);
+//        val configurator = createConfigurator(fmFile, filterFile, productsFile);
+        if (configurator == null) {
+            configurator = createConfigurator(fmFile, filterFile, productsFile, rankingStrategy.getCalculator(fmFile, filterFile, productsFile));
+        }
 
         configurator.findAllSolutions(req); // identify all products that satisfy the Requirement
 
         // reorder the products according to the recommendation strategy
         List<Product> recommendedProducts;
         if (rankingStrategy != null) {
-            recommendedProducts = rankingStrategy.rank(configurator.getProducts(), fm, configurator);
+            recommendedProducts = rankingStrategy.rank(configurator.getProducts());
         } else {
             recommendedProducts = configurator.getProducts();
         }

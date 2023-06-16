@@ -8,6 +8,9 @@
 
 package at.tugraz.ist.ase.ao4fma.core;
 
+import lombok.Getter;
+import lombok.Synchronized;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,12 +20,14 @@ import java.util.List;
  */
 public class TransactionList implements Iterable<Transaction> {
 
+    @Getter
     List<Transaction> transactions = new LinkedList<>();
 
     public int size() {
         return transactions.size();
     }
 
+    @Synchronized
     public void add(Transaction transaction) {
         transactions.add(transaction);
     }
@@ -37,6 +42,6 @@ public class TransactionList implements Iterable<Transaction> {
      * @return the number of times the product was purchased
      */
     public long selections(Product p) {
-        return transactions.stream().filter(t -> t.product_id().equals(p.id())).count();
+        return transactions.parallelStream().filter(t -> t.product_id().equals(p.id())).count();
     }
 }

@@ -70,9 +70,11 @@ public class ConfiguratorAdapter extends Configurator {
             Product translatedProduct = productSolutionMapper.toProduct(solution);
 
             productAssortment.get(translatedProduct.properties()).ifPresent(product -> {
-                Product newProduct = new Product(product.id(), product.properties(), translatedProduct.fm_values(), product.rf());
+                Product newProduct = new Product(product.id(), product.properties(), translatedProduct.fm_values(), product.rf(), product.rf_calculated());
 
-                products.add(newProduct);
+                if (!contains(products, newProduct)) {
+                    products.add(newProduct);
+                }
             });
         });
     }
@@ -92,5 +94,9 @@ public class ConfiguratorAdapter extends Configurator {
                                                 .build()));
 
         return Solution.builder().assignments(assignments).build();
+    }
+
+    private boolean contains(List<Product> products, Product product) {
+        return products.parallelStream().anyMatch(p -> p.id().equals(product.id()));
     }
 }

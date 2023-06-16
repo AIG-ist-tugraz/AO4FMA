@@ -11,6 +11,7 @@ package at.tugraz.ist.ase.ao4fma.configurator;
 import at.tugraz.ist.ase.ao4fma.common.Utilities;
 import at.tugraz.ist.ase.ao4fma.core.ProductsReader;
 import at.tugraz.ist.ase.ao4fma.core.mapper.ProductSolutionMapperImpl;
+import at.tugraz.ist.ase.ao4fma.core.rank.IProductRankCalculatable;
 import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.model.translator.MZN2ChocoTranslator;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.translator.fm.FMSolutionTranslator;
@@ -18,6 +19,7 @@ import at.tugraz.ist.ase.hiconfit.configurator.ConfigurationModel;
 import at.tugraz.ist.ase.hiconfit.configurator.Configurator;
 import at.tugraz.ist.ase.hiconfit.fm.parser.FeatureModelParserException;
 import at.tugraz.ist.ase.hiconfit.kb.fm.FMKB;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 
@@ -27,11 +29,15 @@ import java.io.IOException;
 @UtilityClass
 public class ConfiguratorAdapterFactory {
 
-    public static ConfiguratorAdapter createConfigurator(File fmFile, File filterFile, File productsFile) throws FeatureModelParserException, IOException {
+    public static ConfiguratorAdapter createConfigurator(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile, IProductRankCalculatable calculator) throws FeatureModelParserException, IOException {
         // load the feature model
         val fm = Utilities.loadFeatureModel(fmFile);
         // read products
-        val products = ProductsReader.read(productsFile);
+        var products = ProductsReader.read(productsFile); // need to calculate rf
+
+        if (calculator != null) {
+            products = calculator.calculate(products);
+        }
 
         // create knowledge base
         val kb = new FMKB<>(fm, false);

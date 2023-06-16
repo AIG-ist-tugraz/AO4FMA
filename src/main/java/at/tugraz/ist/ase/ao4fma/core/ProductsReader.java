@@ -61,7 +61,13 @@ public class ProductsReader {
                 assignments.add(ur);
             }
 
-            val product = new Product(id, Solution.builder().assignments(assignments).build(), null, 0);
+            val product = Product.builder()
+                    .id(id)
+                    .properties(Solution.builder().assignments(assignments).build())
+                    .fm_values(null)
+                    .rf(0)
+                    .rf_calculated(false)
+                    .build();
             products.add(product);
 
             line = reader.readLine();

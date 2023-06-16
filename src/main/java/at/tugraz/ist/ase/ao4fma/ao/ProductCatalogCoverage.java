@@ -27,14 +27,8 @@ import java.util.HashMap;
 @Slf4j
 public class ProductCatalogCoverage extends AnalysisOperation {
 
-    File fmFile;
-    File filterFile;
-    File productsFile;
-
     public ProductCatalogCoverage(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile) {
-        this.fmFile = fmFile;
-        this.filterFile = filterFile;
-        this.productsFile = productsFile;
+        super(fmFile, filterFile, productsFile);
     }
 
     public double calculate() throws IOException, FeatureModelParserException {

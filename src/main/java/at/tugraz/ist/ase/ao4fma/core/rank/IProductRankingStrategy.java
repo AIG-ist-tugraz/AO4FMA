@@ -8,17 +8,14 @@
 
 package at.tugraz.ist.ase.ao4fma.core.rank;
 
-import at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapter;
 import at.tugraz.ist.ase.ao4fma.core.Product;
-import at.tugraz.ist.ase.hiconfit.fm.core.AbstractRelationship;
-import at.tugraz.ist.ase.hiconfit.fm.core.CTConstraint;
-import at.tugraz.ist.ase.hiconfit.fm.core.Feature;
-import at.tugraz.ist.ase.hiconfit.fm.core.FeatureModel;
+import lombok.NonNull;
 
+import java.io.File;
 import java.util.List;
 
 public interface IProductRankingStrategy {
-    List<Product> rank(List<Product> products,
-                       FeatureModel<Feature, AbstractRelationship<Feature>, CTConstraint> fm,
-                       ConfiguratorAdapter configurator);
+    List<Product> rank(List<Product> products);
+
+    IProductRankCalculatable getCalculator(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile);
 }

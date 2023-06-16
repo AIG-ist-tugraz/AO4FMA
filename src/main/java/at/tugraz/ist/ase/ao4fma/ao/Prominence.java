@@ -35,9 +35,6 @@ import java.util.List;
 @Slf4j
 public class Prominence extends AnalysisOperation {
 
-    File fmFile;
-    File filterFile;
-    File productsFile;
     File transactionsFile;
 
     List<Requirement> userRequirements = null;
@@ -45,9 +42,7 @@ public class Prominence extends AnalysisOperation {
 
     public Prominence(@NonNull File fmFile, @NonNull File filterFile,
                       @NonNull File productsFile, @NonNull File transactionsFile) {
-        this.fmFile = fmFile;
-        this.filterFile = filterFile;
-        this.productsFile = productsFile;
+        super(fmFile, filterFile, productsFile);
         this.transactionsFile = transactionsFile;
     }
 
@@ -108,16 +103,16 @@ public class Prominence extends AnalysisOperation {
 
         // DENOMINATOR - included
         long included= 0;
+        // identify recommendation
+        Recommendation recommendation = Recommendation.builder()
+                .fmFile(fmFile)
+                .filterFile(filterFile)
+                .productsFile(productsFile)
+                .build();
+        recommendation.setWriter(writer);
+        recommendation.setPrintResults(false);
+        recommendation.setRankingStrategy(new SimpleProductRankingStrategy()); // set ranking strategy
         for (Transaction t : mappedTransactions) {
-            // identify recommendation
-            Recommendation recommendation = Recommendation.builder()
-                    .fmFile(fmFile)
-                    .filterFile(filterFile)
-                    .productsFile(productsFile)
-                    .build();
-            recommendation.setWriter(writer);
-            recommendation.setPrintResults(false);
-            recommendation.setRankingStrategy(new SimpleProductRankingStrategy()); // set ranking strategy
             RecommendationList recommendationList = recommendation.recommend(t.req());
 
             if (recommendationList.contains(feature)) {

@@ -29,16 +29,10 @@ import java.util.HashMap;
 @Slf4j
 public class Accessibility extends AnalysisOperation {
 
-    File fmFile;
-    File filterFile;
-    File productsFile;
-
     AllRecommendationLists all = null;
 
     public Accessibility(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile) {
-        this.fmFile = fmFile;
-        this.filterFile = filterFile;
-        this.productsFile = productsFile;
+        super(fmFile, filterFile, productsFile);
     }
 
     public HashMap<Product, Double> calculate() throws IOException, FeatureModelParserException {
@@ -47,7 +41,7 @@ public class Accessibility extends AnalysisOperation {
         recommendation.setPrintResults(false);
         all = recommendation.calculateAllRecommendations();
 
-        val products = ProductsReader.read(productsFile);
+        val products = ProductsReader.read(productsFile); // don't need to calculate rf
 
         // calculate accessibility for each product
         HashMap<Product, Double> accessibility = new HashMap<>();

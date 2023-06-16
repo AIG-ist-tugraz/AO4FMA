@@ -33,9 +33,6 @@ import java.util.List;
 @Slf4j
 public class FeaturesPopularity extends AnalysisOperation {
 
-    File fmFile;
-    File filterFile;
-    File productsFile;
     File transactionsFile;
 
     List<Requirement> userRequirements = null;
@@ -43,9 +40,7 @@ public class FeaturesPopularity extends AnalysisOperation {
 
     public FeaturesPopularity(@NonNull File fmFile, @NonNull File filterFile,
                               @NonNull File productsFile, @NonNull File transactionsFile) {
-        this.fmFile = fmFile;
-        this.filterFile = filterFile;
-        this.productsFile = productsFile;
+        super(fmFile, filterFile, productsFile);
         this.transactionsFile = transactionsFile;
     }
 

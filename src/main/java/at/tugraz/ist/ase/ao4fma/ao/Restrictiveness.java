@@ -33,14 +33,8 @@ import java.util.List;
 @Slf4j
 public class Restrictiveness extends AnalysisOperation {
 
-    File fmFile;
-    File filterFile;
-    File productsFile;
-
     public Restrictiveness(@NonNull File fmFile, @NonNull File filterFile, @NonNull File productsFile) {
-        this.fmFile = fmFile;
-        this.filterFile = filterFile;
-        this.productsFile = productsFile;
+        super(fmFile, filterFile, productsFile);
     }
 
     public double calculate(Requirement req) throws IOException, FeatureModelParserException {
@@ -54,7 +48,7 @@ public class Restrictiveness extends AnalysisOperation {
         }
 
         // read products
-        val productAssortment = ProductsReader.read(productsFile);
+        val productAssortment = ProductsReader.read(productsFile); // don't need to calculate rf
         // DENOMINATOR - the total number of products
         int totalProducts = productAssortment.size();
 

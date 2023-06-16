@@ -30,9 +30,6 @@ import java.util.List;
 @Slf4j
 public class Efficiency extends AnalysisOperation {
 
-    File fmFile;
-    File filterFile;
-    File productsFile;
     File transactionsFile;
 
     List<Requirement> userRequirements = null;
@@ -40,9 +37,7 @@ public class Efficiency extends AnalysisOperation {
 
     public Efficiency(@NonNull File fmFile, @NonNull File filterFile,
                       @NonNull File productsFile, @NonNull File transactionsFile) {
-        this.fmFile = fmFile;
-        this.filterFile = filterFile;
-        this.productsFile = productsFile;
+        super(fmFile, filterFile, productsFile);
         this.transactionsFile = transactionsFile;
     }
 
@@ -50,13 +45,12 @@ public class Efficiency extends AnalysisOperation {
         loadData();
 
         // load products
-        val products = ProductsReader.read(productsFile);
+        val products = ProductsReader.read(productsFile); // don't need to calculate rf
 
         // calculate efficiency for each product
         HashMap<Product, Double> efficiencies = new HashMap<>();
         for (Product product : products) {
-            val efficiencyValue = calculate(product);
-            efficiencies.put(product, efficiencyValue);
+            efficiencies.put(product, calculate(product));
         }
 
         return efficiencies;
@@ -71,7 +65,8 @@ public class Efficiency extends AnalysisOperation {
 
         // update data for transactions
         mappedTransactions = new TransactionList();
-        transactions.forEach(t -> {
+        // TODO: retest
+        transactions.getTransactions().parallelStream().forEach(t -> {
             int ur_id = t.ur_id();
             val ur = userRequirements.get(ur_id);
 
@@ -99,16 +94,17 @@ public class Efficiency extends AnalysisOperation {
 
         // DENOMINATOR
         long displaycounts = 0;
+        // identify recommendation
+        Recommendation recommendation = Recommendation.builder()
+                .fmFile(fmFile)
+                .filterFile(filterFile)
+                .productsFile(productsFile)
+                .build();
+        recommendation.setWriter(writer);
+        recommendation.setPrintResults(false);
+        recommendation.setRankingStrategy(new SimpleProductRankingStrategy()); // set ranking strategy
+
         for (Transaction t : mappedTransactions) {
-            // identify recommendation
-            Recommendation recommendation = Recommendation.builder()
-                    .fmFile(fmFile)
-                    .filterFile(filterFile)
-                    .productsFile(productsFile)
-                    .build();
-            recommendation.setWriter(writer);
-            recommendation.setPrintResults(false);
-            recommendation.setRankingStrategy(new SimpleProductRankingStrategy()); // set ranking strategy
             RecommendationList recommendationList = recommendation.recommend(t.req());
 
             if (recommendationList.contains(product)) {

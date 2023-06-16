@@ -10,6 +10,7 @@ package at.tugraz.ist.ase.ao4fma.core;
 
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 import com.google.common.base.Objects;
+import lombok.Builder;
 
 /**
  * A product
@@ -18,7 +19,8 @@ import com.google.common.base.Objects;
  * @param fm_values user requirements/feature values based on that the product was identified
  * @param rf the result of ranking function
  */
-public record Product (String id, Solution properties, Solution fm_values, int rf) {
+@Builder
+public record Product (String id, Solution properties, Solution fm_values, int rf, boolean rf_calculated) {
     @Override
     public String toString() {
         return "Product{" +

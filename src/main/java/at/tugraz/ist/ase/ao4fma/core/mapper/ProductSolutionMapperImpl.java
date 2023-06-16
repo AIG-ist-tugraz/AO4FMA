@@ -8,8 +8,8 @@
 
 package at.tugraz.ist.ase.ao4fma.core.mapper;
 
-import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.ao4fma.core.Product;
+import at.tugraz.ist.ase.ao4fma.model.ProductAwareConfigurationModel;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import at.tugraz.ist.ase.hiconfit.cacdr_core.Solution;
 
@@ -39,6 +39,6 @@ public class ProductSolutionMapperImpl implements IProductSolutionMapper {
             }
         }
 
-        return new Product("0", new Solution(newAssProperties), new Solution(newAssFeatures), 0);
+        return new Product("0", new Solution(newAssProperties), new Solution(newAssFeatures), 0, false);
     }
 }

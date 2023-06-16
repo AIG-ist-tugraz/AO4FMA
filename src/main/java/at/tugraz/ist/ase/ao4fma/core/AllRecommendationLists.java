@@ -14,7 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Spliterator;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -35,13 +38,7 @@ public class AllRecommendationLists implements Iterable<RecommendationList> {
     }
 
     public int countOccurrence(Product product) {
-        int count = 0;
-        for (RecommendationList list : all) {
-            if (list.contains(product)) {
-                count++;
-            }
-        }
-        return count;
+        return (int) all.parallelStream().filter(list -> list.contains(product)).count();
     }
 
     public double visibility(Product product) throws IOException {

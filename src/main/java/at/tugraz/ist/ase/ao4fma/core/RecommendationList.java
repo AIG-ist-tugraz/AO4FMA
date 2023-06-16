@@ -8,13 +8,13 @@
 
 package at.tugraz.ist.ase.ao4fma.core;
 
-import at.tugraz.ist.ase.hiconfit.cacdr_core.Assignment;
 import com.google.common.base.Objects;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Spliterator;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 /**
  * A list of recommended products for a user requirement
@@ -50,7 +50,7 @@ public class RecommendationList implements Iterable<Product> {
      * @return true if the recommendation list contains the product
      */
     public boolean contains(Product product) {
-        return products.contains(product);
+        return products.parallelStream().anyMatch(p -> Objects.equal(p, product));
     }
 
     /**
@@ -59,14 +59,7 @@ public class RecommendationList implements Iterable<Product> {
      * @return true if the feature is part of the user requirements that led to the recommendation list
      */
     public boolean contains(String feature) {
-        return products.stream().anyMatch(p -> {
-            for (Assignment a : p.fm_values().getAssignments()) {
-                if (a.getVariable().equals(feature) && a.getValue().equals("true")) {
-                    return true;
-                }
-            }
-            return false;
-        });
+        return products.stream().anyMatch(p -> p.fm_values().getAssignments().stream().anyMatch(a -> a.getVariable().equals(feature) && a.getValue().equals("true")));
     }
 
     @Override
@@ -89,12 +82,7 @@ public class RecommendationList implements Iterable<Product> {
         if (this == o) return true;
         if (!(o instanceof RecommendationList p)) return false;
         if (products.size() != p.products.size()) return false;
-        for (int i = 0; i < products.size(); i++) {
-            if (!products.get(i).equals(p.products.get(i))) {
-                return false;
-            }
-        }
-        return true;
+        return IntStream.range(0, products.size()).allMatch(i -> products.get(i).equals(p.products.get(i)));
     }
 
     @Override

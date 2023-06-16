@@ -306,7 +306,7 @@ public class Main {
         configurator.findAllSolutions(false,0);
 
         // map the solutions to products
-        val products = configurator.getSolutions().stream().map(solution -> new Product("0",null, solution, 0)).collect(Collectors.toList());
+        val products = configurator.getSolutions().stream().map(solution -> new Product("0",null, solution, 0, false)).collect(Collectors.toList());
 
         Utilities.printList(products, writer);
     }

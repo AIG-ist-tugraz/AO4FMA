@@ -31,14 +31,8 @@ import static at.tugraz.ist.ase.ao4fma.configurator.ConfiguratorAdapterFactory.c
 @Slf4j
 public class UserRequirement extends AnalysisOperation {
 
-    File fmFile;
-    File filterFile;
-    File productsFile;
-
     public UserRequirement(File fmFile, File filterFile, File productsFile) {
-        this.fmFile = fmFile;
-        this.filterFile = filterFile;
-        this.productsFile = productsFile;
+        super(fmFile, filterFile, productsFile);
     }
 
     public List<Requirement> getRequirements() throws FeatureModelParserException {
@@ -85,7 +79,7 @@ public class UserRequirement extends AnalysisOperation {
         List<Requirement> URs = getRequirements();
 
         // filter consistent user requirements
-        val configurator = createConfigurator(fmFile, filterFile, productsFile);
+        val configurator = createConfigurator(fmFile, filterFile, productsFile, null);
 
         List<Requirement> list = new ArrayList<>();
         for (Requirement UR : URs) {
@@ -102,7 +96,7 @@ public class UserRequirement extends AnalysisOperation {
         List<Requirement> URs = getRequirements();
 
         // filter consistent user requirements
-        val configurator = createConfigurator(fmFile, filterFile, productsFile);
+        val configurator = createConfigurator(fmFile, filterFile, productsFile, null);
 
         List<Requirement> list = new ArrayList<>();
         for (Requirement UR : URs) {
