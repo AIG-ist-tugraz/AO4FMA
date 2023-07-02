@@ -1,6 +1,6 @@
 # AO4FMA
 
-Source code to accompany the paper "Analysis Operations On The Run: Beyond Static Feature Model Analysis in Constraint-based Recommenders"
+Source code to accompany the paper "Analysis Operations On The Run: Beyond Static Feature Model Analysis in Constraint-based Recommenders" will be presented in [SPLC'23](https://2023.splc.net).
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ Source code to accompany the paper "Analysis Operations On The Run: Beyond Stati
 | ./lib                   | a library                                                              |
 | ./src                   | source code                                                            |
 | Dockerfile              | Dockerfile to build the Docker image                                   |
-| results.txt             | new results                                                            |
+| results.txt             | results                                                                |
 
 ## How to reproduce the experiment
 
