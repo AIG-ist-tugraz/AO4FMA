@@ -5,14 +5,14 @@ I. RESTRICTIVENESS:
       3 Product{id='p6', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=false, portrait=false, sports=true], rf=6}
       Support: 3
       Total products: 8
-      Restrictiveness: 0.375
+      Restrictiveness: 0.625
    Requirement: sports=true, exchangelens=true
       1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=false, portrait=true, sports=true], rf=7}
       2 Product{id='p3', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t2, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=false, portrait=false, sports=true], rf=6}
       3 Product{id='p6', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=false, portrait=false, sports=true], rf=6}
       Support: 3
       Total products: 8
-      Restrictiveness: 0.375
+      Restrictiveness: 0.625
    Requirement: sports=false, exchangelens=false
       1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=7}
       2 Product{id='p4', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=7}
@@ -24,7 +24,7 @@ I. RESTRICTIVENESS:
       8 Product{id='p7', properties=[accumulator=h, resolution=l, fps=l, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=true, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=4}
       Support: 8
       Total products: 8
-      Restrictiveness: 1.0
+      Restrictiveness: 0.0
 I.1. RESTRICTIVENESS - ALL LEAF FEATURES:
    Requirement: lightweight=true
       1 Product{id='p4', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=true, exchangelens=true, waterproof=false, landscape=true, portrait=false, sports=false], rf=7}
@@ -34,7 +34,7 @@ I.1. RESTRICTIVENESS - ALL LEAF FEATURES:
       5 Product{id='p7', properties=[accumulator=h, resolution=l, fps=l, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=true, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=4}
       Support: 5
       Total products: 8
-      Restrictiveness: 0.625
+      Restrictiveness: 0.375
    Requirement: exchangelens=true
       1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=true, portrait=true, sports=true], rf=7}
       2 Product{id='p4', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=true, portrait=false, sports=false], rf=7}
@@ -51,7 +51,7 @@ I.1. RESTRICTIVENESS - ALL LEAF FEATURES:
       5 Product{id='p8', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=no, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=true, landscape=true, portrait=true, sports=false], rf=6}
       Support: 5
       Total products: 8
-      Restrictiveness: 0.625
+      Restrictiveness: 0.375
    Requirement: landscape=true
       1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=7}
       2 Product{id='p4', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=false, landscape=true, portrait=false, sports=false], rf=7}
@@ -63,7 +63,7 @@ I.1. RESTRICTIVENESS - ALL LEAF FEATURES:
       8 Product{id='p7', properties=[accumulator=h, resolution=l, fps=l, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=4}
       Support: 8
       Total products: 8
-      Restrictiveness: 1.0
+      Restrictiveness: 0.0
    Requirement: portrait=true
       1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=false, portrait=true, sports=false], rf=7}
       2 Product{id='p4', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=false, portrait=true, sports=false], rf=7}
@@ -78,7 +78,7 @@ I.1. RESTRICTIVENESS - ALL LEAF FEATURES:
       3 Product{id='p6', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=false, portrait=false, sports=true], rf=6}
       Support: 3
       Total products: 8
-      Restrictiveness: 0.375
+      Restrictiveness: 0.625
 II. ACCESSIBILITY:
    Product: p1
       Occurrences: 31

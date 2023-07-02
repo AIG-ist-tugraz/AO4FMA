@@ -36,3 +36,4 @@ build/
 
 .log
 /logs.log
+results/results.txt
