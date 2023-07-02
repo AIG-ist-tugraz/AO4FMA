@@ -58,7 +58,7 @@ public class Restrictiveness extends AnalysisOperation {
         int support = recommendationList.size();
 
         // restrictiveness
-        double restrictiveness = (double) support / totalProducts;
+        double restrictiveness = 1 - (double) support / totalProducts;
 
         // print results
         if (printResults) {
