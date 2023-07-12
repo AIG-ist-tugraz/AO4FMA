@@ -16,6 +16,8 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
+import static com.google.common.base.Preconditions.checkElementIndex;
+
 /**
  * A list of recommended products for a user requirement
  */
@@ -33,6 +35,11 @@ public class RecommendationList implements Iterable<Product> {
 
     public boolean empty() {
         return products.isEmpty();
+    }
+
+    public Product get(int index) {
+        checkElementIndex(index, products.size(), "Product index out of bound!");
+        return products.get(index);
     }
 
     /**

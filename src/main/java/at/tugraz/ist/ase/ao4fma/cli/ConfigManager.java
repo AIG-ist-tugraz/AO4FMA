@@ -27,7 +27,7 @@ import java.util.Properties;
 @ToString
 @Slf4j
 public final class ConfigManager {
-    public static String defaultConfigFile = "./data/app.cfg";
+    public static String defaultConfigFile = "./data/conf/app.cfg";
 
     private final File fmFile;
     private final File filterFile;
@@ -35,6 +35,7 @@ public final class ConfigManager {
     private final File transactionsFile;
     private final String queries_folder;
     private final String resultFile;
+    private final int numTransactions;
 
     private static ConfigManager instance = null;
 
@@ -59,6 +60,8 @@ public final class ConfigManager {
         transactionsFile = new File(appProps.getProperty("transactionsFile", "./data/transactions.csv"));
         queries_folder = appProps.getProperty("queries_folder", "./data/query/");
         resultFile = appProps.getProperty("results", "results.csv");
+
+        numTransactions = Integer.parseInt(appProps.getProperty("numTransactions", "2500"));
 
         log.trace("{}<<< Read configurations [fmFile={}, filterFile={}, productsFile={}, transactionsFile={}, queries_folder={}, resultsFile={}]",
                 LoggerUtils.tab(), fmFile, filterFile, productsFile, transactionsFile, queries_folder, resultFile);
