@@ -1,0 +1,400 @@
+I. RESTRICTIVENESS:
+   Requirement: sports=true
+      1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=true, landscape=false, portrait=true, sports=true], rf=7}
+      2 Product{id='p3', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t2, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=false, portrait=false, sports=true], rf=6}
+      3 Product{id='p6', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=false, portrait=false, sports=true], rf=6}
+      Support: 3
+      Total products: 8
+      Restrictiveness: 0.625
+   Requirement: sports=true, exchangelens=true
+      1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=false, portrait=true, sports=true], rf=7}
+      2 Product{id='p3', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t2, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=false, portrait=false, sports=true], rf=6}
+      3 Product{id='p6', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=false, portrait=false, sports=true], rf=6}
+      Support: 3
+      Total products: 8
+      Restrictiveness: 0.625
+   Requirement: sports=false, exchangelens=false
+      1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=7}
+      2 Product{id='p4', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=7}
+      3 Product{id='p3', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t2, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=true, landscape=true, portrait=false, sports=false], rf=6}
+      4 Product{id='p6', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=true, landscape=true, portrait=false, sports=false], rf=6}
+      5 Product{id='p8', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=no, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=6}
+      6 Product{id='p2', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=true, exchangelens=false, waterproof=false, landscape=false, portrait=true, sports=false], rf=5}
+      7 Product{id='p5', properties=[accumulator=h, resolution=a, fps=a, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=true, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=4}
+      8 Product{id='p7', properties=[accumulator=h, resolution=l, fps=l, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=true, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=4}
+      Support: 8
+      Total products: 8
+      Restrictiveness: 0.0
+I.1. RESTRICTIVENESS - ALL LEAF FEATURES:
+   Requirement: lightweight=true
+      1 Product{id='p4', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=true, exchangelens=true, waterproof=false, landscape=true, portrait=false, sports=false], rf=7}
+      2 Product{id='p8', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=no, isolation=h], fm_values=[camera=true, goal=true, lightweight=true, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=6}
+      3 Product{id='p2', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=true, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=5}
+      4 Product{id='p5', properties=[accumulator=h, resolution=a, fps=a, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=true, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=4}
+      5 Product{id='p7', properties=[accumulator=h, resolution=l, fps=l, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=true, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=4}
+      Support: 5
+      Total products: 8
+      Restrictiveness: 0.375
+   Requirement: exchangelens=true
+      1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=true, portrait=true, sports=true], rf=7}
+      2 Product{id='p4', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=true, portrait=false, sports=false], rf=7}
+      3 Product{id='p3', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t2, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=true, portrait=false, sports=true], rf=6}
+      4 Product{id='p6', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=true, portrait=false, sports=true], rf=6}
+      Support: 4
+      Total products: 8
+      Restrictiveness: 0.5
+   Requirement: waterproof=true
+      1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=true, portrait=false, sports=false], rf=7}
+      2 Product{id='p4', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=true, portrait=true, sports=false], rf=7}
+      3 Product{id='p3', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t2, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=true, portrait=false, sports=true], rf=6}
+      4 Product{id='p6', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=true, portrait=false, sports=true], rf=6}
+      5 Product{id='p8', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=no, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=true, landscape=true, portrait=true, sports=false], rf=6}
+      Support: 5
+      Total products: 8
+      Restrictiveness: 0.375
+   Requirement: landscape=true
+      1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=7}
+      2 Product{id='p4', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=false, landscape=true, portrait=false, sports=false], rf=7}
+      3 Product{id='p3', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t2, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=6}
+      4 Product{id='p6', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=6}
+      5 Product{id='p8', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=no, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=6}
+      6 Product{id='p2', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=5}
+      7 Product{id='p5', properties=[accumulator=h, resolution=a, fps=a, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=4}
+      8 Product{id='p7', properties=[accumulator=h, resolution=l, fps=l, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=true, portrait=false, sports=false], rf=4}
+      Support: 8
+      Total products: 8
+      Restrictiveness: 0.0
+   Requirement: portrait=true
+      1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=false, portrait=true, sports=false], rf=7}
+      2 Product{id='p4', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=false, portrait=true, sports=false], rf=7}
+      3 Product{id='p8', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=no, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=false, portrait=true, sports=false], rf=6}
+      4 Product{id='p2', properties=[accumulator=h, resolution=h, fps=a, weight=l, mount=no, isolation=l], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=false, landscape=false, portrait=true, sports=false], rf=5}
+      Support: 4
+      Total products: 8
+      Restrictiveness: 0.5
+   Requirement: sports=true
+      1 Product{id='p1', properties=[accumulator=h, resolution=h, fps=h, weight=h, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=false, waterproof=true, landscape=false, portrait=true, sports=true], rf=7}
+      2 Product{id='p3', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t2, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=false, portrait=false, sports=true], rf=6}
+      3 Product{id='p6', properties=[accumulator=h, resolution=a, fps=h, weight=a, mount=t1, isolation=h], fm_values=[camera=true, goal=true, lightweight=false, exchangelens=true, waterproof=true, landscape=false, portrait=false, sports=true], rf=6}
+      Support: 3
+      Total products: 8
+      Restrictiveness: 0.625
+II. ACCESSIBILITY:
+   Product: p1
+      Occurrences: 31
+      Total recommendations: 47
+      Accessibility: 0.6595744680851063
+   Product: p2
+      Occurrences: 7
+      Total recommendations: 47
+      Accessibility: 0.14893617021276595
+   Product: p3
+      Occurrences: 15
+      Total recommendations: 47
+      Accessibility: 0.3191489361702128
+   Product: p4
+      Occurrences: 31
+      Total recommendations: 47
+      Accessibility: 0.6595744680851063
+   Product: p5
+      Occurrences: 3
+      Total recommendations: 47
+      Accessibility: 0.06382978723404255
+   Product: p6
+      Occurrences: 15
+      Total recommendations: 47
+      Accessibility: 0.3191489361702128
+   Product: p7
+      Occurrences: 3
+      Total recommendations: 47
+      Accessibility: 0.06382978723404255
+   Product: p8
+      Occurrences: 15
+      Total recommendations: 47
+      Accessibility: 0.3191489361702128
+III. PRODUCT CATALOG COVERAGE:
+   Number of products recommended at least one: 8
+   Number of products: 8
+   Product Catalog Coverage: 1.0
+IV. VISIBILITY OF PRODUCTS:
+   Product: p1
+      rank: 1 - worst rank: 4
+      rank: 1 - worst rank: 5
+      rank: 1 - worst rank: 8
+      rank: 1 - worst rank: 4
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 4
+      rank: 1 - worst rank: 4
+      rank: 1 - worst rank: 5
+      rank: 1 - worst rank: 2
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 4
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 4
+      rank: 1 - worst rank: 2
+      rank: 1 - worst rank: 2
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 2
+      rank: 1 - worst rank: 3
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      Visibility: 0.6477272727272727
+   Product: p2
+      rank: 3 - worst rank: 5
+      rank: 6 - worst rank: 8
+      rank: 4 - worst rank: 4
+      rank: 3 - worst rank: 5
+      rank: 3 - worst rank: 3
+      rank: 4 - worst rank: 4
+      rank: 3 - worst rank: 3
+      Visibility: 0.1875
+   Product: p3
+      rank: 3 - worst rank: 4
+      rank: 3 - worst rank: 5
+      rank: 3 - worst rank: 8
+      rank: 2 - worst rank: 3
+      rank: 3 - worst rank: 4
+      rank: 3 - worst rank: 4
+      rank: 3 - worst rank: 5
+      rank: 2 - worst rank: 3
+      rank: 2 - worst rank: 3
+      rank: 2 - worst rank: 3
+      rank: 3 - worst rank: 4
+      rank: 2 - worst rank: 3
+      rank: 2 - worst rank: 3
+      rank: 2 - worst rank: 3
+      rank: 2 - worst rank: 3
+      Visibility: 0.3620689655172413
+   Product: p4
+      rank: 1 - worst rank: 5
+      rank: 2 - worst rank: 4
+      rank: 2 - worst rank: 5
+      rank: 2 - worst rank: 8
+      rank: 2 - worst rank: 4
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 2
+      rank: 2 - worst rank: 4
+      rank: 1 - worst rank: 5
+      rank: 2 - worst rank: 4
+      rank: 2 - worst rank: 5
+      rank: 1 - worst rank: 3
+      rank: 2 - worst rank: 2
+      rank: 2 - worst rank: 3
+      rank: 2 - worst rank: 4
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 2
+      rank: 2 - worst rank: 4
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 2
+      rank: 2 - worst rank: 2
+      rank: 1 - worst rank: 3
+      rank: 2 - worst rank: 2
+      rank: 2 - worst rank: 3
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 1
+      rank: 1 - worst rank: 2
+      rank: 2 - worst rank: 2
+      rank: 1 - worst rank: 1
+      Visibility: 0.4772727272727273
+   Product: p5
+      rank: 4 - worst rank: 5
+      rank: 7 - worst rank: 8
+      rank: 4 - worst rank: 5
+      Visibility: 0.16666666666666663
+   Product: p6
+      rank: 4 - worst rank: 4
+      rank: 4 - worst rank: 5
+      rank: 4 - worst rank: 8
+      rank: 3 - worst rank: 3
+      rank: 4 - worst rank: 4
+      rank: 4 - worst rank: 4
+      rank: 4 - worst rank: 5
+      rank: 3 - worst rank: 3
+      rank: 3 - worst rank: 3
+      rank: 3 - worst rank: 3
+      rank: 4 - worst rank: 4
+      rank: 3 - worst rank: 3
+      rank: 3 - worst rank: 3
+      rank: 3 - worst rank: 3
+      rank: 3 - worst rank: 3
+      Visibility: 0.10344827586206895
+   Product: p7
+      rank: 5 - worst rank: 5
+      rank: 8 - worst rank: 8
+      rank: 5 - worst rank: 5
+      Visibility: 0.0
+   Product: p8
+      rank: 2 - worst rank: 5
+      rank: 5 - worst rank: 5
+      rank: 5 - worst rank: 8
+      rank: 3 - worst rank: 4
+      rank: 2 - worst rank: 2
+      rank: 2 - worst rank: 5
+      rank: 5 - worst rank: 5
+      rank: 2 - worst rank: 3
+      rank: 3 - worst rank: 3
+      rank: 3 - worst rank: 4
+      rank: 2 - worst rank: 2
+      rank: 2 - worst rank: 2
+      rank: 2 - worst rank: 3
+      rank: 3 - worst rank: 3
+      rank: 2 - worst rank: 2
+      Visibility: 0.2321428571428571
+V. CONTROVERSY OF FEATURES:
+   Feature: lightweight
+      Total URs including f: 16
+      Total inconsistent URs: 16
+      Controversy: 1.0
+   Feature: exchangelens
+      Total URs including f: 8
+      Total inconsistent URs: 16
+      Controversy: 0.5
+   Feature: waterproof
+      Total URs including f: 8
+      Total inconsistent URs: 16
+      Controversy: 0.5
+   Feature: landscape
+      Total URs including f: 8
+      Total inconsistent URs: 16
+      Controversy: 0.5
+   Feature: portrait
+      Total URs including f: 8
+      Total inconsistent URs: 16
+      Controversy: 0.5
+   Feature: sports
+      Total URs including f: 16
+      Total inconsistent URs: 16
+      Controversy: 1.0
+VI. GLOBAL CONTROVERSY:
+   Total inconsistent URs: 16
+   Total URs: 63
+   Global controversy: 0.25396825396825395
+VII. EFFICIENCY OF PRODUCTS:
+   Product: p1
+      Selections: 823
+      DisplayCounts: 1615
+      Efficiency: 0.5095975232198142
+   Product: p2
+      Selections: 90
+      DisplayCounts: 393
+      Efficiency: 0.22900763358778625
+   Product: p3
+      Selections: 203
+      DisplayCounts: 771
+      Efficiency: 0.26329442282749677
+   Product: p4
+      Selections: 851
+      DisplayCounts: 1652
+      Efficiency: 0.5151331719128329
+   Product: p5
+      Selections: 26
+      DisplayCounts: 174
+      Efficiency: 0.14942528735632185
+   Product: p6
+      Selections: 222
+      DisplayCounts: 771
+      Efficiency: 0.28793774319066145
+   Product: p7
+      Selections: 35
+      DisplayCounts: 174
+      Efficiency: 0.20114942528735633
+   Product: p8
+      Selections: 250
+      DisplayCounts: 806
+      Efficiency: 0.31017369727047145
+VIII. PROMINENCE OF FEATURES:
+   Feature: lightweight
+      Number of time when f selected explicitly: 885
+      Number of recommendation where f included in: 1032
+      Prominence: 0.8575581395348837
+   Feature: exchangelens
+      Number of time when f selected explicitly: 1252
+      Number of recommendation where f included in: 2254
+      Prominence: 0.5554569653948536
+   Feature: waterproof
+      Number of time when f selected explicitly: 1231
+      Number of recommendation where f included in: 2209
+      Prominence: 0.5572657311000453
+   Feature: landscape
+      Number of time when f selected explicitly: 1323
+      Number of recommendation where f included in: 2134
+      Prominence: 0.619962511715089
+   Feature: portrait
+      Number of time when f selected explicitly: 1255
+      Number of recommendation where f included in: 1905
+      Prominence: 0.6587926509186351
+   Feature: sports
+      Number of time when f selected explicitly: 848
+      Number of recommendation where f included in: 1145
+      Prominence: 0.7406113537117904
+IX. POPULARITY OF FEATURES:
+   Feature: lightweight
+      Selections: 885
+      Feature selections: 6794
+      Feature Popularity: 0.1302619958787165
+   Feature: exchangelens
+      Selections: 1252
+      Feature selections: 6794
+      Feature Popularity: 0.18428024727700912
+   Feature: waterproof
+      Selections: 1231
+      Feature selections: 6794
+      Feature Popularity: 0.18118928466293788
+   Feature: landscape
+      Selections: 1323
+      Feature selections: 6794
+      Feature Popularity: 0.19473064468648807
+   Feature: portrait
+      Selections: 1255
+      Feature selections: 6794
+      Feature Popularity: 0.1847218133647336
+   Feature: sports
+      Selections: 848
+      Feature selections: 6794
+      Feature Popularity: 0.12481601413011481
+X. POPULARITY OF PRODUCTS:
+   Product: p1
+      Selections: 823
+      Product selections: 2500
+      Product Popularity: 0.3292
+   Product: p2
+      Selections: 90
+      Product selections: 2500
+      Product Popularity: 0.036
+   Product: p3
+      Selections: 203
+      Product selections: 2500
+      Product Popularity: 0.0812
+   Product: p4
+      Selections: 851
+      Product selections: 2500
+      Product Popularity: 0.3404
+   Product: p5
+      Selections: 26
+      Product selections: 2500
+      Product Popularity: 0.0104
+   Product: p6
+      Selections: 222
+      Product selections: 2500
+      Product Popularity: 0.0888
+   Product: p7
+      Selections: 35
+      Product selections: 2500
+      Product Popularity: 0.014
+   Product: p8
+      Selections: 250
+      Product selections: 2500
+      Product Popularity: 0.1
