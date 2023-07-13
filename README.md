@@ -11,7 +11,7 @@ Source code to accompany the paper "Analysis Operations On The Run: Feature Mode
 
 | *folder*                | *description*                                                          |
 |-------------------------|------------------------------------------------------------------------|
-| ./data/app.cfg          | the configuration file                                                 |
+| ./data/conf/            | the configuration files                                                |
 | ./data/camera.xml       | testing feature model                                                  |
 | ./data/filter.mzn       | filter constraints using MiniZinc syntax                               |
 | ./data/products.csv     | product assortment                                                     |

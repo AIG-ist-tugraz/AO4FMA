@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static at.tugraz.ist.ase.ao4fma.cli.ConfigManager.defaultConfigFile;
+import static at.tugraz.ist.ase.ao4fma.cli.ConfigManager.defaultConfigFileTransactions;
 
 @Slf4j
 public class FakeTransactionsGenerator {
@@ -45,7 +45,7 @@ public class FakeTransactionsGenerator {
 
         cmdLineOptions.printWelcome();
 
-        String confFile = cmdLineOptions.getConfFile() == null ? defaultConfigFile : cmdLineOptions.getConfFile();
+        String confFile = cmdLineOptions.getConfFile() == null ? defaultConfigFileTransactions : cmdLineOptions.getConfFile();
         ConfigManager cfg = ConfigManager.getInstance(confFile);
 
         val fmFile = cfg.getFmFile();

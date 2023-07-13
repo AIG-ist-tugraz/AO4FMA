@@ -28,6 +28,7 @@ import java.util.Properties;
 @Slf4j
 public final class ConfigManager {
     public static String defaultConfigFile = "./data/conf/app.cfg";
+    public static String defaultConfigFileTransactions = "./data/conf/transactions.cfg";
 
     private final File fmFile;
     private final File filterFile;
