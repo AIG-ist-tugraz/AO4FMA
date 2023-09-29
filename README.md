@@ -1,6 +1,6 @@
 # AO4FMA
 
-Source code to accompany the paper "Analysis Operations On The Run: Feature Model Analysis in Constraint-based Recommender Systems" will be presented in [SPLC'23](https://2023.splc.net).
+Source code to accompany the paper "Analysis Operations On The Run: Feature Model Analysis in Constraint-based Recommender Systems" as presented in [SPLC'23](https://2023.splc.net).
 
 ## Table of Contents
 
